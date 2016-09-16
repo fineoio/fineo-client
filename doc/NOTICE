@@ -1,0 +1,7 @@
+fineo-client
+Copyright 2016 Fineo, Inc.
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+Please see LICENSE for additional copyright and licensing information.
