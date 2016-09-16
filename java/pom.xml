@@ -1,0 +1,234 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.fineo.client</groupId>
+  <artifactId>fineo-client-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <modules>
+    <module>models</module>
+    <module>common</module>
+    <module>jdbc</module>
+  </modules>
+  <packaging>pom</packaging>
+
+  <name>Fineo Client - Parent</name>
+  <url>http://fineo.io</url>
+
+  <properties>
+    <!-- dependencies -->
+    <fineo.readerator.version>1.0-SNAPSHOT</fineo.readerator.version>
+
+    <!-- external dependencies -->
+    <avatica.version>1.8.0-fineo-1.0-SNAPSHOT</avatica.version>
+    <calcite.version>1.8.0-SNAPSHOT</calcite.version>
+    <async-http-client.version>2.0.11</async-http-client.version>
+    <guava.version>19.0</guava.version>
+    <logback-classic.version>1.1.3</logback-classic.version>
+    <aws-java-sdk.version>1.11.33</aws-java-sdk.version>
+    <jcommander.version>1.30</jcommander.version>
+    <slf4j.version>1.7.21</slf4j.version>
+
+    <!-- Test dependencies -->
+    <junit.version>4.12</junit.version>
+    <mockito.version>1.10.19</mockito.version>
+    <hamcrest.version>1.3</hamcrest.version>
+
+    <!-- Plugins -->
+    <surefire.version>2.19</surefire.version>
+    <maven.shade.version>2.3</maven.shade.version>
+    <maven.compiler.version>3.3</maven.compiler.version>
+    <maven.dependency.version>2.10</maven.dependency.version>
+
+    <!-- Test Running properties -->
+    <test.output.to.file>true</test.output.to.file>
+    <test.exclude.pattern></test.exclude.pattern>
+  </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>maven.fineo.snapshot</id>
+      <url>s3://maven.fineo.io/snapshot</url>
+    </snapshotRepository>
+    <repository>
+      <id>maven.fineo</id>
+      <url>s3://maven.fineo.io/release</url>
+    </repository>
+  </distributionManagement>
+
+  <scm>
+    <connection>>scm:git:https://github.com/fineo-io/fineo-client</connection>
+  </scm>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.kuali.maven.wagons</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>1.2.1</version>
+      </extension>
+    </extensions>
+    <pluginManagement>
+      <plugins>
+        <!-- Create the test jar -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.6</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+      <groupId>external.atlassian.jgitflow</groupId>
+        <artifactId>jgitflow-maven-plugin</artifactId>
+        <version>1.0-m5.1</version>
+        <configuration>
+          <flowInitContext>
+            <!-- This is a little weird in that the master is not 'master', but master is actually
+            the current stable branch, while the master branch is the most current development
+            changes, as standard for most 'regular' git projects. Entirely a semantics thing.
+            -->
+            <masterBranchName>stable</masterBranchName>
+            <developBranchName>master</developBranchName>
+            <featureBranchPrefix>feature-</featureBranchPrefix>
+            <releaseBranchPrefix>release-</releaseBranchPrefix>
+            <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+            <!-- no prefix - makes readthedocs happy -->
+            <versionTagPrefix></versionTagPrefix>
+          </flowInitContext>
+          <allowSnapshots>true</allowSnapshots>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.version}</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <!-- Configuration for two distinct phases of test execution. First phase just
+         supports local, non-s3 requiring tests. The second phase is just the tests
+         that require a connection to s3 manipulate buckets/files there. -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire.version}</version>
+        <!-- Generic testing configuration for all packages -->
+        <configuration>
+          <redirectTestOutputToFile>${test.output.to.file}</redirectTestOutputToFile>
+          <argLine>-enableassertions -Djava.security.egd=file:/dev/./urandom
+            -Dsqlite4java.library.path=${project.build.directory}/dependencies
+            -Djava.net.preferIPv4Stack=true
+          </argLine>
+          <excludes>
+            <!-- users can add -D option to skip particular test classes
+           ex: mvn test -Dtest.exclude.pattern=**/TestFoo.java,**/TestBar.java
+            -->
+            <exclude>${test.exclude.pattern}</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Intra-project -->
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client.models</groupId>
+        <artifactId>common-models</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <!-- Fineo -->
+      <dependency>
+        <groupId>io.fineo.read</groupId>
+        <artifactId>readerator-common</artifactId>
+        <version>${fineo.readerator.version}</version>
+      </dependency>
+
+      <!-- Other -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.calcite.avatica</groupId>
+        <artifactId>avatica-server</artifactId>
+        <version>${avatica.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.calcite.avatica</groupId>
+        <artifactId>avatica</artifactId>
+        <version>${avatica.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.beust</groupId>
+        <artifactId>jcommander</artifactId>
+        <version>${jcommander.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-core</artifactId>
+        <version>${aws-java-sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.asynchttpclient</groupId>
+        <artifactId>async-http-client</artifactId>
+        <version>${async-http-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback-classic.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>${hamcrest.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
