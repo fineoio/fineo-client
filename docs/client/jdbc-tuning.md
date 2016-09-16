@@ -1,5 +1,3 @@
-# JDBC Tuning
-
 Generally, the default properties work pretty well. However, if you want to maximize the 
 throughput, there are a few parameters that you can tune through the jdbc client:
 

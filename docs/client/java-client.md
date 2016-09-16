@@ -1,13 +1,11 @@
-# Java client
-
 The java client is the easiest way to manipulate schema and write to the API. 
 
-## Requirements
+# Requirements
 
  * maven 3
  * java 8
 
-## Usage
+# Usage
 
 The basic java client is available through Maven here:
 
