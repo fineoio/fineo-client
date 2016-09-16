@@ -51,7 +51,7 @@
       <id>deploy</id>
       <activation>
         <property>
-          <name>deploy</name>
+          <name>performRelease</name>
         </property>
       </activation>
       <build>
