@@ -1,0 +1,5 @@
+site_name: Fineo Client
+site_url: http://client.fineo.io
+repo_url: https://github.com/fineo-io/fineo-client
+repo_name: 'GitHub'
+site_description: 'Client access to the Fineo API'
