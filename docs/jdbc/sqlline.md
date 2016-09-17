@@ -4,11 +4,11 @@ You can connect to Fineo through SqlLine - a standard console based SQL access t
 
 ## 1. Download
 
-The Fineo-specific build is available [here](http://maven.fineo.io/sqlline/sqlline/1.1.10-fineo-1.0-SNAPSHOT/sqlline-1.1.10-fineo-1.0-20160917.180455-2.tar.gz)
+The Fineo-specific build is available [here](http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.0/sqlline-1.1.10-fineo-1.0.tar.gz)
 
 ## 2. Start
 
-Once you unpack the tarball, you can just run sqlline directly:
+Once you unpack the tarball, you can just run sqlline directly from the unpacked directory:
 
 ```
 $ ./sqlline
