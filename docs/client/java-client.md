@@ -12,8 +12,15 @@ The basic java client is available through Maven here:
 ```
 <project>
 ...
+  <repositories>
+    <repository>
+      <id>Fineo</id>
+      <url>http://maven.fineo.io/release</url>
+    </repository>
+  </repositories>
+  ...
   <dependencies>
-    <depenendency>
+    <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>common</artifactId>
       <version>1.0.0</version>

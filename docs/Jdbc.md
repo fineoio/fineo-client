@@ -6,6 +6,13 @@ project with:
 ```
 <project>
 ...
+  <repositories>
+    <repository>
+      <id>Fineo</id>
+      <url>http://maven.fineo.io/release</url>
+    </repository>
+  </repositories>
+  ...
   <dependencies>
     <dependency>
       <groupId>io.fineo.client</groupId>
