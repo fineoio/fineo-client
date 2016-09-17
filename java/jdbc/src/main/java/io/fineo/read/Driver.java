@@ -105,7 +105,6 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   }
 
   private String convertProperties(Properties info) throws IOException {
-
     // ensure we use our factory to create our client
     info.put(HTTP_CLIENT_IMPL.camelName(), FineoAvaticaAwsHttpClient.class.getName());
     // yup, always use protobuf
