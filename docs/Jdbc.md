@@ -96,6 +96,6 @@ All requests must have **both an API Key and IAM User credentials**.
 
 # Tuning
 
-You find information on tuning the client connection at our [tuning guide](client/jdbc-tuning)
+You find information on tuning the client connection at our [tuning guide](jdbc/tuning)
 
 [JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.0.0/jdbc-1.0.0.jar
