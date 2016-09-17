@@ -43,8 +43,11 @@ Class.forName(io.fineo.read.Driver)
 The full connection string can then be specified as:
 
 ```
-jdbc:fineo:url:<URL you were given>;[other properties]
+jdbc:fineo:url=<URL you were given>;[other properties]
 ```
+
+The connection string is parsed according to 
+[OLE DB Connection String Syntax](https://msdn.microsoft.com/en-us/library/windows/desktop/ms722656\(v=vs.85\).aspx).
 
 # Authentication
 
