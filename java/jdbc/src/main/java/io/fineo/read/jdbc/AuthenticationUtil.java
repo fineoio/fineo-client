@@ -9,6 +9,7 @@ import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.SystemPropertiesCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import org.apache.calcite.avatica.BuiltInConnectionProperty;
+import org.apache.calcite.avatica.remote.AuthenticationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,8 @@ public class AuthenticationUtil {
       user = chain.getCredentials().getAWSAccessKeyId();
       password = chain.getCredentials().getAWSSecretKey();
     }
+    // set the avatica authentication type
+    info.setProperty("authentication", AuthenticationType.BASIC.name());
     info.setProperty(BuiltInConnectionProperty.AVATICA_USER.camelName(), user);
     info.setProperty(BuiltInConnectionProperty.AVATICA_PASSWORD.camelName(), password);
   }

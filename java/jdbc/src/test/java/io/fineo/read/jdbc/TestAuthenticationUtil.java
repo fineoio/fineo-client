@@ -1,6 +1,9 @@
 package io.fineo.read.jdbc;
 
 import org.apache.calcite.avatica.BuiltInConnectionProperty;
+import org.apache.calcite.avatica.ConnectionConfig;
+import org.apache.calcite.avatica.ConnectionConfigImpl;
+import org.apache.calcite.avatica.remote.AuthenticationType;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -16,7 +19,7 @@ public class TestAuthenticationUtil {
     props.setProperty("password", "password1");
     AuthenticationUtil.setupAuthentication(props);
 
-    assertPassword(props, props.getProperty("user"),  props.getProperty("password"));
+    assertPassword(props, props.getProperty("user"), props.getProperty("password"));
   }
 
   @Test
@@ -30,15 +33,19 @@ public class TestAuthenticationUtil {
     assertPassword(props, "access_key", "secret_key");
 
     props.setProperty("user", "");
+    props.setProperty("authentication", "static");
     AuthenticationUtil.setupAuthentication(props);
     assertPassword(props, "access_key", "secret_key");
 
     props.setProperty("password", "");
+    props.setProperty("authentication", "static");
     AuthenticationUtil.setupAuthentication(props);
     assertPassword(props, "access_key", "secret_key");
   }
 
   private void assertPassword(Properties props, String user, String password) {
+    ConnectionConfig c = new ConnectionConfigImpl(props);
+    assertEquals(AuthenticationType.BASIC, AuthenticationType.valueOf(c.authentication()));
     assertEquals(props.get(BuiltInConnectionProperty.AVATICA_USER.camelName()), user);
     assertEquals(props.get(BuiltInConnectionProperty.AVATICA_PASSWORD.camelName()), password);
   }

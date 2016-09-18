@@ -62,7 +62,8 @@
             <version>${maven.shade.version}</version>
             <configuration>
               <createDependencyReducedPom>true</createDependencyReducedPom>
-              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>all</shadedClassifierName>
             </configuration>
             <executions>
               <execution>
@@ -73,11 +74,12 @@
                 <configuration>
                   <artifactSet>
                     <includes>
+                      <include>io.fineo.client:common</include>
                       <include>io.fineo.read:readerator-common</include>
                       <include>org.apache.calcite.avatica:avatica</include>
                       <include>com.google.guava:guava</include>
                       <!-- Logging -->
-                      <!-- Common already include slf4j-api -->
+                      <include>org.slf4j:slf4j-api</include>
                       <include>org.slf4j:jcl-over-slf4j</include>
 
                       <!-- Connections -->
@@ -87,7 +89,10 @@
                       <include>com.typesafe.netty:netty-reactive-streams</include>
                       <include>org.javassist:javassist</include>
 
+                      <!-- AWS tools -->
                       <include>com.amazonaws:aws-java-sdk-core</include>
+                      <include>joda-time:joda-time</include>
+                      <include>com.fasterxml.jackson.core:*</include>
                     </includes>
                   </artifactSet>
                   <relocations>
@@ -106,6 +111,14 @@
                     <relocation>
                       <pattern>com.google.gson</pattern>
                       <shadedPattern>fineo.com.google.gson</shadedPattern>
+                    </relocation>
+                    <relocation>
+                      <pattern>io.netty</pattern>
+                      <shadedPattern>fineo.client.io.netty</shadedPattern>
+                    </relocation>
+                    <relocation>
+                      <pattern>org.reactivestreams</pattern>
+                      <shadedPattern>fineo.client.org.reactivestreams</shadedPattern>
                     </relocation>
                     <!-- Really more for show, these _should_ already be moved by avatica -->
                     <relocation>

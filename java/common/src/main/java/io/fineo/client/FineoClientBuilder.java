@@ -2,7 +2,6 @@ package io.fineo.client;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.http.HttpMethodName;
-import com.amazonaws.util.IOUtils;
 import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +32,8 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static io.fineo.client.ResponseUtil.asClientException;
+import static io.fineo.client.ResponseUtil.error;
 import static java.lang.String.format;
 
 /**
@@ -151,9 +152,21 @@ public class FineoClientBuilder {
             "Don't support http method: " + httpRequest.method);
       }
 
+
       Type t = method.getReturnType();
-      CompletableFuture<Object> future = handleResponse(response, method);
-      if (t.getTypeName().equals(CompletableFuture.class.getName())) {
+      String name = method.getName();
+      boolean async = t.getTypeName().equals(CompletableFuture.class.getName());
+
+      // if its a future, then look up the synchronous version so we can get the correct return type
+      if (async) {
+        Class c = method.getDeclaringClass();
+        String syncName = method.getName().replace("Async", "");
+        method = c.getMethod(syncName, method.getParameterTypes());
+        t = method.getReturnType();
+      }
+
+      CompletableFuture<Object> future = handleResponse(response, t, name);
+      if (async) {
         return future;
       }
       try {
@@ -210,7 +223,7 @@ public class FineoClientBuilder {
       return request;
     }
 
-    CompletableFuture<Object> handleResponse(Future<Response> future, Method method)
+    CompletableFuture<Object> handleResponse(Future<Response> future, Type t, String methodName)
       throws Throwable {
       return CompletableFuture.supplyAsync(() -> {
         Response response;
@@ -219,35 +232,25 @@ public class FineoClientBuilder {
         } catch (InterruptedException | ExecutionException e) {
           throw new RuntimeException(e);
         }
-        int code = response.getStatusCode();
         InputStream content = response.getResponseBodyAsStream();
         try {
-          // successful request if code is 2xx
-          if (code >= 200 && code < 300) {
-            Type t = method.getReturnType();
-            JavaType type = mapper.getTypeFactory().constructType(t);
-            if (t != void.class && content != null) {
-              try (Reader reader = new InputStreamReader(content, StringUtils.UTF8)) {
-                return mapper.readValue(reader, type);
-              }
-            } else {
-              // discard response
-              if (content != null) {
-                content.close();
-              }
-              return null;
+          if (error(response)) {
+            throw asClientException(response, methodName);
+          }
+
+          JavaType type = mapper.getTypeFactory().constructType(t);
+          if (t != void.class && content != null && content.available() > 0) {
+            try (Reader reader = new InputStreamReader(content, StringUtils.UTF8)) {
+              return mapper.readValue(reader, type);
             }
           } else {
-            String error = content == null ? "" : IOUtils.toString(content);
-            FineoApiClientException e = new FineoApiClientException(error);
-            e.setMethod(method.getName());
-            e.setStatusCode(response.getStatusCode());
-            String requestId = response.getHeaders().get("x-amzn-RequestId");
-            if (requestId != null) {
-              e.setRequestId(requestId);
+            // discard response
+            if (content != null) {
+              content.close();
             }
-            throw e;
+            return null;
           }
+
         } catch (IOException e) {
           throw new RuntimeException(e);
         }

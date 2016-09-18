@@ -27,7 +27,6 @@ public class ApiAwsClient implements AutoCloseable {
     Slf4jLogFactory.enable();
   }
 
-  public static final byte[] EMPTY_BYTES = new byte[0];
   private final URI baseUri;
   private final URL url;
   private AWSCredentialsProvider credentials;

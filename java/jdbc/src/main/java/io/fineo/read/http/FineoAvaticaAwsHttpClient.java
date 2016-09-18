@@ -1,7 +1,8 @@
 package io.fineo.read.http;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.internal.StaticCredentialsProvider;
 import io.fineo.client.ApiAwsClient;
 import io.fineo.client.ClientConfiguration;
 import io.fineo.read.AwsApiGatewayBytesTranslator;
@@ -12,12 +13,15 @@ import org.apache.calcite.avatica.remote.AvaticaHttpClient;
 import org.apache.calcite.avatica.remote.UsernamePasswordAuthenticateable;
 import org.asynchttpclient.Response;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static io.fineo.client.ResponseUtil.asClientException;
+import static io.fineo.client.ResponseUtil.error;
 import static io.fineo.read.jdbc.ConnectionPropertyUtil.setInt;
 import static io.fineo.read.jdbc.FineoConnectionProperties.API_KEY;
 
@@ -29,17 +33,20 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
   private final AwsApiGatewayBytesTranslator translator = new AwsApiGatewayBytesTranslator();
   private final Map<String, String> properties;
   private final ApiAwsClient client;
-  private StaticCredentialsProvider credentials;
+  private AWSCredentialsProvider credentials;
 
   public FineoAvaticaAwsHttpClient(URL url) throws MalformedURLException, URISyntaxException {
+    // first, get the properties
+    this.properties = ConnectionStringBuilder.parse(url);
+
     // simplify the url to just the bit we will actually send
     url = (
       url.getPort() == -1 ?
       new URL(url.getProtocol(), url.getHost(), url.getPath()) :
       new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath()));
-    this.properties = ConnectionStringBuilder.parse(url);
+    // create a connection
     this.client = new ApiAwsClient(url, "/prod", getConf(this.properties));
-    client.setApiKey(properties.get(API_KEY));
+    client.setApiKey(properties.get(API_KEY.camelName()));
   }
 
   private io.fineo.client.ClientConfiguration getConf(Map<String, String> properties) {
@@ -61,9 +68,12 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
     request = translator.encode(request);
     try {
       Response response = client.post("/", request).get();
+      // not successful, throw it as an error
+      if (error(response)) {
+        throw asClientException(response, "AVATICA");
+      }
       return translator.decode(response.getResponseBodyAsBytes());
-    } catch (InterruptedException | ExecutionException | URISyntaxException |
-      MalformedURLException e) {
+    } catch (InterruptedException | ExecutionException | URISyntaxException | IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -74,7 +84,7 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
       case BASIC:
       case DIGEST:
         this.credentials =
-          new StaticCredentialsProvider(new BasicAWSCredentials(username, password));
+          new AWSStaticCredentialsProvider(new BasicAWSCredentials(username, password));
     }
   }
 

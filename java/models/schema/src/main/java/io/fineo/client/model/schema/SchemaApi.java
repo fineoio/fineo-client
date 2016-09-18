@@ -43,7 +43,7 @@ public interface SchemaApi extends AutoCloseable {
     ReadMetricResponse readMetric(@Parameter(name = "metricName") String metricName);
 
     @Op(path = "/schema/metric", method = "GET")
-    CompletableFuture<ReadMetricResponse> readMetricAync(
+    CompletableFuture<ReadMetricResponse> readMetricAsync(
       @Parameter(name = "metricName") String metricName);
 
     @Op(path = "/schema/metric", method = "PATCH")
