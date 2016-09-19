@@ -69,11 +69,13 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
     request = translator.encode(request);
     try {
       Response response = client.post("/", request).get();
-      // not successful, throw it as an error
-      if (error(response)) {
+      // Success and error over 500 (avatica, server-side error) need to unpack the bytes
+      // Otherwise, its an AWS error, so we should just unpack it regularly;
+      if (!error(response) || response.getStatusCode() >= 500 ) {
+        return translator.decode(response.getResponseBodyAsBytes());
+      } else {
         throw asClientException(response, "AVATICA");
       }
-      return translator.decode(response.getResponseBodyAsBytes());
     } catch (InterruptedException | ExecutionException | URISyntaxException | IOException e) {
       throw new RuntimeException(e);
     }

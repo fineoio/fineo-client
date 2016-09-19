@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TestAuthenticationUtil {
 
@@ -19,7 +20,7 @@ public class TestAuthenticationUtil {
     props.setProperty("password", "password1");
     AuthenticationUtil.setupAuthentication(props);
 
-    assertPassword(props, props.getProperty("user"), props.getProperty("password"));
+    assertPassword(props, "user1", "password1");
   }
 
   @Test
@@ -48,5 +49,8 @@ public class TestAuthenticationUtil {
     assertEquals(AuthenticationType.BASIC, AuthenticationType.valueOf(c.authentication()));
     assertEquals(props.get(BuiltInConnectionProperty.AVATICA_USER.camelName()), user);
     assertEquals(props.get(BuiltInConnectionProperty.AVATICA_PASSWORD.camelName()), password);
+    // make sure the incoming connection doesn't overwrite the user/password properties
+    assertNull(props.getProperty("user"));
+    assertNull(props.getProperty("password"));
   }
 }

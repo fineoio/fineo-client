@@ -26,12 +26,13 @@ public class AuthenticationUtil {
   /**
    * Get the authentication from the Properties. Maybe the user/password are already set, in
    * which case, just use those. Otherwise, try the various AWS authentication methods
+   *
    * @param info connection properties to read/update
    */
   public static void setupAuthentication(Properties info) {
     // check to see if username/password set
-    String user = info.getProperty("user", null);
-    String password = info.getProperty("password", null);
+    String user = (String) info.remove("user");
+    String password = (String) info.remove("password");
     if (user == null || user.length() == 0 || password == null || password.length() == 0) {
       // load all the places the credentials could be stored
       AWSCredentialsProviderChain chain = loadCredentialChain(info);
