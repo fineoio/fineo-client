@@ -92,7 +92,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
       // do the same parsing as in UnregisteredDriver#connect(...). We so this here so we can
       // generate a URL that contains all the necessary properties, allowing them to get passed
       // to our custom client. The alternative, right now, is to create a custom factory and have
-      // that create custom Avatica connections, which have our metadata info
+      // that create custom Avatica connections, which has our metadata info
       final String prefix = getConnectStringPrefix();
       assert url.startsWith(prefix);
       final String urlSuffix = url.substring(prefix.length());
@@ -121,6 +121,11 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     // API KEY is also the company key, so set that too
     info.put(FineoJdbcProperties.COMPANY_KEY_PROPERTY, key);
     setupClientProperties(info, sb);
+    // testing override
+    String testPrefix = info.getProperty("fineo.internal.test.api-prefix");
+    if (testPrefix != null) {
+      sb.with("fineo.internal.test.api-prefix", testPrefix);
+    }
     return sb.build();
   }
 

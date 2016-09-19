@@ -163,6 +163,11 @@
         <artifactId>schema</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>jdbc</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- Fineo -->
       <dependency>

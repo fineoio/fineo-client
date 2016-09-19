@@ -1,5 +1,6 @@
 package io.fineo.read.jdbc;
 
+import io.fineo.read.Driver;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
@@ -30,7 +31,7 @@ public class TestVanityDriver {
     System.setProperty(ACCESS_KEY_SYSTEM_PROPERTY, "AKIAIUHLZLB7VTXUAX7A");
     System.setProperty(SECRET_KEY_SYSTEM_PROPERTY, "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");
 
-    Class.forName("io.fineo.read.Driver");
+    Driver.load();
     assertEquals(DriverManager.getDriver("jdbc:fineo:").getClass(), io.fineo.read.Driver.class);
     String url = "https://" + Inet4Address.getLocalHost().getCanonicalHostName();
     thrown.expectCause(new BaseMatcher<Throwable>() {

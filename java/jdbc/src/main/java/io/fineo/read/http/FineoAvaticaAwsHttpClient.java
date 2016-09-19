@@ -45,7 +45,8 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
       new URL(url.getProtocol(), url.getHost(), url.getPath()) :
       new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath()));
     // create a connection
-    this.client = new ApiAwsClient(url, "/prod", getConf(this.properties));
+    String prefix = properties.computeIfAbsent("fineo.internal.test.api-prefix", k -> "/prod");
+    this.client = new ApiAwsClient(url, prefix, getConf(this.properties));
     client.setApiKey(properties.get(API_KEY.camelName()));
   }
 
