@@ -148,11 +148,12 @@
                     <exclude>logback-test.xml</exclude>
                   </excludes>
                 </filter>
-                <!-- Don't double include slf4j -->
+                <!-- Don't double include slf4j, fasterxml from avatica -->
                 <filter>
                   <artifact>org.apache.calcite.avatica:avatica</artifact>
                   <excludes>
-                    <exclude>org/slf4j/*</exclude>
+                    <exclude>org/slf4j/**</exclude>
+                    <exclude>com/fasterxml/</exclude>
                   </excludes>
                 </filter>
               </filters>
