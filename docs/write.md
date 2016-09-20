@@ -1,6 +1,6 @@
 Writes are not made through SQL interfaces (yet!), but instead made through RESTful APIs.
 
-The swagger specifications are available [here](http://api.fineo.io/?spec=write.json)
+The swagger specifications are available [here]
 
 However, you still need to authenticate with an API Key and
 [sign the request](http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html) 
@@ -72,3 +72,5 @@ have. Please see the [Schema](Schema) documentation for how the schema flexibili
 ### 1. Batch
 During the BETA 'later' is loosely defined. In the future, we hope to provide a stricter SLA 
 on when the batch data will be available.
+
+[here]: http://api.fineo.io/?url=http://api.fineo.io.s3-website-us-east-1.amazonaws.com/dist/ingest-swagger.json

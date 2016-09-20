@@ -1,7 +1,7 @@
 Schema is not managed through SQL interfaces (yet!), but instead exposed through its own 
 RESTful APIs.
 
-The swagger specifications are available [here](http://api.fineo.io/?spec=schema.json)
+The swagger specifications are available [here].
 
 However, you still need to authenticate with an API Key and
 [sign the request](http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html) 
@@ -141,5 +141,5 @@ While we are in BETA, there are a few limitations on schema and its manipulation
         * where ```<n>``` is a number
  
   
-
+[here]: http://api.fineo.io/?url=http://api.fineo.io.s3-website-us-east-1.amazonaws.com/dist/schema-swagger.json
 [Java DateTimeFormatter: Patterns For Formatting and Parsing]: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
