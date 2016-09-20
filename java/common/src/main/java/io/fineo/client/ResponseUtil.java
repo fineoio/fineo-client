@@ -8,10 +8,12 @@ import java.io.InputStream;
 
 public class ResponseUtil {
 
-  private ResponseUtil(){}
+  private ResponseUtil() {
+  }
 
   /**
    * Check to see if the response is an 'error'
+   *
    * @param response
    * @return <tt>true</tt> if it is an error, false otherwise
    */
@@ -20,10 +22,17 @@ public class ResponseUtil {
     return !(code >= 200 && code < 300);
   }
 
-  public static FineoApiClientException asClientException(Response response, String method)
-    throws IOException {
+  public static FineoApiClientException asClientException(Response response, String method) {
     InputStream content = response.getResponseBodyAsStream();
-    String error = content == null ? "" : IOUtils.toString(content);
+    String error;
+    try {
+      error = content == null ? "" : IOUtils.toString(content);
+    } catch (IOException e) {
+      // IOUtils is just writing to ByteArrayOutputStream, so we should never see an IOException
+      // in 'normal' course of things. If so, its really bad and we should fail hard.
+      throw new RuntimeException(e);
+    }
+
     StringBuffer sb = new StringBuffer("[");
     sb.append(response.getStatusCode());
     sb.append("] ");
