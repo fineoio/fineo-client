@@ -17,7 +17,8 @@ project with:
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>jdbc</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
+      <classifier>all</classifier>
     </dependency>
     ...
   </dependencies>
@@ -98,4 +99,4 @@ All requests must have **both an API Key and IAM User credentials**.
 
 You find information on tuning the client connection at our [tuning guide](jdbc/tuning)
 
-[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.0.0/jdbc-1.0.0.jar
+[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.0.1/jdbc-1.0.1-all.jar
