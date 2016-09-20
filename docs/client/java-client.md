@@ -12,11 +12,18 @@ The basic java client is available through Maven here:
 ```
 <project>
 ...
+  <repositories>
+    <repository>
+      <id>Fineo</id>
+      <url>http://maven.fineo.io/release</url>
+    </repository>
+  </repositories>
+  ...
   <dependencies>
-    <depenendency>
+    <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>common</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
     ...
   </dependencies>
@@ -39,4 +46,4 @@ instance you can call. For instance, to use the 'StreamWrite' API, you would do:
   StreamWrite stream = builder.build(StreamWrite.class)
 ```
 
-All the Java APIs support a synchronous and asynchrous execution method.
+All the Java APIs support a synchronous and an asynchrous version of each method.

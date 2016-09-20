@@ -1,7 +1,8 @@
 package io.fineo.read.http;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.internal.StaticCredentialsProvider;
 import io.fineo.client.ApiAwsClient;
 import io.fineo.client.ClientConfiguration;
 import io.fineo.read.AwsApiGatewayBytesTranslator;
@@ -11,13 +12,18 @@ import org.apache.calcite.avatica.remote.AuthenticationType;
 import org.apache.calcite.avatica.remote.AvaticaHttpClient;
 import org.apache.calcite.avatica.remote.UsernamePasswordAuthenticateable;
 import org.asynchttpclient.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static io.fineo.client.ResponseUtil.asClientException;
+import static io.fineo.client.ResponseUtil.error;
 import static io.fineo.read.jdbc.ConnectionPropertyUtil.setInt;
 import static io.fineo.read.jdbc.FineoConnectionProperties.API_KEY;
 
@@ -26,20 +32,27 @@ import static io.fineo.read.jdbc.FineoConnectionProperties.API_KEY;
  */
 public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
                                                   UsernamePasswordAuthenticateable {
+
+  private static final Logger LOG = LoggerFactory.getLogger(FineoAvaticaAwsHttpClient.class);
+
   private final AwsApiGatewayBytesTranslator translator = new AwsApiGatewayBytesTranslator();
   private final Map<String, String> properties;
   private final ApiAwsClient client;
-  private StaticCredentialsProvider credentials;
+  private AWSCredentialsProvider credentials;
 
   public FineoAvaticaAwsHttpClient(URL url) throws MalformedURLException, URISyntaxException {
+    // first, get the properties
+    this.properties = ConnectionStringBuilder.parse(url);
+
     // simplify the url to just the bit we will actually send
     url = (
       url.getPort() == -1 ?
       new URL(url.getProtocol(), url.getHost(), url.getPath()) :
       new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath()));
-    this.properties = ConnectionStringBuilder.parse(url);
-    this.client = new ApiAwsClient(url, "/prod", getConf(this.properties));
-    client.setApiKey(properties.get(API_KEY));
+    // create a connection
+    String prefix = properties.computeIfAbsent("fineo.internal.test.api-prefix", k -> "/prod");
+    this.client = new ApiAwsClient(url, prefix, getConf(this.properties));
+    client.setApiKey(properties.get(API_KEY.camelName()));
   }
 
   private io.fineo.client.ClientConfiguration getConf(Map<String, String> properties) {
@@ -59,12 +72,24 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
   public byte[] send(byte[] request) {
     client.setCredentials(this.credentials);
     request = translator.encode(request);
+    Response response;
     try {
-      Response response = client.post("/", request).get();
-      return translator.decode(response.getResponseBodyAsBytes());
-    } catch (InterruptedException | ExecutionException | URISyntaxException |
-      MalformedURLException e) {
+      response = client.post("/", request).get();
+    } catch (InterruptedException | ExecutionException | URISyntaxException | IOException e) {
       throw new RuntimeException(e);
+    }
+    try {
+      // Success and error over 500 (avatica, server-side error) need to unpack the bytes
+      // Otherwise, its an AWS error, so we should just unpack it regularly;
+      if (!error(response) || response.getStatusCode() >= 500) {
+        return translator.decode(response.getResponseBodyAsBytes());
+      } else {
+        throw asClientException(response, "AVATICA");
+      }
+    } catch (IllegalArgumentException e) {
+      LOG.error("Could not process response from server: {}", e.getMessage());
+      LOG.error("Raw message content: \n" + response.getResponseBody());
+      throw e;
     }
   }
 
@@ -74,7 +99,7 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
       case BASIC:
       case DIGEST:
         this.credentials =
-          new StaticCredentialsProvider(new BasicAWSCredentials(username, password));
+          new AWSStaticCredentialsProvider(new BasicAWSCredentials(username, password));
     }
   }
 

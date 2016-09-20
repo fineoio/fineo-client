@@ -3,7 +3,7 @@
 
   <groupId>io.fineo.client</groupId>
   <artifactId>fineo-client-parent</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <modules>
     <module>models</module>
     <module>common</module>
@@ -153,6 +153,22 @@
         <artifactId>common-models</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.fineo.client.models</groupId>
+        <artifactId>write</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client.models</groupId>
+        <artifactId>schema</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>jdbc</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <!-- Fineo -->
       <dependency>
         <groupId>io.fineo.read</groupId>

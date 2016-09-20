@@ -1,0 +1,31 @@
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{3}[%L] - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="DEBUGGING" class="ch.qos.logback.core.FileAppender">
+    <file>logs/sqlline-debug.log</file>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{3}[%L] - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="io.fineo" level="DEBUG" additivity="false">
+    <appender-ref ref="DEBUGGING"/>
+  </logger>
+
+  <logger name="fineo.client" level="DEBUG" additivity="false">
+    <appender-ref ref="DEBUGGING"/>
+  </logger>
+  <!-- this logs like crazy at DEBUG -->
+  <logger name="fineo.client.org.asynchttpclient" level="INFO" additivity="false">
+    <appender-ref ref="DEBUGGING"/>
+  </logger>
+
+  <root level="WARN">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="DEBUGGING"/>
+  </root>
+</configuration>
