@@ -64,22 +64,22 @@ The properties you need to set are:
   * property: ```authentication```
   * Options:
     * DEFAULT
-      - Use the [default AWS credential chain]
-      - property necessary
+        - Use the [default AWS credential chain]
+        - property necessary
     * system
-      * Load from the system properties:
-        * aws.accessKeyId
-        * aws.secretKey
+        - Load from the system properties:
+            - aws.accessKeyId
+            - aws.secretKey
     * env
-      - Load from the environment variables:
-        - AWS_ACCESS_KEY_ID / AWS_ACCESS_KEY
-        - AWS_SECRET_KEY / AWS_SECRET_ACCESS_KEY
+        - Load from the environment variables:
+            - AWS_ACCESS_KEY_ID / AWS_ACCESS_KEY
+            - AWS_SECRET_KEY / AWS_SECRET_ACCESS_KEY
     * static
-      - sub-property: aws_key
-      - sub-property: aws_secret
+        - sub-property: aws_key
+        - sub-property: aws_secret
     * profile
-      - sub property: profile_name=<name>
-      - Loads the specified profile from ~/.aws/credentials
+        - sub property: profile_name=```<name>```
+        - Loads the specified profile from ~/.aws/credentials
 
 You can also provision multiple authentcation types with the ```_OR_``` separator to set a 
 hierarchy of types. For example:
