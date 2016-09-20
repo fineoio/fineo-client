@@ -19,7 +19,7 @@ seconds. However, it comes at a higher cost and with some more stringent
 [limitations](#limitations).
 
 Batch is a bit more scalable, but events are processed asynchronously and are available at some 
-point in time later[[1](#1)].
+point in time later[[1](#1-batch)].
 
 ## Batch Uploads
 
@@ -69,6 +69,6 @@ have. Please see the [Schema](Schema) documentation for how the schema flexibili
 
 ## Notes
 
-### 1. 
+### 1. Batch
 During the BETA 'later' is loosely defined. In the future, we hope to provide a stricter SLA 
 on when the batch data will be available.
