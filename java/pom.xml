@@ -3,7 +3,7 @@
 
   <groupId>io.fineo.client</groupId>
   <artifactId>fineo-client-parent</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <modules>
     <module>models</module>
     <module>common</module>
