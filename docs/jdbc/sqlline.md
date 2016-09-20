@@ -4,13 +4,16 @@ You can connect to Fineo through SqlLine - a standard console based SQL access t
 
 ## 1. Download
 
-The Fineo-specific build of sqlline is available [here] [[1](#sqlline)]].
+The Fineo-specific build of sqlline is available [here] [[1](#1-sqlline)].
 
-## 2. Start
+## 2. Prepare
 
 Unpack the tarball and then copy in the desired fineo jdbc jar (see [jdbc](/Jdbc) for the jar) to
  `lib/`. If you want logging you can also copy in you desired logging framework (Fineo leverages 
- Slf4j everywhere); we recommend using [logback](http://logback.qos.ch/) [[2](#logback)].
+ Slf4j everywhere); we recommend using [logback](http://logback.qos.ch/) [[2](#2-logback)].
+ 
+ 
+## 3. Start
  
 Now you are ready to start the sqlline shell:
 
