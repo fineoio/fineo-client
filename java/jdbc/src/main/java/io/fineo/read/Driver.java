@@ -56,7 +56,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     return true;
   }
 
-  private final Map<String, ConnectionInfo> open = new HashMap<>();
+  protected final Map<String, ConnectionInfo> open = new HashMap<>();
 
   public Driver() throws ClassNotFoundException {
     super();
