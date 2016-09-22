@@ -39,8 +39,6 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   private static final Logger LOG = LoggerFactory.getLogger(Driver.class);
   public static final String CONNECT_PREFIX = "jdbc:fineo:";
 
-  private static final String URL = "https://53r0nhslih.execute-api.us-east-1.amazonaws.com/prod";
-
   static {
     try {
       new Driver().register();
@@ -100,10 +98,10 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
       assert url.startsWith(prefix);
       final String urlSuffix = url.substring(prefix.length());
       final Properties info2 = ConnectStringParser.parse(urlSuffix, info);
-      String updatedUrl = convertProperties(info2);
+      updateProperties(info2);
 
       // Unregistered Driver stuff
-      final AvaticaConnection connection = factory.newConnection(this, factory, updatedUrl, info2);
+      final AvaticaConnection connection = factory.newConnection(this, factory, url, info2);
       handler.onConnectionInit(connection);
 
       try {
@@ -133,7 +131,20 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     }
   }
 
-  private String convertProperties(Properties info) throws IOException {
+  /**
+   * Update the properties to fix inside the avatica framework. Does things like:
+   * <ol>
+   * <li>Translate aws auth into avatica auth</li>
+   * <li>Update url to include things like the Api Key
+   * <ul>
+   * <li>The client is created with the URL from the properties (url=), not the overall
+   * connection URL, so we have to update the url here
+   * </li>
+   * </ul>
+   * </li>
+   * </ol>
+   */
+  private void updateProperties(Properties info) throws IOException {
     // ensure we use our factory to create our client
     info.put(HTTP_CLIENT_IMPL.camelName(), FineoAvaticaAwsHttpClient.class.getName());
     // yup, always use protobuf
@@ -141,21 +152,25 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     setupAuthentication(info);
 
     // properties that are passed through the connection string
-    ConnectionStringBuilder sb = new ConnectionStringBuilder(getConnectStringPrefix(),
-      BuiltInConnectionProperty.URL.wrap(info).getString(URL));
+    ConnectionStringBuilder sb = new ConnectionStringBuilder(
+      BuiltInConnectionProperty.URL.wrap(info).getString("=== No URL Specified ==="));
     String key = Preconditions
       .checkNotNull(API_KEY.wrap(info).getString(), "Must specify the Fineo API Key via %s",
         API_KEY.camelName());
     sb.with(API_KEY, info);
-    // API KEY is also the company key, so set that too
+
+    // API KEY is also the company key, and we need that in the connection properties on the
+    // server side
     info.put(FineoJdbcProperties.COMPANY_KEY_PROPERTY, key);
     setupClientProperties(info, sb);
+
     // testing override
     String testPrefix = info.getProperty("fineo.internal.test.api-prefix");
     if (testPrefix != null) {
       sb.with("fineo.internal.test.api-prefix", testPrefix);
     }
-    return sb.build();
+    String url = sb.build();
+    info.setProperty("url", url);
   }
 
   /**
