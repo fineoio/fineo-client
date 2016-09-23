@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.fineo.client</groupId>
@@ -8,6 +10,7 @@
     <module>models</module>
     <module>common</module>
     <module>jdbc</module>
+    <module>tools</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -41,7 +44,7 @@
 
     <!-- Test Running properties -->
     <test.output.to.file>true</test.output.to.file>
-    <test.exclude.pattern />
+    <test.exclude.pattern/>
   </properties>
 
   <distributionManagement>
@@ -82,11 +85,16 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven.shade.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
-      <groupId>external.atlassian.jgitflow</groupId>
+        <groupId>external.atlassian.jgitflow</groupId>
         <artifactId>jgitflow-maven-plugin</artifactId>
         <version>1.0-m5.1</version>
         <configuration>
@@ -101,7 +109,7 @@
             <releaseBranchPrefix>release-</releaseBranchPrefix>
             <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
             <!-- no prefix - makes readthedocs happy -->
-            <versionTagPrefix />
+            <versionTagPrefix/>
           </flowInitContext>
           <allowSnapshots>true</allowSnapshots>
           <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -149,6 +157,12 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>common</artifactId>
+        <version>${project.version}</version>
+        <classifier>all</classifier>
+      </dependency>
+      <dependency>
         <groupId>io.fineo.client.models</groupId>
         <artifactId>common-models</artifactId>
         <version>${project.version}</version>
@@ -168,6 +182,12 @@
         <artifactId>jdbc</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>jdbc</artifactId>
+        <classifier>all</classifier>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- Fineo -->
       <dependency>
@@ -185,6 +205,11 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>

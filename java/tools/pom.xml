@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>fineo-client-parent</artifactId>
+    <groupId>io.fineo.client</groupId>
+    <version>1.0.2-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.fineo.client</groupId>
+  <artifactId>tools</artifactId>
+
+  <name>Fineo Client - Tools</name>
+  <description>Java based tools for clients</description>
+
+  <properties>
+    <snakeyaml.version>1.17</snakeyaml.version>
+    <commons-dbutils.version>1.6</commons-dbutils.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.fineo.client</groupId>
+      <artifactId>common</artifactId>
+      <classifier>all</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.fineo.client</groupId>
+      <artifactId>jdbc</artifactId>
+      <classifier>all</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.fineo.client.models</groupId>
+      <artifactId>schema</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>io.fineo.client</groupId>
+          <artifactId>common</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.fineo.client.models</groupId>
+      <artifactId>write</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>io.fineo.client</groupId>
+          <artifactId>common</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>${snakeyaml.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-dbutils</groupId>
+      <artifactId>commons-dbutils</artifactId>
+      <version>${commons-dbutils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <!-- Core, non-jdbc tools -->
+          <!-- These don't get a manifest b/c there are a bunch of 'natural' options -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>io.fineo.client.models:*</include>
+                  <include>io.fineo.client:common:jar:all</include>
+
+                  <include>org.yaml:snakeyaml</include>
+                  <include>com.beust:jcommander</include>
+
+                  <include>ch.qos.logback:logback-core</include>
+                  <include>ch.qos.logback:logback-classic</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <!-- General artifact cleanliness -->
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>.gitkeep</exclude>
+                    <!-- -test.xml overrides our logback.xml -->
+                    <exclude>logback-test.xml</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+          <!-- Separate jar just for the JDBC stuff -->
+          <execution>
+            <id>build-jdbc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedClassifierName>jdbc</shadedClassifierName>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <transformers>
+                <transformer
+                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>io.fineo.client.tools.SqlToJson</Main-Class>
+                    <X-Compile-Source-JDK>1.8</X-Compile-Source-JDK>
+                    <X-Compile-Target-JDK>1.8</X-Compile-Target-JDK>
+                  </manifestEntries>
+                </transformer>
+                transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>ahc-default.properties</resource>
+                </transformer>
+              </transformers>
+              <artifactSet>
+                <includes>
+                  <include>io.fineo.client:jdbc:all</include>
+
+                  <!-- tools combined jar already includes all of the other things we might -->
+                  <include>commons-dbutils:commons-dbutils</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <!-- General artifact cleanliness -->
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>.gitkeep</exclude>
+                    <!-- -test.xml overrides our logback.xml -->
+                    <exclude>logback-test.xml</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <relocations>
+                <!-- Same relocations that we do in jdbc-all -->
+                <relocation>
+                  <pattern>com.fasterxml.jackson</pattern>
+                  <shadedPattern>fineo.client.com.fasterxml.jackson</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.common</pattern>
+                  <shadedPattern>fineo.client.com.google.common</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.thirdparty</pattern>
+                  <shadedPattern>fineo.client.com.google.thirdparty</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.gson</pattern>
+                  <shadedPattern>fineo.client.com.google.gson</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>io.netty</pattern>
+                  <shadedPattern>fineo.client.io.netty</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.reactivestreams</pattern>
+                  <shadedPattern>fineo.client.org.reactivestreams</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.asynchttpclient</pattern>
+                  <shadedPattern>fineo.client.org.asynchttpclient</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.amazonaws</pattern>
+                  <shadedPattern>fineo.client.com.amazonaws</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.http</pattern>
+                  <shadedPattern>fineo.apache.http</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

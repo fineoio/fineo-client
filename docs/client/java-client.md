@@ -46,4 +46,4 @@ instance you can call. For instance, to use the 'StreamWrite' API, you would do:
   StreamWrite stream = builder.build(StreamWrite.class)
 ```
 
-All the Java APIs support a synchronous and an asynchrous version of each method.
+All the Java APIs support a synchronous and an asynchronous version of each method.
