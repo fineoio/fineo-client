@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface SchemaApi extends AutoCloseable {
 
-  interface Management {
+  interface Management extends SchemaApi {
 
     @Op(path = "/schema", method = "GET")
     ReadSchemaManagementResponse getCurrentSchemaManagement(ReadSchemaManagement read);
@@ -32,9 +32,9 @@ public interface SchemaApi extends AutoCloseable {
     CompletableFuture<Empty> updateCurrentSchemaManagementAsync(SchemaManagementRequest update);
   }
 
-  interface Metric {
+  interface Metric extends SchemaApi {
     @Op(path = "/schema/metric", method = "POST")
-    Empty createMetric(CreateMetricRequest update);
+    Empty createMetric(CreateMetricRequest create);
 
     @Op(path = "/schema/metric", method = "POST")
     CompletableFuture<Empty> createMetricAync(CreateMetricRequest update);
@@ -59,7 +59,7 @@ public interface SchemaApi extends AutoCloseable {
     CompletableFuture<Empty> deleteMetricAsync(DeleteMetricRequest update);
   }
 
-  interface Field {
+  interface Field extends SchemaApi {
     @Op(path = "/schema/field", method = "POST")
     Empty createField(CreateFieldRequest request);
 

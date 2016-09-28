@@ -3,11 +3,12 @@
 
   <groupId>io.fineo.client</groupId>
   <artifactId>fineo-client-parent</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <modules>
     <module>models</module>
     <module>common</module>
     <module>jdbc</module>
+    <module>tools</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -82,11 +83,16 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven.shade.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
-      <groupId>external.atlassian.jgitflow</groupId>
+        <groupId>external.atlassian.jgitflow</groupId>
         <artifactId>jgitflow-maven-plugin</artifactId>
         <version>1.0-m5.1</version>
         <configuration>
@@ -149,6 +155,12 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>common</artifactId>
+        <version>${project.version}</version>
+        <classifier>all</classifier>
+      </dependency>
+      <dependency>
         <groupId>io.fineo.client.models</groupId>
         <artifactId>common-models</artifactId>
         <version>${project.version}</version>
@@ -168,6 +180,12 @@
         <artifactId>jdbc</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>jdbc</artifactId>
+        <classifier>all</classifier>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- Fineo -->
       <dependency>
@@ -185,6 +203,11 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>

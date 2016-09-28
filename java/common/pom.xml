@@ -3,7 +3,7 @@
   <parent>
     <artifactId>fineo-client-parent</artifactId>
     <groupId>io.fineo.client</groupId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -23,11 +23,22 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
+
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+    </dependency>
 
+    <!-- Testing -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
@@ -37,4 +48,72 @@
       <artifactId>hamcrest-core</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <shadedClassifierName>all</shadedClassifierName>
+          <createDependencyReducedPom>true</createDependencyReducedPom>
+        </configuration>
+        <executions>
+          <!-- Core, non-jdbc tools -->
+          <!-- These don't get a manifest b/c there are a bunch of 'natural' options -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>com.google.guava:guava</include>
+
+                  <!-- Logging -->
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:log4j-over-slf4j</include>
+                  <include>org.slf4j:jcl-over-slf4j</include>
+
+                  <!-- Connections -->
+                  <include>org.asynchttpclient:*</include>
+                  <include>io.netty:*</include>
+                  <include>org.reactivestreams:reactive-streams</include>
+                  <include>com.typesafe.netty:netty-reactive-streams</include>
+                  <include>org.javassist:javassist</include>
+
+                  <!-- AWS tools -->
+                  <include>com.amazonaws:aws-java-sdk-core</include>
+                  <include>joda-time:joda-time</include>
+                  <include>com.fasterxml.jackson.core:*</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <!-- General artifact cleanliness -->
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>.gitkeep</exclude>
+                    <!-- -test.xml overrides our logback.xml -->
+                    <exclude>logback-test.xml</exclude>
+                  </excludes>
+                </filter>
+                <!-- Really, where does this logging come from? Just use slf4j! -->
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>org/apache/log4j/*</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

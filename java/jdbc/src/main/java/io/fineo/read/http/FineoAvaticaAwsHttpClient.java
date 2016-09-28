@@ -3,6 +3,7 @@ package io.fineo.read.http;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.google.common.annotations.VisibleForTesting;
 import io.fineo.client.ApiAwsClient;
 import io.fineo.client.ClientConfiguration;
 import io.fineo.read.AwsApiGatewayBytesTranslator;
@@ -105,5 +106,10 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
 
   public void close() {
     this.client.close();
+  }
+
+  @VisibleForTesting
+  public Map<String, String> getPropertiesForTesting(){
+    return this.properties;
   }
 }

@@ -13,6 +13,7 @@ import org.apache.calcite.avatica.DriverVersion;
 import org.apache.calcite.avatica.Handler;
 import org.apache.calcite.avatica.HandlerImpl;
 import org.apache.calcite.avatica.remote.AvaticaHttpClient;
+import org.apache.calcite.avatica.remote.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static io.fineo.read.jdbc.AuthenticationUtil.setupAuthentication;
@@ -35,8 +38,6 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
   private static final Logger LOG = LoggerFactory.getLogger(Driver.class);
   public static final String CONNECT_PREFIX = "jdbc:fineo:";
-
-  private static final String URL = "https://53r0nhslih.execute-api.us-east-1.amazonaws.com/prod";
 
   static {
     try {
@@ -53,7 +54,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     return true;
   }
 
-  private final List<Pair> open = new ArrayList<>();
+  protected final Map<String, ConnectionInfo> open = new HashMap<>();
 
   public Driver() throws ClassNotFoundException {
     super();
@@ -91,20 +92,59 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     try {
       // do the same parsing as in UnregisteredDriver#connect(...). We so this here so we can
       // generate a URL that contains all the necessary properties, allowing them to get passed
-      // to our custom client. The alternative, right now, is to create a custom factory and have
-      // that create custom Avatica connections, which has our metadata info
+      // to our custom client. It also allows us to manage closing the client pool if we don't
+      // finish initializing correctly
       final String prefix = getConnectStringPrefix();
       assert url.startsWith(prefix);
       final String urlSuffix = url.substring(prefix.length());
       final Properties info2 = ConnectStringParser.parse(urlSuffix, info);
-      String updatedUrl = convertProperties(info2);
-      return super.connect(updatedUrl, info);
+      updateProperties(info2);
+
+      // Unregistered Driver stuff
+      final AvaticaConnection connection = factory.newConnection(this, factory, url, info2);
+      handler.onConnectionInit(connection);
+
+      try {
+        // avatica.Driver stuff
+        Service service = connection.getService();
+
+        // super.connect(...) should be creating a service and setting it in the AvaticaConnection
+        assert null != service;
+
+        service.apply(
+          new Service.OpenConnectionRequest(connection.id,
+            Service.OpenConnectionRequest.serializeProperties(info)));
+      } catch (RuntimeException e) {
+        // can happen if we have a bad connection on the server side.
+        try {
+          connection.close();
+        } catch (SQLException ce) {
+          LOG.error("Failed to correctly close the connection!", ce);
+          // make sure that we definitely close the thread pool
+          close(connection);
+        }
+        throw e;
+      }
+      return connection;
     } catch (IOException e) {
       throw new SQLException("Unexpected exception while obtaining connection!");
     }
   }
 
-  private String convertProperties(Properties info) throws IOException {
+  /**
+   * Update the properties to fix inside the avatica framework. Does things like:
+   * <ol>
+   * <li>Translate aws auth into avatica auth</li>
+   * <li>Update url to include things like the Api Key
+   * <ul>
+   * <li>The client is created with the URL from the properties (url=), not the overall
+   * connection URL, so we have to update the url here
+   * </li>
+   * </ul>
+   * </li>
+   * </ol>
+   */
+  private void updateProperties(Properties info) throws IOException {
     // ensure we use our factory to create our client
     info.put(HTTP_CLIENT_IMPL.camelName(), FineoAvaticaAwsHttpClient.class.getName());
     // yup, always use protobuf
@@ -112,21 +152,25 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     setupAuthentication(info);
 
     // properties that are passed through the connection string
-    ConnectionStringBuilder sb = new ConnectionStringBuilder(getConnectStringPrefix(),
-      BuiltInConnectionProperty.URL.wrap(info).getString(URL));
+    ConnectionStringBuilder sb = new ConnectionStringBuilder(
+      BuiltInConnectionProperty.URL.wrap(info).getString("=== No URL Specified ==="));
     String key = Preconditions
       .checkNotNull(API_KEY.wrap(info).getString(), "Must specify the Fineo API Key via %s",
         API_KEY.camelName());
     sb.with(API_KEY, info);
-    // API KEY is also the company key, so set that too
+
+    // API KEY is also the company key, and we need that in the connection properties on the
+    // server side
     info.put(FineoJdbcProperties.COMPANY_KEY_PROPERTY, key);
     setupClientProperties(info, sb);
+
     // testing override
     String testPrefix = info.getProperty("fineo.internal.test.api-prefix");
     if (testPrefix != null) {
       sb.with("fineo.internal.test.api-prefix", testPrefix);
     }
-    return sb.build();
+    String url = sb.build();
+    info.setProperty("url", url);
   }
 
   /**
@@ -147,47 +191,39 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   @Override
   protected AvaticaHttpClient getHttpClient(AvaticaConnection connection, ConnectionConfig config) {
     AvaticaHttpClient client = super.getHttpClient(connection, config);
-    open.add(new Pair(connection, (FineoAvaticaAwsHttpClient) client));
+    open.put(connection.id, new ConnectionInfo(connection, (FineoAvaticaAwsHttpClient) client));
     return client;
   }
 
   @Override
   protected Handler createHandler() {
     return new HandlerImpl() {
+
       @Override
       public void onConnectionClose(AvaticaConnection connection) {
-        boolean found = false;
-        for (int i = 0; i < open.size(); i++) {
-          Pair p = open.get(i);
-          if (p.isEqual(connection)) {
-            p.close();
-            open.remove(i);
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          LOG.error("Attempting to close connection on driver that didn't creat the connection!");
-        }
+        Driver.this.close(connection);
       }
     };
   }
 
-  private static class Pair {
-    private final AvaticaConnection connection;
+  private void close(AvaticaConnection connection) {
+    ConnectionInfo info = open.remove(connection.id);
+    if (info == null) {
+      LOG.error("Could not find connection: %s on driver!", connection.id);
+      return;
+    }
+
+    info.client.close();
+  }
+
+  private class ConnectionInfo {
+    private final AvaticaConnection conn;
     private final FineoAvaticaAwsHttpClient client;
 
-    private Pair(AvaticaConnection connection, FineoAvaticaAwsHttpClient client) {
-      this.connection = connection;
+    public ConnectionInfo(AvaticaConnection connection,
+      FineoAvaticaAwsHttpClient client) {
+      this.conn = connection;
       this.client = client;
-    }
-
-    public boolean isEqual(AvaticaConnection connection) {
-      return this.connection == connection;
-    }
-
-    public void close() {
-      client.close();
     }
   }
 }

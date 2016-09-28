@@ -1,6 +1,7 @@
 package io.fineo.read.jdbc;
 
 import com.google.common.base.Joiner;
+import org.apache.calcite.avatica.ConnectionProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,9 +16,8 @@ public class ConnectionStringBuilder {
   private final StringBuffer sb;
   private final List<String> props;
 
-  public ConnectionStringBuilder(String url, String target) {
+  public ConnectionStringBuilder(String url) {
     this.sb = new StringBuffer(url);
-    sb.append("url=" + target);
     this.props = new ArrayList<>();
   }
 
@@ -48,7 +48,7 @@ public class ConnectionStringBuilder {
     return with(prop.camelName(), value);
   }
 
-  private String getValue(FineoConnectionProperties prop, Properties info) {
+  private String getValue(ConnectionProperty prop, Properties info) {
     String value;
     switch (prop.type()) {
       case STRING:
