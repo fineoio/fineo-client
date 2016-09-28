@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.fineo.client</groupId>
   <artifactId>fineo-client-parent</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <modules>
     <module>models</module>
     <module>common</module>
@@ -44,7 +42,7 @@
 
     <!-- Test Running properties -->
     <test.output.to.file>true</test.output.to.file>
-    <test.exclude.pattern/>
+    <test.exclude.pattern />
   </properties>
 
   <distributionManagement>
@@ -109,7 +107,7 @@
             <releaseBranchPrefix>release-</releaseBranchPrefix>
             <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
             <!-- no prefix - makes readthedocs happy -->
-            <versionTagPrefix/>
+            <versionTagPrefix />
           </flowInitContext>
           <allowSnapshots>true</allowSnapshots>
           <autoVersionSubmodules>true</autoVersionSubmodules>
