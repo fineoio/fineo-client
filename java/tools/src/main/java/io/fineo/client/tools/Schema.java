@@ -18,7 +18,6 @@ import static io.fineo.client.tools.option.HelpOption.help;
  * <ol>
  * <li>Creating a metric type based on a java class</li>
  * </ol>
- * </p>
  */
 public class Schema {
 
