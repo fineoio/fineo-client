@@ -7,6 +7,13 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Fineo Client - Model - Common</name>
   <artifactId>common-models</artifactId>
+  <name>Fineo Client - Model - Common</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+  </dependencies>
 </project>
