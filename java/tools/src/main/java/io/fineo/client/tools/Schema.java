@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.tools.command.Command;
 import io.fineo.client.tools.command.CreateMetric;
+import io.fineo.client.tools.command.DeleteMetric;
 import io.fineo.client.tools.command.ReadMetric;
 import io.fineo.client.tools.option.ApiOption;
 import io.fineo.client.tools.option.HelpOption;
@@ -23,14 +24,18 @@ import static io.fineo.client.tools.option.HelpOption.help;
 public class Schema {
 
   public static void main(String[] args) throws Exception {
+    HelpOption help = help();
     ApiOption api = new ApiOption();
+
     SchemaOption schema = new SchemaOption();
     CreateMetric create = new CreateMetric(schema);
     ReadMetric read = new ReadMetric(schema);
-    HelpOption help = help();
+    DeleteMetric delete = new DeleteMetric(schema);
+
     JCommander commander = new JCommander(new Object[]{api, schema, help});
-    commander.addCommand("create", create);
-    commander.addCommand("read", read);
+    commander.addCommand(create);
+    commander.addCommand(read);
+    commander.addCommand(delete);
 
     commander.parse(args);
     help.check(commander);

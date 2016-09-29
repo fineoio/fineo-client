@@ -7,8 +7,8 @@ import io.fineo.client.model.schema.field.CreateFieldRequest;
 import io.fineo.client.model.schema.metric.CreateMetricRequest;
 import io.fineo.client.tools.option.SchemaOption;
 
-@Parameters(commandDescription = "Create the specified metric and fields (Default if no command "
-                                 + "specified)")
+@Parameters(commandNames = "create",
+            commandDescription = "Create the specified metric and fields (Default command)")
 public class CreateMetric implements Command {
   private final SchemaOption schema;
 

@@ -7,7 +7,8 @@ import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.metric.ReadMetricResponse;
 import io.fineo.client.tools.option.SchemaOption;
 
-@Parameters(commandDescription = "Read the schema for the metric and output in JSON format")
+@Parameters(commandNames = "read",
+            commandDescription = "Read the schema for the metric and output in JSON format")
 public class ReadMetric implements Command {
   private final SchemaOption schema;
 
