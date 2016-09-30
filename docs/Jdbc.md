@@ -17,7 +17,7 @@ project with:
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>jdbc</artifactId>
-      <version>1.1.0</version>
+      <version>1.1.1</version>
       <classifier>all</classifier>
     </dependency>
     ...
@@ -105,5 +105,5 @@ You find information on tuning the client connection at our [tuning guide](jdbc/
 Currently, we support the same semantics as [Drill SQL](http://drill.apache.org/docs/sql-reference)
 
 
-[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.0/jdbc-1.1.0-all.jar
+[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.1/jdbc-1.1.1-all.jar
 [default AWS credential chain]: http://docs.aws.amazon.com/java-sdk/latest/developer-guide/credentials.html
