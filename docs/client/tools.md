@@ -33,10 +33,10 @@ You can get the tools [here].
 To create the bundled metric type into a table named 'metric', you run: 
 
 ```
-$ java -cp tools-1.1.0-SNAPSHOT.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
-  --credentials-file <yaml credentials>
+  --credentials-file <yaml credentials> \
   --type metric
 ```
 
@@ -45,12 +45,53 @@ Otherwise, we just use the type you specify. Note that if you have your own type
 create a metric type like:
 
 ```
-$ java -cp tools-1.1.0-SNAPSHOT.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
   --type com.company.Event \
   --metric-name my-events
+```
+
+### Reading schema
+
+You can also read the schema for a given table with the `read` command. For instance, to read the
+ schema of the metric table that we create above, you would run:
+  
+```
+$ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
+  --api-key <your api key> \
+  --url <api> \
+  --credentials-file <yaml credentials>\
+  --metric-name metric \
+  read
+```
+
+which would output a JSON object like:
+
+```
+{
+  "name":"metric",
+  "aliases":[""],
+  "timestampPatterns":[],
+  "fields":[
+    {"name":"field","aliases":[""],"type":"STRING"},
+    {"name":"timestamp","aliases":[],"type":"LONG"},
+  ]
+}
+```
+
+### Deleting a metric
+
+You can also delete a table (e.g. metric) with the `delete` command like so: 
+
+```
+$ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
+  --api-key <your api key> \
+  --url <api> \
+  --credentials-file <yaml credentials> \
+  --metric-name metric \
+  delete
 ```
 
 ## Stream
@@ -59,7 +100,7 @@ The same event type that you created above can be reused with the Stream tool. I
 sending a single event, you can easily specify each field:
 
 ```
-$ java -cp tools-1.1.0-SNAPSHOT.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
@@ -74,7 +115,7 @@ The tool sets the timestamp is set to the time the event is written, so you don'
   field belongs. Going back to built in 'metric' type, you can specify two events like this:
 
 ```
-$ java -cp tools-1.1.0-SNAPSHOT.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
@@ -107,7 +148,7 @@ Suppose you just want to read all the rows in the 'metric' table that you create
 above:
 
 ```
-$ java -jar tools-1.1.0-jdbc.jar \
+$ java -jar tools-<version>-jdbc.jar \
     --api-key <your api key> \
     --url <api> \
     --credentials-file <yaml credentials> \
