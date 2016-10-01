@@ -3,10 +3,17 @@
   <parent>
     <artifactId>models</artifactId>
     <groupId>io.fineo.client.models</groupId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Fineo Client - Model - Common</name>
   <artifactId>common-models</artifactId>
+  <name>Fineo Client - Model - Common</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+  </dependencies>
 </project>

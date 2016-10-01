@@ -2,9 +2,10 @@ package io.fineo.client.tools;
 
 import com.beust.jcommander.JCommander;
 import io.fineo.client.FineoClientBuilder;
-import io.fineo.client.model.schema.SchemaApi;
-import io.fineo.client.model.schema.field.CreateFieldRequest;
-import io.fineo.client.model.schema.metric.CreateMetricRequest;
+import io.fineo.client.tools.command.Command;
+import io.fineo.client.tools.command.CreateMetric;
+import io.fineo.client.tools.command.DeleteMetric;
+import io.fineo.client.tools.command.ReadMetric;
 import io.fineo.client.tools.option.ApiOption;
 import io.fineo.client.tools.option.HelpOption;
 import io.fineo.client.tools.option.SchemaOption;
@@ -16,44 +17,50 @@ import static io.fineo.client.tools.option.HelpOption.help;
  * <p>
  * Supports:
  * <ol>
- * <li>Creating a metric type based on a java class</li>
+ * <li>create: Creating a table (metric) based on a java class</li>
+ * <li>read: Creating a table (metric) based on a java class</li>
  * </ol>
  */
 public class Schema {
 
   public static void main(String[] args) throws Exception {
-    ApiOption api = new ApiOption();
-    SchemaOption schema = new SchemaOption();
     HelpOption help = help();
+    ApiOption api = new ApiOption();
+
+    SchemaOption schema = new SchemaOption();
+    CreateMetric create = new CreateMetric(schema);
+    ReadMetric read = new ReadMetric(schema);
+    DeleteMetric delete = new DeleteMetric(schema);
+
     JCommander commander = new JCommander(new Object[]{api, schema, help});
+    commander.addCommand(create);
+    commander.addCommand(read);
+    commander.addCommand(delete);
+
     commander.parse(args);
     help.check(commander);
 
-    // ensure schema is loaded
-    schema.load();
-
-    // get ready to create clients
+    //prepare the client
     FineoClientBuilder builder = new FineoClientBuilder()
       .withApiKey(api.key)
       .withEndpoint(api.url)
       .withCredentials(api.credentials.get());
 
-    try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class);
-         SchemaApi.Field fields = builder.build(SchemaApi.Field.class)) {
-      CreateMetricRequest create = new CreateMetricRequest();
-      // getting the class also sets the schema name
-      create.setMetricName(schema.name);
-      metrics.createMetric(create);
-
-      // create each field
-      schema.getFields().forEach(field -> {
-        CreateFieldRequest createField = new CreateFieldRequest();
-        createField.setMetricName(schema.name);
-        createField.setFieldName(field.name);
-        createField.setFieldType(field.type);
-
-        fields.createField(createField);
-      });
+    Command command;
+    String parsed = commander.getParsedCommand();
+    if (parsed == null) {
+      command = create;
+    } else {
+      JCommander c = commander.getCommands().get(commander.getParsedCommand());
+      if (c == null) {
+        System.err.println("Unrecognized command!");
+        commander.usage();
+        System.exit(1);
+      }
+      command = (Command) c.getObjects().get(0);
     }
+
+    // run the command
+    command.run(builder);
   }
 }

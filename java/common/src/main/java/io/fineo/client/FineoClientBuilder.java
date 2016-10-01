@@ -142,8 +142,11 @@ public class FineoClientBuilder {
           response = client.patch(httpRequest.path, mapper.writeValueAsBytes(httpRequest.content));
           break;
         case GET:
-          Map<String, List<String>> map = httpRequest.parameters.values().stream().collect
-            (Collectors.toMap(name -> name, name -> newArrayList(httpRequest.parameters.get(name)
+          Map<String, List<String>> map =
+            httpRequest.parameters.keys()
+                                  .stream()
+                                  .collect(Collectors.toMap(name -> name,
+                                    name -> newArrayList(httpRequest.parameters.get(name)
             )));
           response = client.get(httpRequest.path, map);
           break;

@@ -26,7 +26,7 @@ public interface SchemaApi extends AutoCloseable {
       ReadSchemaManagement read);
 
     @Op(path = "/schema", method = "PATCH")
-    Empty updateCurrentSchemaManagement(SchemaManagementRequest update);
+    void updateCurrentSchemaManagement(SchemaManagementRequest update);
 
     @Op(path = "/schema", method = "PATCH")
     CompletableFuture<Empty> updateCurrentSchemaManagementAsync(SchemaManagementRequest update);
@@ -34,7 +34,7 @@ public interface SchemaApi extends AutoCloseable {
 
   interface Metric extends SchemaApi {
     @Op(path = "/schema/metric", method = "POST")
-    Empty createMetric(CreateMetricRequest create);
+    void createMetric(CreateMetricRequest create);
 
     @Op(path = "/schema/metric", method = "POST")
     CompletableFuture<Empty> createMetricAync(CreateMetricRequest update);
@@ -47,13 +47,13 @@ public interface SchemaApi extends AutoCloseable {
       @Parameter(name = "metricName") String metricName);
 
     @Op(path = "/schema/metric", method = "PATCH")
-    Empty updateMetric(UpdateMetricRequest update);
+    void updateMetric(UpdateMetricRequest update);
 
     @Op(path = "/schema/metric", method = "PATCH")
     CompletableFuture<Empty> updateMetricAsync(UpdateMetricRequest update);
 
     @Op(path = "/schema/metric", method = "DELETE")
-    Empty deleteMetric(DeleteMetricRequest update);
+    void deleteMetric(DeleteMetricRequest update);
 
     @Op(path = "/schema/metric", method = "DELETE")
     CompletableFuture<Empty> deleteMetricAsync(DeleteMetricRequest update);
@@ -61,7 +61,7 @@ public interface SchemaApi extends AutoCloseable {
 
   interface Field extends SchemaApi {
     @Op(path = "/schema/field", method = "POST")
-    Empty createField(CreateFieldRequest request);
+    void createField(CreateFieldRequest request);
 
     @Op(path = "/schema/field", method = "POST")
     CompletableFuture<Empty> createFieldAync(CreateFieldRequest request);
@@ -75,7 +75,7 @@ public interface SchemaApi extends AutoCloseable {
       @Parameter(name = "fieldName") String fieldName);
 
     @Op(path = "/schema/field", method = "PATCH")
-    Empty updateField(UpdateFieldRequest update);
+    void updateField(UpdateFieldRequest update);
 
     @Op(path = "/schema/field", method = "PATCH")
     CompletableFuture<Empty> updateFieldAsync(UpdateFieldRequest update);
