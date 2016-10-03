@@ -1,7 +1,8 @@
 package io.fineo.schema.timestamp;
 
-import java.time.Instant;
-import java.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -9,13 +10,18 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Parse the timestamp from one of many patterns
  */
 public class MultiPatternTimestampParser {
+
+  private static final Logger LOG = LoggerFactory.getLogger(MultiPatternTimestampParser.class);
+  private static final String EXPLICIT_ZONE_PATTERN = ".*[@](?<zone>.*)";
+  private static final Pattern ZONE_PATTERN = Pattern.compile(EXPLICIT_ZONE_PATTERN);
 
   public enum TimeFormats {
     // 2011-12-03T10:15:30 @ UTC
@@ -54,16 +60,15 @@ public class MultiPatternTimestampParser {
       if (pattern == null) {
         continue;
       }
-      DateTimeFormatter formatter = getFormatter(pattern);
+
+      TimestampFormatter formatter = getFormatter(pattern);
       try {
-        TemporalAccessor time = formatter.parse(value);
-        OffsetDateTime.parse(value, formatter);
-        return Instant.from(time).toEpochMilli();
+        return OffsetDateTime.parse(value, formatter.formatter).toInstant().toEpochMilli();
       } catch (DateTimeParseException e) {
         if (e.getMessage().contains("Unable to obtain OffsetDateTime")) {
           // try parsing just a local date time which we then zone to UTC
-          OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(value, formatter),
-            ZoneOffset.UTC);
+          OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(value, formatter.formatter),
+            ZoneOffset.of(formatter.explicitZone.normalized().toString()));
           return odt.toInstant().toEpochMilli();
         }
         continue;
@@ -72,7 +77,31 @@ public class MultiPatternTimestampParser {
     return null;
   }
 
-  public static DateTimeFormatter getFormatter(String format) {
+  public static class TimestampFormatter {
+    private DateTimeFormatter formatter;
+    private ZoneId explicitZone;
+
+    public TimestampFormatter(DateTimeFormatter formatter, ZoneId explicitZone) {
+      this.formatter = formatter;
+      this.explicitZone = explicitZone;
+    }
+  }
+
+  public static TimestampFormatter getFormatter(String format) {
+    Matcher matcher = ZONE_PATTERN.matcher(format);
+    ZoneId id = ZoneId.of("UTC");
+    if (matcher.matches()) {
+      String zone = matcher.group("zone");
+      id = ZoneId.of(zone.trim());
+      // strip off the ending
+      format = format.substring(0, format.indexOf("@"));
+      LOG.debug("Using format: '{}' with fixed zone: '{}'", format, id);
+    }
+    DateTimeFormatter formatter = parser(format);
+    return new TimestampFormatter(formatter, id);
+  }
+
+  private static DateTimeFormatter parser(String format) {
     try {
       return MultiPatternTimestampParser.TimeFormats.valueOf(format.toUpperCase()).formatter;
     } catch (IllegalArgumentException e) {

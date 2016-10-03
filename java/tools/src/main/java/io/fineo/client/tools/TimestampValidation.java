@@ -9,6 +9,7 @@ import io.fineo.schema.timestamp.MultiLevelTimestampParser;
 import io.fineo.schema.timestamp.TimestampFieldExtractor;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public class TimestampValidation {
     long timestamp = parser.getTimestamp(new MapRecord(record));
     System.out.println("Timestamp parsed to Unix epoch: " + timestamp);
     Instant instant = Instant.ofEpochMilli(timestamp);
-    System.out.println("Which is (ISO_INSTANT): " + instant);
+    System.out.println("Which is ");
+    System.out.println(" ISO_INSTANT: " + instant);
+    System.out.println(" Local:       " + instant.atZone(ZoneId.systemDefault()));
   }
 }
