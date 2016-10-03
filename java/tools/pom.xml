@@ -25,6 +25,10 @@
       <classifier>all</classifier>
     </dependency>
     <dependency>
+      <groupId>io.fineo.client.schema</groupId>
+      <artifactId>schema</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>jdbc</artifactId>
       <classifier>all</classifier>

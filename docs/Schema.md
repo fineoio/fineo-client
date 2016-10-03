@@ -78,8 +78,8 @@ A Timestamp Pattern defines an expected format of the ```timestamp``` field that
 into a Unix Epoch time. There are a couple of 'standard' formats that we support out of the box:
 
   * ISO_DATE_TIME
-   * Example: ```2011-12-03T10:15:30```
-   * Note: Assumed to be at UTC
+    * Example: ```2011-12-03T10:15:30```
+    * Note: Assumed to be at UTC
   * ISO_OFFSET_DATE_TIME
     * Example: ```2011-12-03T10:15:30+01:00```
     * Note: Same as ISO_DATE_TIME but with an offset from UTC

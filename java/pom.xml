@@ -9,6 +9,7 @@
     <module>common</module>
     <module>jdbc</module>
     <module>tools</module>
+    <module>schema</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -185,6 +186,11 @@
         <groupId>io.fineo.client</groupId>
         <artifactId>jdbc</artifactId>
         <classifier>all</classifier>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client.schema</groupId>
+        <artifactId>schema</artifactId>
         <version>${project.version}</version>
       </dependency>
 
