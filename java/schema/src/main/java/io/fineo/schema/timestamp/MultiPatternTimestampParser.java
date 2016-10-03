@@ -1,6 +1,9 @@
 package io.fineo.schema.timestamp;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -54,8 +57,15 @@ public class MultiPatternTimestampParser {
       DateTimeFormatter formatter = getFormatter(pattern);
       try {
         TemporalAccessor time = formatter.parse(value);
+        OffsetDateTime.parse(value, formatter);
         return Instant.from(time).toEpochMilli();
       } catch (DateTimeParseException e) {
+        if (e.getMessage().contains("Unable to obtain OffsetDateTime")) {
+          // try parsing just a local date time which we then zone to UTC
+          OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(value, formatter),
+            ZoneOffset.UTC);
+          return odt.toInstant().toEpochMilli();
+        }
         continue;
       }
     }
