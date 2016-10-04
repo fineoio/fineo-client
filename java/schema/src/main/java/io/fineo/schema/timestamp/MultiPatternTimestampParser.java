@@ -71,7 +71,11 @@ public class MultiPatternTimestampParser {
           // try parsing just a local date time which we then zone to UTC
           ZonedDateTime odt = ZonedDateTime.of(LocalDateTime.parse(value, formatter.formatter),
             formatter.explicitZone);
-          return odt.toInstant().toEpochMilli();
+          try {
+            return odt.toInstant().toEpochMilli();
+          } catch (DateTimeParseException e1) {
+            // fall through to continue
+          }
         }
         continue;
       }

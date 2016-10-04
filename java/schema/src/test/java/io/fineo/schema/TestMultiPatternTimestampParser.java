@@ -51,4 +51,16 @@ public class TestMultiPatternTimestampParser {
     assertEquals(zdt.toInstant().toEpochMilli(),
       parser.parse("2015-10-12 12:34:16.345 PST").longValue());
   }
+
+  @Test
+  public void testFallbackParsing() throws Exception {
+    MultiPatternTimestampParser parser =
+      new MultiPatternTimestampParser(
+        newArrayList("dd-MM-u HH:mm:ss.SSS @ UTC-1", "uuuu-MM-dd HH:mm:ss.SSS zzz"));
+
+    ZonedDateTime zdt = ZonedDateTime.of(2015, 10, 12, 12, 34, 16, (int) TimeUnit.MILLISECONDS
+      .toNanos(345), TimeZone.getTimeZone("PST").toZoneId());
+    assertEquals(zdt.toInstant().toEpochMilli(),
+      parser.parse("2015-10-12 12:34:16.345 PST").longValue());
+  }
 }
