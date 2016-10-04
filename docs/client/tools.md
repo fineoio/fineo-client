@@ -139,6 +139,34 @@ Which will create two events and send them to the stream API (in json format):
 }]
 ```
 
+## Timestamp Validation
+
+Before sending events to the Fineo API, you should check that your timestamp parse as you expect.
+ For this, we have the `TimestampValidation` tool that parses the timestamp _exactly as it would 
+ on the server-side_ so you can be sure things are working as expected.
+
+```
+$  java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.TimestampValidation \
+    --pattern <pattern> \
+    --value <column value>
+```
+
+For example, you could check:
+
+ * --pattern "uuuu-MM-dd HH:mm:ss.SSS@ UTC-8"
+ * --value "2016-01-21 15:32:12.345"
+
+Which would output something like (if you are in the PST timezone):
+
+```
+Timestamp parsed to Unix epoch: 1453415532345
+Which is 
+ ISO_INSTANT: 2016-01-21T22:32:12.345Z
+ Local:       2016-01-21T14:32:12.345-08:00[America/Los_Angeles]
+```
+
+TimestampValidation is a local tool, so it does not need a URL or Api Key.
+
 ## SqlToJson
 
 SqlToJson is stored in its [own jar] which includes all the JDBC connection management on top of 
