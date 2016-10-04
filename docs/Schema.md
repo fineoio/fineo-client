@@ -96,7 +96,29 @@ into a Unix Epoch time. There are a couple of 'standard' formats that we support
 
 Any of these standard names can be provided as the Timestamp Pattern. Alternatively, you provide 
 your own parsing format as defined in at
-[Java DateTimeFormatter: Patterns For Formatting and Parsing].  
+[Java DateTimeFormatter: Patterns For Formatting and Parsing] and supports formatting at 'Zoned' 
+timestamps (like: `2015-10-12 12:34:16.345 PST`).  
+
+##### Formatted Coerced Timezones
+
+You may not have a timestamp on your records, but don't want to them to default to UTC time zone.
+When you have a **custom timestamp parsing specification** (not one of the above short aliases) 
+you can additionally specify a timezone offset from UTC with an `@` separator followed by the 
+UTC offset to be applied to all records that match that formatting.
+
+For instance,
+
+```
+uuuu-MM-dd HH:mm:ss.SSS@ UTC+1
+```
+
+Would match
+
+```
+2015-10-12 12:34:16.345
+```
+
+And assign it to the UTC+1 timezone. 
 
 #### Timestamp Aliases
 
