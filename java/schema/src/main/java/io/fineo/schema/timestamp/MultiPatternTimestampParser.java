@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -63,12 +64,13 @@ public class MultiPatternTimestampParser {
 
       TimestampFormatter formatter = getFormatter(pattern);
       try {
-        return OffsetDateTime.parse(value, formatter.formatter).toInstant().toEpochMilli();
+        return ZonedDateTime.parse(value, formatter.formatter).toInstant().toEpochMilli();
       } catch (DateTimeParseException e) {
-        if (e.getMessage().contains("Unable to obtain OffsetDateTime")) {
+        LOG.debug(e.getMessage());
+        if (e.getMessage().contains("Unable to obtain")) {
           // try parsing just a local date time which we then zone to UTC
-          OffsetDateTime odt = OffsetDateTime.of(LocalDateTime.parse(value, formatter.formatter),
-            ZoneOffset.of(formatter.explicitZone.normalized().toString()));
+          ZonedDateTime odt = ZonedDateTime.of(LocalDateTime.parse(value, formatter.formatter),
+            formatter.explicitZone);
           return odt.toInstant().toEpochMilli();
         }
         continue;
