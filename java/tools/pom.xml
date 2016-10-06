@@ -73,6 +73,11 @@
       <artifactId>logback-classic</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.4</version>
+    </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
@@ -98,6 +103,7 @@
                   <include>io.fineo.client:common:jar:all</include>
 
                   <include>org.yaml:snakeyaml</include>
+                  <include>org.apache.commons:commons-csv</include>
                   <include>com.beust:jcommander</include>
 
                   <include>ch.qos.logback:logback-core</include>
