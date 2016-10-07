@@ -58,7 +58,7 @@ public class WriteEventOption {
     long ts = System.currentTimeMillis();
     for (Map<String, Object> event : events.values()) {
       // all events need a metric type too
-      event.put("metrictype", schema.name);
+      event.put("metrictype", schema.getName());
 
       // ensure all the events have a timestamp field
       if (!event.containsKey("timestamp")) {

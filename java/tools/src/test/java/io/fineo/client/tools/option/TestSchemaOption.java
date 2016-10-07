@@ -32,7 +32,7 @@ public class TestSchemaOption {
         types.remove(0).toUpperCase(), field.type.toUpperCase());
     });
 
-    assertEquals(opt.type, opt.name);
+    assertEquals(opt.type, opt.getName());
   }
 
   public static class MetricClass extends EventTypes.EventBase {

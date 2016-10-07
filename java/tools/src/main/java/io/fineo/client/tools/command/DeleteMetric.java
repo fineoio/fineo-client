@@ -17,7 +17,7 @@ public class DeleteMetric implements Command {
   @Override
   public void run(FineoClientBuilder builder) throws Exception {
     try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class)) {
-      DeleteMetricRequest request = new DeleteMetricRequest().setMetricName(schema.name);
+      DeleteMetricRequest request = new DeleteMetricRequest().setMetricName(schema.getName());
       metrics.deleteMetric(request);
     }
   }

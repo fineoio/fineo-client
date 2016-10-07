@@ -19,19 +19,18 @@ public class CreateMetric implements Command {
   @Override
   public void run(FineoClientBuilder builder) throws Exception {
     // ensure schema is loaded
-    schema.load();
 
     try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class);
          SchemaApi.Field fields = builder.build(SchemaApi.Field.class)) {
       CreateMetricRequest create = new CreateMetricRequest();
       // getting the class also sets the schema name
-      create.setMetricName(schema.name);
+      create.setMetricName(schema.getName());
       metrics.createMetric(create);
 
       // create each field
       schema.getFields().forEach(field -> {
         CreateFieldRequest createField = new CreateFieldRequest();
-        createField.setMetricName(schema.name);
+        createField.setMetricName(schema.getName());
         createField.setFieldName(field.name);
         createField.setFieldType(field.type);
 

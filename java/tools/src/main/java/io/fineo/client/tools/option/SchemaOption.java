@@ -1,12 +1,16 @@
 package io.fineo.client.tools.option;
 
+import com.beust.jcommander.DynamicParameter;
 import com.beust.jcommander.Parameter;
 import io.fineo.client.model.write.SingleStreamEventBase;
 import io.fineo.client.tools.EventTypes;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Options around creating/managing schemas
@@ -19,18 +23,30 @@ public class SchemaOption {
 
   @Parameter(names = "--metric-name", description = "Name of the metric. If none specified, uses a "
                                                     + "form of the type class name")
-  public String name;
+  private String name;
 
-  /**
-   * Load all the properties after parsing. Needed because there is on explicit call to this
-   * object after parsing is complete
-   * @throws ClassNotFoundException if the parsed type cannot be found
-   */
-  public void load() throws ClassNotFoundException {
-    this.getClazz();
+  @DynamicParameter(names = "-F",
+                    description = "Field name and type specification. E.g. -Ffield1=VARCHAR")
+  private Map<String, String> fieldAndType = new HashMap<>();
+
+  public String getName() {
+    if (name == null) {
+      return this.type;
+    }
+    return this.name;
   }
 
   public List<FieldInstance> getFields() throws ClassNotFoundException {
+    if (type != null) {
+      return loadFromClass();
+    }
+
+    // just convert the specified fields
+    return fieldAndType.entrySet().stream().map(entry -> new FieldInstance(entry.getKey(), entry
+      .getValue())).collect(Collectors.toList());
+  }
+
+  private List<FieldInstance> loadFromClass() throws ClassNotFoundException {
     Class clazz = getClazz();
 
     // get all the fields as simple get/set methods. this is rather crude, but its just a simple

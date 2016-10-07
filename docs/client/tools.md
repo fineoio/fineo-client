@@ -53,6 +53,22 @@ $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema
   --metric-name my-events
 ```
 
+Alternatively, you can also create schema entirely based on the typing your specify on the 
+command line. For example:
+
+```
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
+  --api-key <your api key> \
+  --url <api> \
+  --credentials-file <yaml credentials> \
+  --metric-name my-events2
+  -Ffield1=VARCHAR -Ffield2=INTEGER
+```
+
+Would create a metric named 'my-events2' with two fields: field1(varchar) and field2(integer). 
+Note that because we are not specifying a type, we must specify a metric name because there is no
+ default value we could create in its place. 
+
 ### Reading schema
 
 You can also read the schema for a given table with the `read` command. For instance, to read the
@@ -72,10 +88,10 @@ which would output a JSON object like:
 ```
 {
   "name":"metric",
-  "aliases":[""],
+  "aliases":[],
   "timestampPatterns":[],
   "fields":[
-    {"name":"field","aliases":[""],"type":"STRING"},
+    {"name":"field","aliases":[],"type":"STRING"},
     {"name":"timestamp","aliases":[],"type":"LONG"},
   ]
 }

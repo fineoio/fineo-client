@@ -19,7 +19,7 @@ public class ReadMetric implements Command {
   @Override
   public void run(FineoClientBuilder builder) throws Exception {
     try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class)) {
-      ReadMetricResponse response = metrics.readMetric(schema.name);
+      ReadMetricResponse response = metrics.readMetric(schema.getName());
       ObjectMapper mapper = new ObjectMapper();
       System.out.println(mapper.writeValueAsString(response));
     }
