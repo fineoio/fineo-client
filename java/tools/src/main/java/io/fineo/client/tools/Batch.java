@@ -90,8 +90,7 @@ public class Batch {
 
   private SingleStreamEventBase[] read(String file) throws IOException, ClassNotFoundException {
     String type = file.substring(file.lastIndexOf(".") + 1);
-    String name = schema.name;
-    schema.load();
+    String name = schema.getName();
     Class<? extends SingleStreamEventBase> clazz = schema.getClazz();
     switch (type) {
       case "json":
