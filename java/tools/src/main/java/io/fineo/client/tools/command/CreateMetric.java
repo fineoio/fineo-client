@@ -1,6 +1,7 @@
 package io.fineo.client.tools.command;
 
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.field.CreateFieldRequest;
@@ -10,6 +11,8 @@ import io.fineo.client.tools.option.SchemaOption;
 @Parameters(commandNames = "create",
             commandDescription = "Create the specified metric and fields (Default command)")
 public class CreateMetric implements Command {
+
+  @ParametersDelegate
   private final SchemaOption schema;
 
   public CreateMetric(SchemaOption schema) {
@@ -18,8 +21,6 @@ public class CreateMetric implements Command {
 
   @Override
   public void run(FineoClientBuilder builder) throws Exception {
-    // ensure schema is loaded
-
     try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class);
          SchemaApi.Field fields = builder.build(SchemaApi.Field.class)) {
       CreateMetricRequest create = new CreateMetricRequest();

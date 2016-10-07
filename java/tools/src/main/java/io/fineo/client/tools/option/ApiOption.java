@@ -7,7 +7,7 @@ public class ApiOption {
   @Parameter(names = "--url", description = "URL to call for api operations")
   public String url;
 
-  @Parameter(names = "--api-key", description = "Api key to use")
+  @Parameter(names = "--api-key", description = "Api key to use", required = true)
   public String key;
 
   @ParametersDelegate

@@ -1,6 +1,7 @@
 package io.fineo.client.tools.command;
 
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.SchemaApi;
@@ -10,6 +11,8 @@ import io.fineo.client.tools.option.SchemaOption;
 @Parameters(commandNames = "read",
             commandDescription = "Read the schema for the metric and output in JSON format")
 public class ReadMetric implements Command {
+
+  @ParametersDelegate
   private final SchemaOption schema;
 
   public ReadMetric(SchemaOption schema) {

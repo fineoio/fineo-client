@@ -19,7 +19,7 @@ public class CredentialsOption {
 
   private AWSCredentialsProvider credentials;
 
-  @Parameter(names = "--credential-type", description = "profile, static")
+  @Parameter(names = "--credential-type", description = "profile, static", required = true)
   public String credentialType;
 
   @Parameter(names = "--profile-name",
