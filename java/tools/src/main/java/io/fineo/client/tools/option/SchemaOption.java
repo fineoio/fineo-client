@@ -2,8 +2,8 @@ package io.fineo.client.tools.option;
 
 import com.beust.jcommander.DynamicParameter;
 import com.beust.jcommander.Parameter;
-import io.fineo.client.model.write.SingleStreamEventBase;
 import io.fineo.client.tools.EventTypes;
+import io.fineo.client.tools.events.AnnotationAliases;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,6 +49,7 @@ public class SchemaOption {
   private List<FieldInstance> loadFromClass() throws ClassNotFoundException {
     Class clazz = getClazz();
 
+    AnnotationAliases aliases = new AnnotationAliases(clazz);
     // get all the fields as simple get/set methods. this is rather crude, but its just a simple
     // tool with simple goals. If you want to get fancier, its recommended to write more java
     // code around a SchemaApi instance that handles the loading of data for you
@@ -86,16 +87,20 @@ public class SchemaOption {
             throw new IllegalArgumentException(
               "Schema tool does not support type: " + type.getTypeName());
         }
-        fields.add(new FieldInstance(fieldName, typeName));
+        // add the field unless it a metric/timestamp alias
+        if (!aliases.getMetricTypeAliases().contains(fieldName) &&
+            !aliases.getTimestampAliases().contains(fieldName)) {
+          fields.add(new FieldInstance(fieldName, typeName));
+        }
       }
     }
     return fields;
   }
 
-  public Class<? extends SingleStreamEventBase> getClazz() throws ClassNotFoundException {
+  public Class getClazz() throws ClassNotFoundException {
     Class clazz = EventTypes.EVENTS.get(type);
     if (clazz == null) {
-      clazz = Class.forName(type).asSubclass(SingleStreamEventBase.class);
+      clazz = Class.forName(type);
     }
     if (this.name == null) {
       this.name = type;
