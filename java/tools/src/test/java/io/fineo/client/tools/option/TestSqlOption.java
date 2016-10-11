@@ -32,7 +32,7 @@ public class TestSqlOption {
   public void testGetQuery() throws Exception {
     SqlOption sql = new SqlOption();
     JCommander cmd = new JCommander(sql);
-    cmd.parse("SELECT", "*", "FROM", "table");
+    cmd.parse("--api-key", "key", "--credential-type", "profile", "SELECT", "*", "FROM", "table");
     assertEquals("SELECT * FROM table", sql.getQuery());
   }
 }
