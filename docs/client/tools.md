@@ -215,7 +215,7 @@ secret_access_key: <secret>
 ```
 
 Alternatively, you can also specify the credentials through command line properties statically or as
- an AWS profile.
+ an AWS profile. See `help` option for more information on how to specify the credentials
  
 # Additional options
 
