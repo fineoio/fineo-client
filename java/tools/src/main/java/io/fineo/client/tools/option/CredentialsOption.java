@@ -64,7 +64,7 @@ public class CredentialsOption {
         staticSecret)));
     }
 
-    Preconditions.checkArgument(providers.size() == 0, "No valid credentials provided!");
+    Preconditions.checkArgument(providers.size() > 0, "No valid credentials provided!");
     return new AWSCredentialsProviderChain(providers);
   }
 }
