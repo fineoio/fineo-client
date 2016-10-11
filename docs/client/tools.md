@@ -37,7 +37,7 @@ $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
-  --type metric
+  create --type metric
 ```
 
 If you wanted to name the table something different, you could also specify `--metric-name`. 
@@ -49,6 +49,7 @@ $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
+  create \
   --type com.company.Event \
   --metric-name my-events
 ```
@@ -61,7 +62,8 @@ $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
-  --metric-name my-events2
+  create \
+  --metric-name my-events2 \
   -Ffield1=VARCHAR -Ffield2=INTEGER
 ```
 
@@ -78,9 +80,8 @@ You can also read the schema for a given table with the `read` command. For inst
 $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
-  --credentials-file <yaml credentials>\
-  --metric-name metric \
-  read
+  --credentials-file <yaml credentials> \
+  read --metric-name metric
 ```
 
 which would output a JSON object like:
@@ -106,8 +107,7 @@ $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
-  --metric-name metric \
-  delete
+  delete --metric-name metric
 ```
 
 ## Stream
@@ -116,7 +116,7 @@ The same event type that you created above can be reused with the Stream tool. I
 sending a single event, you can easily specify each field:
 
 ```
-$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
@@ -128,10 +128,10 @@ The tool sets the timestamp is set to the time the event is written, so you don'
  it explicitly (unless you want to).
  
  If you want to specify multiple events, you need to specify the index of the event to which each
-  field belongs. Going back to built in 'metric' type, you can specify two events like this:
+  field belongs. Going back to the built in 'metric' type, you can specify two events like this:
 
 ```
-$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --url <api> \
   --credentials-file <yaml credentials> \
