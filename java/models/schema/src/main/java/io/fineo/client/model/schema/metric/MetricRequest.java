@@ -12,4 +12,22 @@ public class MetricRequest {
     this.metricName = metricName;
     return (T) this;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof MetricRequest))
+      return false;
+
+    MetricRequest that = (MetricRequest) o;
+
+    return getMetricName().equals(that.getMetricName());
+
+  }
+
+  @Override
+  public int hashCode() {
+    return getMetricName().hashCode();
+  }
 }

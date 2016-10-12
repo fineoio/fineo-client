@@ -49,6 +49,7 @@ public class CreateMetric implements Command {
         updateTimestamp.setAliases(aliases.getTimestampAliases().toArray(NEW_STRING_ARRAY));
         updateTimestamp.setFieldName("timestamp");
         updateTimestamp.setMetricName(schema.getName());
+        fields.updateField(updateTimestamp);
       }
 
       // add the aliases/timestamp patterns at the parent level

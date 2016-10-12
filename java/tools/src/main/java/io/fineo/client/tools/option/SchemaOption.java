@@ -19,15 +19,15 @@ public class SchemaOption {
 
   @Parameter(names = "--type", description = "Generic type name of a known EventType or class name "
                                              + "of a model for the metric schema")
-  String type;
+  public String type;
 
   @Parameter(names = "--metric-name", description = "Name of the metric. If none specified, uses a "
                                                     + "form of the type class name")
-  private String name;
+  public String name;
 
   @DynamicParameter(names = "-F",
                     description = "Field name and type specification. E.g. -Ffield1=VARCHAR")
-  private Map<String, String> fieldAndType = new HashMap<>();
+  public Map<String, String> fieldAndType = new HashMap<>();
 
   public String getName() {
     if (name == null) {

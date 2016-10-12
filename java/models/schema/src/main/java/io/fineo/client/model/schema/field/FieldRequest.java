@@ -14,4 +14,25 @@ public class FieldRequest extends MetricRequest {
     this.fieldName = fieldName;
     return (T) this;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof FieldRequest))
+      return false;
+
+    if(!super.equals(o)){
+      return false;
+    }
+
+    FieldRequest that = (FieldRequest) o;
+
+    return getFieldName().equals(that.getFieldName());
+  }
+
+  @Override
+  public int hashCode() {
+    return getFieldName().hashCode();
+  }
 }
