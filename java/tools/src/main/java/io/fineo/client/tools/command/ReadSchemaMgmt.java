@@ -3,17 +3,11 @@ package io.fineo.client.tools.command;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.ReadSchemaManagement;
 import io.fineo.client.model.schema.ReadSchemaManagementResponse;
 import io.fineo.client.model.schema.SchemaApi;
 
-import java.util.function.Consumer;
-
-/**
- *
- */
 @Parameters(commandNames = "read-mgmt",
             commandDescription = "Read the generic schema management information.")
 public class ReadSchemaMgmt implements Command {
