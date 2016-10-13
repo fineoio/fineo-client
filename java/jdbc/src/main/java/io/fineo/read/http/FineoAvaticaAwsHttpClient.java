@@ -82,7 +82,9 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
     try {
       // Success and error over 500 (avatica, server-side error) need to unpack the bytes
       // Otherwise, its an AWS error, so we should just unpack it regularly;
-      if (!error(response) || response.getStatusCode() >= 500) {
+      // 504 is special - AWS API Gateway sends that when requests take longer than 30 seconds.
+      if (!error(response) ||
+          (response.getStatusCode() >= 500 && response.getStatusCode() != 504)) {
         return translator.decode(response.getResponseBodyAsBytes());
       } else {
         throw asClientException(response, "AVATICA");
@@ -109,7 +111,7 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
   }
 
   @VisibleForTesting
-  public Map<String, String> getPropertiesForTesting(){
+  public Map<String, String> getPropertiesForTesting() {
     return this.properties;
   }
 }
