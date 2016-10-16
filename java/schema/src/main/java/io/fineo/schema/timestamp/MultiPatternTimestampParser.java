@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -66,8 +65,8 @@ public class MultiPatternTimestampParser {
       try {
         return ZonedDateTime.parse(value, formatter.formatter).toInstant().toEpochMilli();
       } catch (DateTimeParseException e) {
-        LOG.debug(e.getMessage());
-        if (e.getMessage().contains("Unable to obtain")) {
+        LOG.debug("Initial parsing failed: {}", e.getMessage());
+        if (e.getMessage().contains("Unable to obtain ZonedDateTime")) {
           // try parsing just a local date time which we then zone to UTC
           ZonedDateTime odt = ZonedDateTime.of(LocalDateTime.parse(value, formatter.formatter),
             formatter.explicitZone);
