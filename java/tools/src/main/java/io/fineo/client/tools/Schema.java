@@ -8,6 +8,7 @@ import io.fineo.client.tools.command.DeleteMetric;
 import io.fineo.client.tools.command.ReadMetric;
 import io.fineo.client.tools.command.ReadSchemaMgmt;
 import io.fineo.client.tools.command.UpdateMetric;
+import io.fineo.client.tools.command.UpdateSchemaMgmt;
 import io.fineo.client.tools.option.ApiOption;
 import io.fineo.client.tools.option.HelpOption;
 import io.fineo.client.tools.option.SchemaOption;
@@ -35,6 +36,7 @@ public class Schema {
     UpdateMetric update = new UpdateMetric();
     DeleteMetric delete = new DeleteMetric(schema);
     ReadSchemaMgmt readSchema = new ReadSchemaMgmt();
+    UpdateSchemaMgmt updateSchema = new UpdateSchemaMgmt();
 
     JCommander commander = new JCommander(new Object[]{api, help});
     commander.addCommand(create);
@@ -42,6 +44,7 @@ public class Schema {
     commander.addCommand(update);
     commander.addCommand(delete);
     commander.addCommand(readSchema);
+    commander.addCommand(updateSchema);
 
     commander.parse(args);
     help.check(commander);
