@@ -1,8 +1,10 @@
 package io.fineo.client.tools.option;
 
 import io.fineo.client.tools.EventTypes;
+import io.fineo.client.tools.events.MetricType;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -33,6 +35,36 @@ public class TestSchemaOption {
     });
 
     assertEquals(opt.type, opt.getName());
+  }
+
+  @Test
+  public void testSkipMetricTypeField() throws Exception {
+    SchemaOption opt = new SchemaOption();
+    opt.type = MetricTypeClass.class.getName();
+    assertEquals(new ArrayList<>(), opt.getFields());
+  }
+
+  public static class MetricTypeClass {
+
+    @MetricType
+    private String ometrictype;
+    private String metrictype;
+
+    public String getMetrictype() {
+      return metrictype;
+    }
+
+    public void setMetrictype(String metrictype) {
+      this.metrictype = metrictype;
+    }
+
+    public String getOmetrictype() {
+      return ometrictype;
+    }
+
+    public void setOmetrictype(String ometrictype) {
+      this.ometrictype = ometrictype;
+    }
   }
 
   public static class MetricClass extends EventTypes.EventBase {

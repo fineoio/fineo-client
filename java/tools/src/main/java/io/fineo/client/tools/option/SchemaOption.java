@@ -59,6 +59,9 @@ public class SchemaOption {
       if (name.startsWith("get")) {
         String suffix = name.substring(3);
         String fieldName = suffix.substring(0, 1).toLowerCase() + suffix.substring(1);
+        if (fieldName.equals("metrictype")) {
+          continue;
+        }
         Class type = method.getReturnType();
         String typeName;
         switch (type.getTypeName()) {
