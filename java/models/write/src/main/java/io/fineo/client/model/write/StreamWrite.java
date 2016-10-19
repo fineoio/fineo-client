@@ -2,7 +2,8 @@ package io.fineo.client.model.write;
 
 import io.fineo.client.Op;
 import io.fineo.client.model.Empty;
-import io.netty.util.concurrent.CompleteFuture;
+
+import java.util.concurrent.CompletableFuture;
 
 public interface StreamWrite extends AutoCloseable {
 
@@ -10,11 +11,11 @@ public interface StreamWrite extends AutoCloseable {
   <T> StreamRecordsResponse write(T[] events);
 
   @Op(method = "PUT", path = "/stream/events")
-  <T> CompleteFuture<StreamRecordsResponse> writeAsync(T[] events);
+  <T> CompletableFuture<StreamRecordsResponse> writeAsync(T[] events);
 
   @Op(method = "PUT", path = "/stream/event")
   <T> Empty writeEvent(T event);
 
   @Op(method = "PUT", path = "/stream/event")
-  <T> CompleteFuture<Empty> writeEventAsync(T events);
+  <T> CompletableFuture<Empty> writeEventAsync(T events);
 }
