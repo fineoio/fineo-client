@@ -3,11 +3,14 @@ package io.fineo.client;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.http.HttpMethodName;
 import com.amazonaws.util.StringUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.asynchttpclient.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +43,8 @@ import static java.lang.String.format;
  * Build a fineo client
  */
 public class FineoClientBuilder {
+
+  private static final Logger LOG = LoggerFactory.getLogger(FineoClientBuilder.class);
 
   private AWSCredentialsProvider credentials;
   private String apiKey;
@@ -130,16 +135,16 @@ public class FineoClientBuilder {
       Future<Response> response;
       switch (httpRequest.method) {
         case PUT:
-          response = client.put(httpRequest.path, mapper.writeValueAsBytes(httpRequest.content));
+          response = client.put(httpRequest.path, contentAsBytes(httpRequest));
           break;
         case POST:
-          response = client.post(httpRequest.path, mapper.writeValueAsBytes(httpRequest.content));
+          response = client.post(httpRequest.path, contentAsBytes(httpRequest));
           break;
         case DELETE:
-          response = client.delete(httpRequest.path, mapper.writeValueAsBytes(httpRequest.content));
+          response = client.delete(httpRequest.path, contentAsBytes(httpRequest));
           break;
         case PATCH:
-          response = client.patch(httpRequest.path, mapper.writeValueAsBytes(httpRequest.content));
+          response = client.patch(httpRequest.path, contentAsBytes(httpRequest));
           break;
         case GET:
           Map<String, List<String>> map =
@@ -147,7 +152,7 @@ public class FineoClientBuilder {
                                   .stream()
                                   .collect(Collectors.toMap(name -> name,
                                     name -> newArrayList(httpRequest.parameters.get(name)
-            )));
+                                    )));
           response = client.get(httpRequest.path, map);
           break;
         default:
@@ -180,6 +185,15 @@ public class FineoClientBuilder {
         // throw the actual case back out
         throw cause;
       }
+    }
+
+    private byte[] contentAsBytes(FineoClientBuilder.Request httpRequest)
+      throws JsonProcessingException {
+      byte[] data = mapper.writeValueAsBytes(httpRequest.content);
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("Sending request with content: {}", new String(data));
+      }
+      return data;
     }
 
     /**
