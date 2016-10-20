@@ -101,13 +101,15 @@ public class SchemaOption {
   }
 
   public Class getClazz() throws ClassNotFoundException {
+    if(type == null){
+      return null;
+    }
+
     Class clazz = EventTypes.EVENTS.get(type);
     if (clazz == null) {
       clazz = Class.forName(type);
     }
-    if (this.name == null) {
-      this.name = type;
-    }
+
     return clazz;
   }
 
