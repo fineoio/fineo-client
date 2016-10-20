@@ -32,9 +32,9 @@ public class Schema {
 
     SchemaOption schema = new SchemaOption();
     CreateMetric create = new CreateMetric(schema);
-    ReadMetric read = new ReadMetric(schema);
+    ReadMetric read = new ReadMetric();
     UpdateMetric update = new UpdateMetric();
-    DeleteMetric delete = new DeleteMetric(schema);
+    DeleteMetric delete = new DeleteMetric();
     ReadSchemaMgmt readSchema = new ReadSchemaMgmt();
     UpdateSchemaMgmt updateSchema = new UpdateSchemaMgmt();
 

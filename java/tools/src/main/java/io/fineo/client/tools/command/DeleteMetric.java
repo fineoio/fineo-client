@@ -5,22 +5,19 @@ import com.beust.jcommander.ParametersDelegate;
 import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.metric.DeleteMetricRequest;
+import io.fineo.client.tools.option.MetricNameOption;
 import io.fineo.client.tools.option.SchemaOption;
 
 @Parameters(commandNames = "delete", commandDescription = "Delete a table (e.g. metric)")
 public class DeleteMetric implements Command {
 
   @ParametersDelegate
-  private final SchemaOption schema;
-
-  public DeleteMetric(SchemaOption schema) {
-    this.schema = schema;
-  }
+  private MetricNameOption metric = new MetricNameOption();
 
   @Override
   public void run(FineoClientBuilder builder) throws Exception {
     try (SchemaApi.Metric metrics = builder.build(SchemaApi.Metric.class)) {
-      DeleteMetricRequest request = new DeleteMetricRequest().setMetricName(schema.getName());
+      DeleteMetricRequest request = new DeleteMetricRequest().setMetricName(metric.get());
       metrics.deleteMetric(request);
     }
   }

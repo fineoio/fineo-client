@@ -4,6 +4,7 @@ import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.field.UpdateFieldRequest;
 import io.fineo.client.tools.events.SchemaForTesting;
+import io.fineo.client.tools.option.MetricNameOption;
 import io.fineo.client.tools.option.SchemaOption;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,7 +21,9 @@ public class TestCreateMetric {
   @Test
   public void testCreateWithAnnotatedType() throws Exception {
     SchemaOption option = new SchemaOption();
-    option.name = "metricname";
+    MetricNameOption name = new MetricNameOption();
+    name.set("metricname");
+    option.metric = name;
     option.type = SchemaForTesting.class.getName();
 
     // setup mocks
@@ -40,7 +43,7 @@ public class TestCreateMetric {
     UpdateFieldRequest update = new UpdateFieldRequest();
     update.setAliases(new String[]{"ts"});
     update.setFieldName("timestamp");
-    update.setMetricName(option.name);
+    update.setMetricName(name.get());
     Mockito.verify(field).updateField(update);
     Mockito.verify(field).close();
     Mockito.verify(mgmt, times(1)).updateCurrentSchemaManagement(any());

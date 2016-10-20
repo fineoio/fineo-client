@@ -2,6 +2,7 @@ package io.fineo.client.tools.option;
 
 import com.beust.jcommander.DynamicParameter;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 import io.fineo.client.tools.EventTypes;
 import io.fineo.client.tools.events.AnnotationAliases;
 
@@ -21,19 +22,18 @@ public class SchemaOption {
                                              + "of a model for the metric schema")
   public String type;
 
-  @Parameter(names = "--metric-name", description = "Name of the metric. If none specified, uses a "
-                                                    + "form of the type class name")
-  public String name;
+  @ParametersDelegate
+  public MetricNameOption metric = new MetricNameOption();
 
   @DynamicParameter(names = "-F",
                     description = "Field name and type specification. E.g. -Ffield1=VARCHAR")
   public Map<String, String> fieldAndType = new HashMap<>();
 
   public String getName() {
-    if (name == null) {
+    if (metric.get() == null) {
       return this.type;
     }
-    return this.name;
+    return this.metric.get();
   }
 
   public List<FieldInstance> getFields() throws ClassNotFoundException {
@@ -101,7 +101,7 @@ public class SchemaOption {
   }
 
   public Class getClazz() throws ClassNotFoundException {
-    if(type == null){
+    if (type == null) {
       return null;
     }
 
