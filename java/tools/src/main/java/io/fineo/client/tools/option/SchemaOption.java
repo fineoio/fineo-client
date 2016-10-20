@@ -1,9 +1,7 @@
 package io.fineo.client.tools.option;
 
 import com.beust.jcommander.DynamicParameter;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
-import io.fineo.client.tools.EventTypes;
 import io.fineo.client.tools.events.AnnotationAliases;
 
 import java.lang.reflect.Method;
@@ -18,9 +16,8 @@ import java.util.stream.Collectors;
  */
 public class SchemaOption {
 
-  @Parameter(names = "--type", description = "Generic type name of a known EventType or class name "
-                                             + "of a model for the metric schema")
-  public String type;
+  @ParametersDelegate
+  public MetricClassOption type = new MetricClassOption();
 
   @ParametersDelegate
   public MetricNameOption metric = new MetricNameOption();
@@ -30,10 +27,14 @@ public class SchemaOption {
   public Map<String, String> fieldAndType = new HashMap<>();
 
   public String getName() {
-    if (metric.get() == null) {
-      return this.type;
+    return getMetricName(metric, type);
+  }
+
+  public static String getMetricName(MetricNameOption name, MetricClassOption type){
+    if (name.get() == null) {
+      return type.getTypeName();
     }
-    return this.metric.get();
+    return name.get();
   }
 
   public List<FieldInstance> getFields() throws ClassNotFoundException {
@@ -101,16 +102,7 @@ public class SchemaOption {
   }
 
   public Class getClazz() throws ClassNotFoundException {
-    if (type == null) {
-      return null;
-    }
-
-    Class clazz = EventTypes.EVENTS.get(type);
-    if (clazz == null) {
-      clazz = Class.forName(type);
-    }
-
-    return clazz;
+   return type.getClazz();
   }
 
   public static class FieldInstance {

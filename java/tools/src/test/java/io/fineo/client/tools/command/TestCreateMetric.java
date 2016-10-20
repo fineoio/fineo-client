@@ -4,6 +4,7 @@ import io.fineo.client.FineoClientBuilder;
 import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.field.UpdateFieldRequest;
 import io.fineo.client.tools.events.SchemaForTesting;
+import io.fineo.client.tools.option.MetricClassOption;
 import io.fineo.client.tools.option.MetricNameOption;
 import io.fineo.client.tools.option.SchemaOption;
 import org.junit.Test;
@@ -24,7 +25,9 @@ public class TestCreateMetric {
     MetricNameOption name = new MetricNameOption();
     name.set("metricname");
     option.metric = name;
-    option.type = SchemaForTesting.class.getName();
+    MetricClassOption clazz = new MetricClassOption();
+    clazz.type = SchemaForTesting.class.getName();
+    option.type = clazz;
 
     // setup mocks
     FineoClientBuilder builder = Mockito.mock(FineoClientBuilder.class);

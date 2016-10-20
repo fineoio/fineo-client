@@ -23,16 +23,19 @@ public class WriteEventOption {
 
   // so we can get the type of the event
   @ParametersDelegate
-  SchemaOption schema = new SchemaOption();
+  MetricClassOption clazz = new MetricClassOption();
+
+  @ParametersDelegate
+  MetricNameOption name = new MetricNameOption();
 
   @Parameter(names = "--field", variableArity = true,
              description = "[event number.]<field name>.<value> The event number is only "
                            + "necessary if more than one event is being written at a time")
   List<String> fields = new ArrayList<>();
 
-  public SingleStreamEventBase[] getEvents() throws ClassNotFoundException {
+  public Object[] getEvents() throws ClassNotFoundException {
     Preconditions.checkArgument(fields.size() != 0, "No events/fields specified to send!");
-    Class<? extends SingleStreamEventBase> clazz = schema.getClazz();
+    Class<? extends SingleStreamEventBase> clazz = this.clazz.getClazz();
 
     Map<Integer, Map<String, Object>> events = new HashMap<>();
     for (String field : fields) {
@@ -58,7 +61,7 @@ public class WriteEventOption {
     long ts = System.currentTimeMillis();
     for (Map<String, Object> event : events.values()) {
       // all events need a metric type too
-      event.put("metrictype", schema.getName());
+      event.put("metrictype", SchemaOption.getMetricName(this.name, this.clazz));
 
       // ensure all the events have a timestamp field
       if (!event.containsKey("timestamp")) {
@@ -66,11 +69,16 @@ public class WriteEventOption {
       }
     }
 
-    List<SingleStreamEventBase> eventList =
+    List<Object> eventList =
       events.entrySet().stream()
             .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+            // just get the event
             .map(e -> e.getValue())
+            // attempt "casting" the event to the specified type (if one was specified)
             .map(event -> {
+              if (clazz == null) {
+                return event;
+              }
               String msg = null;
               try {
                 msg = mapper.writeValueAsString(event);
@@ -80,6 +88,6 @@ public class WriteEventOption {
               }
             })
             .collect(Collectors.toList());
-    return eventList.toArray(new SingleStreamEventBase[0]);
+    return eventList.toArray();
   }
 }

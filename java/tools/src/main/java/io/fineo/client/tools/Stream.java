@@ -39,9 +39,9 @@ public class Stream {
       .withCredentials(api.credentials.get());
 
     try (StreamWrite stream = builder.build(StreamWrite.class)) {
-      SingleStreamEventBase[] event = events.getEvents();
+      Object[] event = events.getEvents();
       if (write.sequential) {
-        for (SingleStreamEventBase e : event) {
+        for (Object e : event) {
           stream.writeEvent(e);
         }
       } else {

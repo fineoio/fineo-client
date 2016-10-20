@@ -15,7 +15,7 @@ public class TestSchemaOption {
   @Test
   public void testLoadFields() throws Exception {
     SchemaOption opt = new SchemaOption();
-    opt.type = MetricClass.class.getName();
+    opt.type = new MetricClassOption().setType(MetricClass.class.getName());
 
     List<SchemaOption.FieldInstance> fields = opt.getFields();
     assertEquals("Missing some fields! Got fields: " + fields, 7, fields.size());
@@ -34,13 +34,13 @@ public class TestSchemaOption {
         types.remove(0).toUpperCase(), field.type.toUpperCase());
     });
 
-    assertEquals(opt.type, opt.getName());
+    assertEquals(opt.type.getTypeName(), opt.getName());
   }
 
   @Test
   public void testSkipMetricTypeField() throws Exception {
     SchemaOption opt = new SchemaOption();
-    opt.type = MetricTypeClass.class.getName();
+    opt.type = new MetricClassOption().setType(MetricTypeClass.class.getName());
     assertEquals(new ArrayList<>(), opt.getFields());
   }
 
