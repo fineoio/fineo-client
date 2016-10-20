@@ -30,25 +30,56 @@ public class TestCreateMetric {
     option.type = clazz;
 
     // setup mocks
-    FineoClientBuilder builder = Mockito.mock(FineoClientBuilder.class);
-    SchemaApi.Metric metric = Mockito.mock(SchemaApi.Metric.class);
-    SchemaApi.Field field = Mockito.mock(SchemaApi.Field.class);
-    SchemaApi.Management mgmt = Mockito.mock(SchemaApi.Management.class);
-    Mockito.when(builder.build(eq(SchemaApi.Metric.class))).thenReturn(metric);
-    Mockito.when(builder.build(eq(SchemaApi.Field.class))).thenReturn(field);
-    Mockito.when(builder.build(eq(SchemaApi.Management.class))).thenReturn(mgmt);
+    ClientBuilder builder = mockBuilder();
 
     CreateMetric create = new CreateMetric(option);
-    create.run(builder);
+    create.run(builder.builder);
 
-    Mockito.verify(metric, times(1)).createMetric(any());
-    Mockito.verify(field).createField(any());
     UpdateFieldRequest update = new UpdateFieldRequest();
     update.setAliases(new String[]{"ts"});
     update.setFieldName("timestamp");
     update.setMetricName(name.get());
-    Mockito.verify(field).updateField(update);
-    Mockito.verify(field).close();
-    Mockito.verify(mgmt, times(1)).updateCurrentSchemaManagement(any());
+    Mockito.verify(builder.field).createField(any());
+    builder.verify(update);
+  }
+
+  @Test
+  public void testCreateWithCommandLineType() throws Exception {
+    SchemaOption option = new SchemaOption();
+    MetricNameOption name = new MetricNameOption();
+    name.set("metricname");
+    option.metric = name;
+    option.fieldAndType.put("f1", "VARCHAR");
+
+    // setup mocks
+    ClientBuilder builder = mockBuilder();
+
+    CreateMetric create = new CreateMetric(option);
+    create.run(builder.builder);
+
+    Mockito.verify(builder.field).createField(any());
+  }
+
+  private ClientBuilder mockBuilder(){
+    return new ClientBuilder();
+  }
+
+  private class ClientBuilder{
+    FineoClientBuilder builder = Mockito.mock(FineoClientBuilder.class);
+    SchemaApi.Metric metric = Mockito.mock(SchemaApi.Metric.class);
+    SchemaApi.Field field = Mockito.mock(SchemaApi.Field.class);
+    SchemaApi.Management mgmt = Mockito.mock(SchemaApi.Management.class);
+
+    public ClientBuilder() {
+      Mockito.when(builder.build(eq(SchemaApi.Metric.class))).thenReturn(metric);
+      Mockito.when(builder.build(eq(SchemaApi.Field.class))).thenReturn(field);
+      Mockito.when(builder.build(eq(SchemaApi.Management.class))).thenReturn(mgmt);
+    }
+
+    private void verify(UpdateFieldRequest request) throws Exception {
+      Mockito.verify(metric, times(1)).createMetric(any());
+      Mockito.verify(field).close();
+      Mockito.verify(mgmt, times(1)).updateCurrentSchemaManagement(any());
+    }
   }
 }

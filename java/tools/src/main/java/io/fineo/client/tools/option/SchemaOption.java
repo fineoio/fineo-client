@@ -38,7 +38,7 @@ public class SchemaOption {
   }
 
   public List<FieldInstance> getFields() throws ClassNotFoundException {
-    if (type != null) {
+    if (type.getClazz() != null) {
       return loadFromClass();
     }
 
