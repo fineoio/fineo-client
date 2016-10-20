@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- */
 public class AnnotationAliases {
 
   private List<String> timestampPatterns = new ArrayList<>();
@@ -15,6 +12,9 @@ public class AnnotationAliases {
   private List<String> timestampAliases = new ArrayList<>();
 
   public AnnotationAliases(Class schema) {
+    if (schema == null) {
+      return;
+    }
     for (Field f : schema.getDeclaredFields()) {
       for (Timestamp ts : f.getAnnotationsByType(Timestamp.class)) {
         if (ts.pattern() != null) {
