@@ -18,7 +18,7 @@
 
   <properties>
     <!-- dependencies -->
-    <fineo.readerator.version>1.0-SNAPSHOT</fineo.readerator.version>
+    <fineo.connection.version>1.0.0-SNAPSHOT</fineo.connection.version>
 
     <!-- external dependencies -->
     <avatica.version>1.8.0-fineo-1.0-SNAPSHOT</avatica.version>
@@ -196,9 +196,9 @@
 
       <!-- Fineo -->
       <dependency>
-        <groupId>io.fineo.read</groupId>
-        <artifactId>readerator-common</artifactId>
-        <version>${fineo.readerator.version}</version>
+        <groupId>io.fineo.connection</groupId>
+        <artifactId>common</artifactId>
+        <version>${fineo.connection.version}</version>
       </dependency>
 
       <!-- Other -->
