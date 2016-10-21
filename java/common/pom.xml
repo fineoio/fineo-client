@@ -12,6 +12,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>io.fineo.client.models</groupId>
+      <artifactId>common-models</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-core</artifactId>
     </dependency>
@@ -69,6 +73,7 @@
             <configuration>
               <artifactSet>
                 <includes>
+                  <include>io.fineo.client.models:common-models</include>
                   <include>com.google.guava:guava</include>
 
                   <!-- Logging -->

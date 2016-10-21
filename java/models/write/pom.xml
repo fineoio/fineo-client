@@ -15,9 +15,5 @@
       <groupId>io.fineo.client.models</groupId>
       <artifactId>common-models</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.fineo.client</groupId>
-      <artifactId>common</artifactId>
-    </dependency>
   </dependencies>
 </project>
