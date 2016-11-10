@@ -66,7 +66,7 @@ public enum FineoConnectionProperties implements ConnectionProperty {
     this.type = type;
     this.defaultValue = defaultValue;
     this.required = required;
-    assert defaultValue == null || type.valid(defaultValue);
+    assert defaultValue == null || type.valid(defaultValue, type.defaultValueClass());
   }
 
   @Override
@@ -87,6 +87,10 @@ public enum FineoConnectionProperties implements ConnectionProperty {
   @Override
   public ConnectionConfigImpl.PropEnv wrap(Properties properties) {
     return new ConnectionConfigImpl.PropEnv(parse(properties, NAME_TO_PROPS), this);
+  }
+
+  public Class valueClass() {
+    return type.defaultValueClass();
   }
 
   @Override
