@@ -85,7 +85,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   }
 
   @Override
-  public Connection connect(String url, Properties info) throws SQLException {
+  public Connection connect(String url, Properties baseInfo) throws SQLException {
     if (!acceptsURL(url)) {
       return null;
     }
@@ -97,7 +97,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
       final String prefix = getConnectStringPrefix();
       assert url.startsWith(prefix);
       final String urlSuffix = url.substring(prefix.length());
-      final Properties info2 = ConnectStringParser.parse(urlSuffix, info);
+      final Properties info2 = ConnectStringParser.parse(urlSuffix, baseInfo);
       updateProperties(info2);
 
       // Unregistered Driver stuff
@@ -113,7 +113,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
         service.apply(
           new Service.OpenConnectionRequest(connection.id,
-            Service.OpenConnectionRequest.serializeProperties(info)));
+            Service.OpenConnectionRequest.serializeProperties(info2)));
       } catch (RuntimeException e) {
         // can happen if we have a bad connection on the server side.
         try {
