@@ -3,6 +3,7 @@ package io.fineo.client.tools.option;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import io.fineo.client.model.write.SingleStreamEventBase;
 
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * A bit more complicated, but basically we create a set of write events from a schema model. We
@@ -39,14 +42,20 @@ public class WriteEventOption {
 
     Map<Integer, Map<String, Object>> events = new HashMap<>();
     for (String field : fields) {
-      String[] parts = field.split("[.]");
+      List<String> parts = newArrayList(field.split("[.]"));
       Integer index;
       // its the only field to send, so its index is 0
-      if (parts.length == 2) {
+      if (parts.size() == 2) {
         index = 0;
       } else {
-        index = Integer.valueOf(parts[0]);
-        parts = new String[]{parts[1], parts[2]};
+        try {
+          index = Integer.valueOf(parts.get(0));
+          parts.remove(0);
+        } catch (NumberFormatException e) {
+          // oops, its not a number. Instead, its a field name, with a field that has a '.' in
+          // the value
+          index = 0;
+        }
       }
       Map<String, Object> event = events.get(index);
       if (event == null) {
@@ -54,14 +63,15 @@ public class WriteEventOption {
         events.put(index, event);
       }
 
-      event.put(parts[0], parts[1]);
+      event.put(parts.get(0), Joiner.on(".").join(parts.subList(1, parts.size())));
     }
 
 
     long ts = System.currentTimeMillis();
     for (Map<String, Object> event : events.values()) {
-      // all events need a metric type too
-      event.put("metrictype", SchemaOption.getMetricName(this.name, this.clazz));
+      // try to specify a type for the event
+      String type = SchemaOption.getMetricName(this.name, this.clazz);
+      event.put("metrictype", type);
 
       // ensure all the events have a timestamp field
       if (!event.containsKey("timestamp")) {

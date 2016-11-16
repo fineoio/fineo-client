@@ -4,6 +4,8 @@ import io.fineo.client.model.write.SingleStreamEventBase;
 import io.fineo.client.tools.EventTypes;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -51,6 +53,28 @@ public class TestWriteEventOption {
     opt.fields = newArrayList("field.1");
     Object[] events = opt.getEvents();
     assertEquals(1, events.length);
+  }
+
+  @Test
+  public void testEventWithDotInFieldValue() throws Exception {
+    WriteEventOption opt = new WriteEventOption();
+    opt.fields = newArrayList("field.1.1");
+    Object[] events = opt.getEvents();
+    assertEquals(1, events.length);
+    Map<String, String> event = (Map<String, String>) events[0];
+    assertEquals("1.1", event.get("field"));
+  }
+
+  @Test
+  public void testEventWithDotInFieldValueAndMultipleEvents() throws Exception {
+    WriteEventOption opt = new WriteEventOption();
+    opt.fields = newArrayList("0.field.1.1", "1.field.1.2");
+    Object[] events = opt.getEvents();
+    assertEquals(2, events.length);
+    Map<String, String> event = (Map<String, String>) events[0];
+    assertEquals("1.1", event.get("field"));
+    event = (Map<String, String>) events[1];
+    assertEquals("1.2", event.get("field"));
   }
 
   private void validateMetric(String fieldValue, Object streamEvent) {
