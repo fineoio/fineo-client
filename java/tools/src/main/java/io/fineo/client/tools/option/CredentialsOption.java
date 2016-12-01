@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.beust.jcommander.Parameter;
 import com.google.common.base.Preconditions;
@@ -36,6 +37,10 @@ public class CredentialsOption {
   @Parameter(names = "--credentials-file", description = "YAML file for the credentials")
   public String credentialsFile;
 
+  @Parameter(names = "--environment-credentials",
+             description = "Load credentials from the standard AWS environment keys")
+  public boolean envCredentials;
+
   public AWSCredentialsProvider get() throws FileNotFoundException {
     if (this.credentials == null) {
       credentials = getCredentials();
@@ -62,6 +67,9 @@ public class CredentialsOption {
     if (staticKey != null && staticSecret != null) {
       providers.add(new AWSStaticCredentialsProvider(new BasicAWSCredentials(staticKey,
         staticSecret)));
+    }
+    if (envCredentials) {
+      providers.add(new EnvironmentVariableCredentialsProvider());
     }
 
     Preconditions.checkArgument(providers.size() > 0, "No valid credentials provided!");
