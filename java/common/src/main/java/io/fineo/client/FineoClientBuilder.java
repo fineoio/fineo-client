@@ -190,8 +190,9 @@ public class FineoClientBuilder {
     private byte[] contentAsBytes(FineoClientBuilder.Request httpRequest)
       throws JsonProcessingException {
       byte[] data = mapper.writeValueAsBytes(httpRequest.content);
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("Sending request with content: {}", new String(data));
+      if (LOG.isDebugEnabled()){
+        LOG.debug("Sending {} - {} request with content: {}", httpRequest.method, httpRequest.path,
+          new String(data));
       }
       return data;
     }
