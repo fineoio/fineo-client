@@ -36,7 +36,12 @@ Fineo has a custom JDBC driver that you specify with the prefix:
 jdbc:fineo:
 ```
 
-In Java code, you may need to load the driver with:
+With the driver name:
+```
+io.fineo.read.Driver
+```
+
+For instance, you might need to load the class in Java:
 ```
 Class.forName(io.fineo.read.Driver)
 ```

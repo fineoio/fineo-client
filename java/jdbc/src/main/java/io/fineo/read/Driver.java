@@ -1,6 +1,5 @@
 package io.fineo.read;
 
-import com.google.common.base.Preconditions;
 import io.fineo.read.http.FineoAvaticaAwsHttpClient;
 import io.fineo.read.jdbc.ConnectionStringBuilder;
 import io.fineo.read.jdbc.FineoConnectionProperties;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -90,18 +90,10 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
       return null;
     }
     try {
-      // do the same parsing as in UnregisteredDriver#connect(...). We so this here so we can
-      // generate a URL that contains all the necessary properties, allowing them to get passed
-      // to our custom client. It also allows us to manage closing the client pool if we don't
-      // finish initializing correctly
-      final String prefix = getConnectStringPrefix();
-      assert url.startsWith(prefix);
-      final String urlSuffix = url.substring(prefix.length());
-      final Properties info2 = ConnectStringParser.parse(urlSuffix, baseInfo);
-      updateProperties(info2);
-
+      Properties info = prepareProperties(url, baseInfo);
       // Unregistered Driver stuff
-      final AvaticaConnection connection = factory.newConnection(this, factory, url, info2);
+      final AvaticaConnection connection =
+        factory.newConnection(this, factory, (String) info.get("url"), info);
       handler.onConnectionInit(connection);
 
       try {
@@ -113,7 +105,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
         service.apply(
           new Service.OpenConnectionRequest(connection.id,
-            Service.OpenConnectionRequest.serializeProperties(info2)));
+            Service.OpenConnectionRequest.serializeProperties(info)));
       } catch (RuntimeException e) {
         // can happen if we have a bad connection on the server side.
         try {
@@ -129,6 +121,39 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     } catch (IOException e) {
       throw new SQLException("Unexpected exception while obtaining connection!");
     }
+  }
+
+  protected Properties prepareProperties(String url, Properties info)
+    throws SQLException, IOException {
+    // do the same parsing as in UnregisteredDriver#connect(...). We so this here so we can
+    // generate a URL that contains all the necessary properties, allowing them to get passed
+    // to our custom client. It also allows us to manage closing the client pool if we don't
+    // finish initializing correctly
+    final String prefix = getConnectStringPrefix();
+    assert url.startsWith(prefix);
+    final String urlSuffix = url.substring(prefix.length());
+    final Properties info2 = ConnectStringParser.parse(urlSuffix, info);
+    // parse the properties based on the URL key, if possible
+    boolean https = urlSuffix.startsWith("https://");
+    if (urlSuffix.startsWith("//") || https) {
+      String first = urlSuffix.contains(";") ? urlSuffix.split(";")[0] : urlSuffix;
+      URL urlString = new URL(https ? first : "https:" + first);
+      info2.put("url", urlString.getProtocol() + "://" + urlString.getHost());
+      // we might have connection properties here that we should also add
+      String query = urlString.getQuery();
+      if (query != null && query.length() > 0) {
+        for (String q : query.split("&")) {
+          String[] parts = q.split("=");
+          if (parts.length != 2) {
+            LOG.error("Skippping URL query parameter: " + q);
+            continue;
+          }
+          info2.put(parts[0], parts[1]);
+        }
+      }
+    }
+    updateProperties(info2);
+    return info2;
   }
 
   /**
@@ -154,10 +179,8 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     // properties that are passed through the connection string
     ConnectionStringBuilder sb = new ConnectionStringBuilder(
       BuiltInConnectionProperty.URL.wrap(info).getString("=== No URL Specified ==="));
-    String key = Preconditions
-      .checkNotNull(API_KEY.wrap(info).getString(), "Must specify the Fineo API Key via %s",
-        API_KEY.camelName());
-    sb.with(API_KEY, info);
+    String key = API_KEY.wrap(info).getString();
+    sb.with(API_KEY.camelName(), key);
 
     // API KEY is also the company key, and we need that in the connection properties on the
     // server side

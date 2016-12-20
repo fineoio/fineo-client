@@ -69,14 +69,16 @@ public class ConnectionStringBuilder {
   }
 
   public ConnectionStringBuilder with(String key, String value) {
-    props.add(key + "=" + value);
+    if (value != null) {
+      props.add(key + "=" + value);
+    }
     return this;
   }
 
   public static Map<String, String> parse(java.net.URL url) {
     Map<String, String> map = new HashMap<>();
     String query = url.getQuery();
-    if(query == null){
+    if (query == null) {
       return map;
     }
     String[] parts = query.split("&");

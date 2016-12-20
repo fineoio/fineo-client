@@ -3,18 +3,21 @@ package io.fineo.read.jdbc;
 import io.fineo.client.FineoApiClientException;
 import io.fineo.read.http.FineoAvaticaAwsHttpClient;
 import org.apache.calcite.avatica.AvaticaConnection;
+import org.apache.calcite.avatica.ConnectionConfigImpl;
 import org.apache.calcite.avatica.remote.RemoteProtobufService;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import static com.amazonaws.SDKGlobalConfiguration.ACCESS_KEY_SYSTEM_PROPERTY;
 import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_SYSTEM_PROPERTY;
@@ -83,5 +86,41 @@ public class TestDriver {
     FineoAvaticaAwsHttpClient value = (FineoAvaticaAwsHttpClient) field.get(service);
     Map<String, String> props = value.getPropertiesForTesting();
     assertEquals("1234", props.get(FineoConnectionProperties.API_KEY.camelName()));
+  }
+
+  @Test
+  public void testParseUrlWithoutExplicitParameter() throws Exception {
+    String url = "//the-fineo-url.at.something?api_key=1234";
+    Properties info = parseUrl(url);
+    ConnectionConfigImpl config = new ConnectionConfigImpl(info);
+    assertEquals("https:" + url, config.url());
+    assertEquals("1234", info.get("api_key"));
+  }
+
+  @Test
+  public void testParseUrlWithSlash() throws Exception {
+    String url = "//the-fineo-url.at.something/?api_key=1234";
+    Properties info = parseUrl(url);
+    ConnectionConfigImpl config = new ConnectionConfigImpl(info);
+    assertEquals("https://the-fineo-url.at.something?api_key=1234", config.url());
+  }
+
+  private Properties parseUrl(String url) throws Exception {
+    FakeFactoryDriver driver = new FakeFactoryDriver();
+    Properties props = new Properties();
+    return driver.prepareProperties(format("jdbc:fineo:%s", url), props);
+  }
+
+  private static class FakeFactoryDriver extends io.fineo.read.Driver {
+
+    public FakeFactoryDriver() throws ClassNotFoundException {
+      super();
+    }
+
+    @Override
+    public Properties prepareProperties(String url, Properties info)
+      throws SQLException, IOException {
+      return super.prepareProperties(url, info);
+    }
   }
 }
