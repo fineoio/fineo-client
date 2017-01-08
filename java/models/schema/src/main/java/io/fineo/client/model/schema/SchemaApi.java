@@ -30,6 +30,12 @@ public interface SchemaApi extends AutoCloseable {
 
     @Op(path = "/schema", method = "PATCH")
     CompletableFuture<Empty> updateCurrentSchemaManagementAsync(SchemaManagementRequest update);
+
+    @Op(path = "/schema/metrics", method = "GET")
+    ReadSchemasResponse getSchemas();
+
+    @Op(path = "/schema/metrics", method = "GET")
+    CompletableFuture<Empty> getSchemasAsync();
   }
 
   interface Metric extends SchemaApi {
