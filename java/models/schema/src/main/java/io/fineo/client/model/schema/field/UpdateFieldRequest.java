@@ -10,8 +10,18 @@ public class UpdateFieldRequest extends FieldRequest {
     return aliases;
   }
 
-  public void setAliases(String[] aliases) {
+  public UpdateFieldRequest setAliases(String[] aliases) {
     this.aliases = aliases;
+    return this;
+  }
+
+  public String getNewDisplayName() {
+    return newDisplayName;
+  }
+
+  public UpdateFieldRequest setNewDisplayName(String newDisplayName) {
+    this.newDisplayName = newDisplayName;
+    return this;
   }
 
   @Override
@@ -20,17 +30,24 @@ public class UpdateFieldRequest extends FieldRequest {
       return true;
     if (!(o instanceof UpdateFieldRequest))
       return false;
-
-    if (!super.equals(o)) {
+    if (!super.equals(o))
       return false;
-    }
 
     UpdateFieldRequest that = (UpdateFieldRequest) o;
+
+    if (getNewDisplayName() != null ? !getNewDisplayName().equals(that.getNewDisplayName()) :
+        that.getNewDisplayName() != null)
+      return false;
+    // Probably incorrect - comparing Object[] arrays with Arrays.equals
     return Arrays.equals(getAliases(), that.getAliases());
+
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(getAliases());
+    int result = super.hashCode();
+    result = 31 * result + (getNewDisplayName() != null ? getNewDisplayName().hashCode() : 0);
+    result = 31 * result + Arrays.hashCode(getAliases());
+    return result;
   }
 }
