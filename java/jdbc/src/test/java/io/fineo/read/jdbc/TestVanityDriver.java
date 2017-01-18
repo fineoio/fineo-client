@@ -39,7 +39,8 @@ public class TestVanityDriver {
       public boolean matches(Object item) {
         if(item instanceof ExecutionException){
           item = ((ExecutionException) item).getCause();
-          return ((ConnectException) item).getMessage().contains("Connection refused");
+          return ((ConnectException) item).getMessage().contains("Connection refused") ||
+                 ((ConnectException) item).getMessage().contains("connection timed out");
         }
         return false;
       }
