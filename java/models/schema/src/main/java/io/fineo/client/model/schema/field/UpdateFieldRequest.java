@@ -3,6 +3,7 @@ package io.fineo.client.model.schema.field;
 import java.util.Arrays;
 
 public class UpdateFieldRequest extends FieldRequest {
+  private String newDisplayName;
   private String[] aliases;
 
   public String[] getAliases() {
