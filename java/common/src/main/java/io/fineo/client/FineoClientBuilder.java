@@ -49,7 +49,7 @@ public class FineoClientBuilder {
   private AWSCredentialsProvider credentials;
   private String apiKey;
   private String endpoint;
-  private String stage = "/prod";
+  private String stage = "/v1";
   private ClientConfiguration conf = new ClientConfiguration();
 
   public FineoClientBuilder withApiKey(String apiKey) {
