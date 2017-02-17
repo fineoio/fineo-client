@@ -73,4 +73,4 @@ have. Please see the [Schema](Schema) documentation for how the schema flexibili
 During the BETA 'later' is loosely defined. In the future, we hope to provide a stricter SLA 
 on when the batch data will be available.
 
-[here]: http://api.fineo.io/?url=http://api.fineo.io.s3-website-us-east-1.amazonaws.com/dist/ingest-swagger.json
+[here]: http://api-docs.fineo.io

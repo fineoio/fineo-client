@@ -163,5 +163,5 @@ While we are in BETA, there are a few limitations on schema and its manipulation
         * where ```<n>``` is a number
  
   
-[here]: http://api.fineo.io/?url=http://api.fineo.io.s3-website-us-east-1.amazonaws.com/dist/schema-swagger.json
+[here]: http://api-docs.fineo.io
 [Java DateTimeFormatter: Patterns For Formatting and Parsing]: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
