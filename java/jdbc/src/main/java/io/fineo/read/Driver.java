@@ -176,9 +176,13 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     info.put(SERIALIZATION.camelName(), PROTOBUF.toString());
     setupAuthentication(info);
 
+    // get the default URL, if none has been specified
+    String url = BuiltInConnectionProperty.URL.wrap(info).getString();
+    if(url == null){
+      url = DriverProperties.READ_URL;
+    }
     // properties that are passed through the connection string
-    ConnectionStringBuilder sb = new ConnectionStringBuilder(
-      BuiltInConnectionProperty.URL.wrap(info).getString("=== No URL Specified ==="));
+    ConnectionStringBuilder sb = new ConnectionStringBuilder(url);
     String key = API_KEY.wrap(info).getString();
     sb.with(API_KEY.camelName(), key);
 
@@ -192,7 +196,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     if (testPrefix != null) {
       sb.with("fineo.internal.test.api-prefix", testPrefix);
     }
-    String url = sb.build();
+    url = sb.build();
     info.setProperty("url", url);
   }
 

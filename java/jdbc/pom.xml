@@ -44,6 +44,39 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-cognitoidp</artifactId>
+      <version>${aws-java-sdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-cognitoidentity</artifactId>
+      <version>${aws-java-sdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-sts</artifactId>
+      <version>${aws-java-sdk.version}</version>
+    </dependency>
+    <!-- Handle jwt tokens library! -->
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <!-- force jackson to match our version -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.6.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.6.6</version>
+    </dependency>
+
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.mockito</groupId>
@@ -52,6 +85,12 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -90,6 +129,18 @@
                   <include>com.amazonaws:aws-java-sdk-core</include>
                   <include>joda-time:joda-time</include>
                   <include>com.fasterxml.jackson.core:*</include>
+                  <include>com.amazonaws:jmespath-java</include>
+                  <include>com.amazonaws:aws-java-sdk-sts</include>
+                  <include>com.amazonaws:aws-java-sdk-cognitoidp</include>
+                  <include>com.amazonaws:aws-java-sdk-cognitoidentity</include>
+                  <!-- need the http client for cognito requests over standard apache http -->
+                  <include>org.apache.httpcomponents:httpclient</include>
+                  <include>org.apache.httpcomponents:httpcore</include>
+
+                  <!-- JWT Handling -->
+                  <include>com.auth0:java-jwt</include>
+                  <include>commons-codec:commons-codec</include>
+                  <include>org.bouncycastle:bcprov-jdk15on</include>
                 </includes>
               </artifactSet>
               <relocations>
