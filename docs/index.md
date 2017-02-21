@@ -4,7 +4,6 @@
 
 This guide provides information about how to access the Fineo API
 
-
 # Features
 
  - Fully integrated java client API with synchronous and asynchronous endpoints
@@ -18,15 +17,27 @@ This guide provides information about how to access the Fineo API
 When you sign up, you will be given an API Key. **Keep this safe** - it ties all requests back to 
 your tables/data. If anyone else gets access to this key, they will be able to see you information.
 
-## User IAM Credentials
+## Credentials
 
-Each user is also given a set of credentials (managed through 
-[AWS IAM](https://aws.amazon.com/iam/)). They will look something like this:
+When you sign up through the application, you specified an email and password. These will be user
+ username and password, respectively, and used for signing all requests to the API. This ensures 
+ that no one else can masquerade as you. 
+ 
+Devices are also given 'access' and 'secret' keys that are compliant with the
+[AWS IAM](https://aws.amazon.com/iam/) style credentials. They will look something like this:
  
 ```
 aws_access_key: AKIBJHP57RXU4RO...
 aws_secret_access_key: 5kZVWNNhf56h4iRC04DyYN3XI5elYO...
 ```
 
-These credentials are used to authenticate/authorize a specific person to specific action - 
+These credentials are used to authenticate/authorize a specific device to when making actions - 
 reading, writing, updating schema, etc.
+
+**All these credentials should be kept in a safe place.**
+
+# Getting started
+
+Looking to jump right in? Head over to our [getting started] guide.
+
+[getting started]: /getting-started

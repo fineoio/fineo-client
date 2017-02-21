@@ -5,6 +5,10 @@ There are several limitations/restrictions on the platform. All other limitation
 
  * java >= 1.8u101
 
+# Devices
+
+ * Max 2 keys at any time, per device
+
 # Events
 
  1. 500 events/sec
