@@ -31,8 +31,8 @@ import static io.fineo.read.jdbc.FineoConnectionProperties.API_KEY;
 /**
  * An Avatica client that writes/reads a Fineo AWS endpoint
  */
-public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
-                                                  UsernamePasswordAuthenticateable {
+public class FineoAvaticaAwsHttpClient
+  implements AvaticaHttpClient, UsernamePasswordAuthenticateable, AutoCloseable {
 
   private static final Logger LOG = LoggerFactory.getLogger(FineoAvaticaAwsHttpClient.class);
 
@@ -106,7 +106,8 @@ public class FineoAvaticaAwsHttpClient implements AvaticaHttpClient,
     }
   }
 
-  public void close() {
+  @Override
+  public void close() throws IOException {
     this.client.close();
   }
 

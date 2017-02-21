@@ -5,17 +5,21 @@ import com.amazonaws.DefaultRequest;
 import com.amazonaws.auth.AWS4Signer;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.http.HttpMethodName;
+import com.google.common.annotations.VisibleForTesting;
 import io.fineo.client.aws.Slf4jLogFactory;
+import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +35,21 @@ public class ApiAwsClient implements AutoCloseable {
   private final URL url;
   private AWSCredentialsProvider credentials;
   private String apiKey;
-  private final DefaultAsyncHttpClient client;
+  private final AsyncHttpClient client;
 
   public ApiAwsClient(URL url, String envPrefix, ClientConfiguration conf)
     throws URISyntaxException, MalformedURLException {
-    this.url = new URL(url, envPrefix);
-    this.baseUri = url.toURI();
-    this.client = new DefaultAsyncHttpClient(conf.build());
+    this(url, envPrefix, new DefaultAsyncHttpClient(conf.build()));
+  }
+
+  @VisibleForTesting
+  ApiAwsClient(URL url, String envPrefix, AsyncHttpClient client)
+    throws URISyntaxException, MalformedURLException {
+    this.client = client;
+    // deconstruct the passed URL for and append the environment prefix.
+    String path = Paths.get(url.getFile(), envPrefix).toString();
+    this.url = new URL(url.getProtocol(), url.getHost(), url.getPort(), path, null);
+    this.baseUri =  new URL(url.getProtocol(), url.getHost(), url.getPort(), "", null).toURI();
   }
 
   public Future<Response> post(String path, byte[] data)
@@ -127,7 +139,8 @@ public class ApiAwsClient implements AutoCloseable {
     this.apiKey = apiKey;
   }
 
-  public void close() {
+  @Override
+  public void close() throws IOException {
     this.client.close();
   }
 }

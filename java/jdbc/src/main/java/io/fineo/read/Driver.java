@@ -224,12 +224,17 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
       @Override
       public void onConnectionClose(AvaticaConnection connection) {
-        Driver.this.close(connection);
+        try {
+          Driver.this.close(connection);
+        } catch (IOException e) {
+          LOG.error("Failed to fully close connection!");
+          throw new RuntimeException(e);
+        }
       }
     };
   }
 
-  private void close(AvaticaConnection connection) {
+  private void close(AvaticaConnection connection) throws IOException {
     ConnectionInfo info = open.remove(connection.id);
     if (info == null) {
       LOG.error("Could not find connection: %s on driver!", connection.id);
