@@ -152,15 +152,7 @@ set _before_ sending a write (as opposed to all other fields).
 
 # Limitations
 
-While we are in BETA, there are a few limitations on schema and its manipulation.
-
-  * No field deletes
-  * Disallowed field names:
-    * companykey
-    * Anything with the prefix:
-      * _f
-      * ```T<n>¦¦```
-        * where ```<n>``` is a number
+While we are in BETA, no field deletes are supported/
  
   
 [here]: http://api-docs.fineo.io

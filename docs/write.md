@@ -55,17 +55,6 @@ Every event is required to contain two fields:
   
 That said, these fields are very flexible and can be changed to fix almost any scenario that you 
 have. Please see the [Schema](Schema) documentation for how the schema flexibility works.
- 
-## Physical Limitations
-
-  * Message size
-    * Stream: 1MB per request, 
-    * Batch 5MB per request
-        - Does not apply to S3 uploaded batches
-  * Request frequency
-    * 200 requests/sec, with bursts to 500 requests/sec
-    * A request can be a either a single stream event, a list of events to the `stream/events` 
-  endpoint, or a batch request.
 
 ## Notes
 
