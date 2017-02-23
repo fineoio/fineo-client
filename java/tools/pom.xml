@@ -100,6 +100,8 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <shadedClassifierName>exec</shadedClassifierName>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
               <artifactSet>
                 <includes>
                   <include>io.fineo.client.models:*</include>
@@ -163,7 +165,10 @@
                 <includes>
                   <include>io.fineo.client:jdbc:all</include>
 
-                  <!-- tools combined jar already includes all of the other things we might -->
+                  <include>org.yaml:snakeyaml</include>
+                  <include>com.beust:jcommander</include>
+                  <include>ch.qos.logback:logback-core</include>
+                  <include>ch.qos.logback:logback-classic</include>
                   <include>commons-dbutils:commons-dbutils</include>
                 </includes>
               </artifactSet>
