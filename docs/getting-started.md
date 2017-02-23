@@ -100,7 +100,6 @@ You should have received your API Key in your welcome email. If not, [please rea
  Then, you can view the tables:
  
  ```
- 
  0: jdbc:fineo:url=https://api.fineo.io/read> !tables
 +------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
 | TABLE_CAT  | TABLE_SCHEM | TABLE_NAME | TABLE_TYPE |  REMARKS   |  TYPE_CAT  | TYPE_SCHEM | TYPE_NAME  | SELF_REFERENCING_COL_NAME | REF_GENERATION |
@@ -112,7 +111,6 @@ You should have received your API Key in your welcome email. If not, [please rea
 | FINEO      | INFORMATION_SCHEMA | TABLES     | TABLE      |            |            |            |            |                           |                |
 | FINEO      | INFORMATION_SCHEMA | VIEWS      | TABLE      |            |            |            |            |                           |                |
 +------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
-
 ```
 
 Or you can read the values that you sent:
