@@ -95,6 +95,7 @@
           with jdbc-all in the next phase, but its not problematic.
            -->
           <execution>
+            <id>build-exec</id>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
@@ -104,6 +105,9 @@
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <artifactSet>
                 <includes>
+                  <!-- * means we re-include common-models. however, makes it easier if we want to
+                    add another model module later. no issue by overlapping classes in
+                    common-models & common -->
                   <include>io.fineo.client.models:*</include>
                   <include>io.fineo.client:common:jar:all</include>
                   <include>io.fineo.client.schema:schema</include>

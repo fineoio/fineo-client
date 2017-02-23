@@ -76,9 +76,9 @@
                 <artifactSet>
                   <includes>
                     <!-- AWS tools -->
-                    <include>com.amazonaws:aws-java-sdk-core</include>
                     <include>joda-time:joda-time</include>
                     <include>com.fasterxml.jackson.core:*</include>
+                    <include>com.amazonaws:aws-java-sdk-core</include>
                     <include>com.amazonaws:jmespath-java</include>
                     <include>com.amazonaws:aws-java-sdk-sts</include>
                     <include>com.amazonaws:aws-java-sdk-cognitoidp</include>

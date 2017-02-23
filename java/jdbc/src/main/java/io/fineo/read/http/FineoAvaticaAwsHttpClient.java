@@ -1,5 +1,6 @@
 package io.fineo.read.http;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.google.common.annotations.VisibleForTesting;
 import io.fineo.client.ApiAwsClient;
 import io.fineo.client.ClientConfiguration;
@@ -37,7 +38,7 @@ public class FineoAvaticaAwsHttpClient
   private final AwsApiGatewayBytesTranslator translator = new AwsApiGatewayBytesTranslator();
   private final Map<String, String> properties;
   private final ApiAwsClient client;
-  private CredentialsHelper credentials;
+  private AWSCredentialsProvider credentials;
 
   public FineoAvaticaAwsHttpClient(URL url) throws MalformedURLException, URISyntaxException {
     // first, get the properties
@@ -69,7 +70,7 @@ public class FineoAvaticaAwsHttpClient
 
   @Override
   public byte[] send(byte[] request) {
-    client.setCredentials(this.credentials.getCredentials());
+    client.setCredentials(this.credentials);
     request = translator.encode(request);
     Response response;
     try {

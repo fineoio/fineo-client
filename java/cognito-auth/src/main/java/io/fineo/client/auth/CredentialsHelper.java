@@ -1,5 +1,6 @@
 package io.fineo.client.auth;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -16,57 +17,58 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- *
- */
-public abstract class CredentialsHelper {
+public class CredentialsHelper {
 
-  public abstract AWSCredentialsProvider getCredentials();
-
-  public static CredentialsHelper getHelper(String key, String secret) {
+  public static AWSCredentialsProvider getHelper(String key, String secret) {
     if (userShape(key, secret)) {
       return getUserHelper(key, secret);
     }
     return getStaticHelper(key, secret);
   }
 
-  public static CredentialsHelper getStaticHelper(String key, String secret) {
-    return new CredentialsHelper() {
-      @Override
-      public AWSCredentialsProvider getCredentials() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(key, secret));
-      }
-    };
+  public static AWSCredentialsProvider getStaticHelper(String key, String secret) {
+    return new AWSStaticCredentialsProvider(new BasicAWSCredentials(key, secret));
   }
 
-  public static CredentialsHelper getUserHelper(String username, String password) {
+  public static AWSCredentialsProvider getUserHelper(String username, String password) {
     CognitoUserPool pool = new CognitoUserPool(
       CognitoClientProperties.USER_POOL_ID, CognitoClientProperties.CLIENT_ID,
       CognitoClientProperties.SECRET);
     CognitoUser user = pool.getUser(username);
-    return new CognitoCredentialsHelper(pool, user, username, password);
+    return new UserCredentialsProvider(user, username, password);
   }
 
   private static boolean userShape(String username, String password) {
     return username.contains("@");
   }
 
-  private static class CognitoCredentialsHelper extends CredentialsHelper {
-    private final CognitoUserPool pool;
+
+  private static class UserCredentialsProvider implements AWSCredentialsProvider {
     private final CognitoUser user;
     private final String username;
     private final String password;
+    private AWSCredentialsProvider delegate;
 
-    public CognitoCredentialsHelper(
-      CognitoUserPool pool, CognitoUser user, String username, String password) {
-      this.pool = pool;
+    public UserCredentialsProvider( CognitoUser user, String username, String password) {
       this.user = user;
       this.username = username;
       this.password = password;
     }
 
     @Override
-    public AWSCredentialsProvider getCredentials() {
+    public AWSCredentials getCredentials() {
+      if (delegate == null) {
+        delegate = load();
+      }
+      return delegate.getCredentials();
+    }
+
+    @Override
+    public void refresh() {
+      delegate.refresh();
+    }
+
+    private AWSCredentialsProvider load(){
       CountDownLatch done = new CountDownLatch(1);
       AtomicReference<CognitoUserSession> sessionRef = new AtomicReference<>();
       AtomicReference<Exception> error = new AtomicReference<>();
@@ -110,9 +112,11 @@ public abstract class CredentialsHelper {
         }
         CognitoUserSession session = sessionRef.get();
         CognitoCachingCredentialsProvider credentialsProvider = new
-          CognitoCachingCredentialsProvider(CognitoClientProperties.IDENTITY_POOL_ID, Regions.US_EAST_1);
+          CognitoCachingCredentialsProvider(CognitoClientProperties.IDENTITY_POOL_ID,
+          Regions.US_EAST_1);
         Map<String, String> logins = new HashMap<>();
-        String source = "cognito-idp.us-east-1.amazonaws.com/" + CognitoClientProperties.USER_POOL_ID;
+        String source =
+          "cognito-idp.us-east-1.amazonaws.com/" + CognitoClientProperties.USER_POOL_ID;
         logins.put(source, session.getIdToken().getJWTToken());
         credentialsProvider.setLogins(logins);
         return credentialsProvider;

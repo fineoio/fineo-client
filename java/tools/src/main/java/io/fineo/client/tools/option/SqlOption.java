@@ -37,11 +37,17 @@ public class SqlOption {
     }
 
     append(first, sb, FineoConnectionProperties.API_KEY, api.key);
-    append(sb, FineoConnectionProperties.AUTHENTICATION, "static");
-    AWSCredentialsProvider credentials = api.credentials.get();
-    AWSCredentials creds = credentials.getCredentials();
-    append(sb, FineoConnectionProperties.AWS_KEY, creds.getAWSAccessKeyId());
-    append(sb, FineoConnectionProperties.AWS_SECRET, creds.getAWSSecretKey());
+    CredentialsOption creds = api.credentials;
+    if (creds.username != null) {
+      append(sb, "username", creds.username);
+      append(sb, "password", creds.password);
+    } else {
+      append(sb, FineoConnectionProperties.AUTHENTICATION, "static");
+      AWSCredentialsProvider provider = api.credentials.get();
+      AWSCredentials credentials = provider.getCredentials();
+      append(sb, FineoConnectionProperties.AWS_KEY, credentials.getAWSAccessKeyId());
+      append(sb, FineoConnectionProperties.AWS_SECRET, credentials.getAWSSecretKey());
+    }
 
     return sb.toString();
   }

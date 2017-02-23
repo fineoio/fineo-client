@@ -76,10 +76,14 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>io.fineo.client:common</include>
                   <include>io.fineo.connection:common</include>
                   <include>io.fineo.client:cognito-auth:all</include>
                   <include>org.apache.calcite.avatica:avatica</include>
+
+                  <include>io.fineo.client:common</include>
+                  <!-- Include all of this because we don't include io.fineo.client:common:all,
+                  but rather just the original jar
+                   -->
                   <include>com.google.guava:guava</include>
                   <!-- Logging -->
                   <include>org.slf4j:slf4j-api</include>

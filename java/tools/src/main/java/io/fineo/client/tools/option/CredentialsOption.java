@@ -58,7 +58,7 @@ public class CredentialsOption {
   }
 
   private AWSCredentialsProvider getCredentials() throws FileNotFoundException {
-    // use an untyped list to allow for changing authentication providers
+    // use an untyped list to allow for changing aw namespace in packaging
     List providers = new ArrayList();
     // load the yaml credentials file into static credentials
     if (credentialsFile != null) {
@@ -84,7 +84,7 @@ public class CredentialsOption {
     // tools are expected to be short-lived, so we can can just use the standard cognito
     // credentials (no need to worry about refresh)
     if(username != null && password != null){
-      providers.add(CredentialsHelper.getUserHelper(username, password).getCredentials());
+      providers.add(CredentialsHelper.getUserHelper(username, password));
     }
 
     Preconditions.checkArgument(providers.size() > 0, "No valid credentials provided!");
