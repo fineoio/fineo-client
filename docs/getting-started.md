@@ -110,7 +110,8 @@ You should have received your API Key in your welcome email. If not, [please rea
 | FINEO      | INFORMATION_SCHEMA | SCHEMATA   | TABLE      |            |            |            |            |                           |                |
 | FINEO      | INFORMATION_SCHEMA | TABLES     | TABLE      |            |            |            |            |                           |                |
 | FINEO      | INFORMATION_SCHEMA | VIEWS      | TABLE      |            |            |            |            |                           |                |
-+------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+ 
++------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
+
 ```
 
 Or you can read the values that you sent:
