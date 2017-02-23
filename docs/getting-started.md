@@ -68,12 +68,11 @@ as the 'device' we created with the Stream tool:
 ```
 $ java -cp tools-1.1.1.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
-  --url https://api.fineo.io/stream \
   --static-key <your device access key> \
   --static-secret <your device secret key> \
   --metric-name demo
   --field text."device sent" \
-  --field point.2 \
+  --field point.2
 ```
 
 ## Reading Data
@@ -91,7 +90,7 @@ download it, start it up with:
 Now, we need to connect to Fineo
 
 ```
-!connect jdbc:fineo:url=https://api.fineo.io/read;api_key=<your api key>
+!connect jdbc:fineo:api_key=<your api key>
 ```
 
 You should have received your API Key in your welcome email. If not, [please reach out]. You will
@@ -171,11 +170,11 @@ Great! Now, when we query with SQLLine, we see:
 You now have all the tools to use the whole platform! You can create and manage devices, 
 manipulate schemas, upload data and then view data in JDBC based tools. 
 
-When you ready, take a deeper look into:
+When you're ready, take a deeper look into:
  * how to use the [java client SDK] in your code
  * all the power that Fineo's [schema flexibility] provides
- * how to more extensively [configure jdbc] connections
  * all the various [command line tools]
+ * how to more extensively [configure jdbc] connections
 
 We love to hear any feedback you have, [email us]!
 

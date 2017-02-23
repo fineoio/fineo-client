@@ -9,16 +9,10 @@ The Driver class:
 io.fineo.read.Driver
 ```
 
-and the JDBC URL, which is at least:
+and the JDBC URL. You must also provide your API Key, either as an URL parameter, like:
 
 ```
-jdbc:fineo:url=https://api.fineo.io/read
-```
-
-You must also specify your API Key, either as a URl parameter, like:
-
-```
-jdbc:fineo:url=https://api.fineo.io/read;api_key=<your_key>
+jdbc:fineo:api_key=<your_key>
 ```
 
 Or in the `Properties` object, when connecting with Java.

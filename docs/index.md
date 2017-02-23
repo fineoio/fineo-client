@@ -4,11 +4,19 @@
 
 This guide provides information about how to access the Fineo API
 
-# Features
+# Getting started
+
+Looking to jump right in? Head over to our [getting started] guide.
+
+# Fineo Features
+
+Fineo is the easiest, smartest way to build your IoT analytics. With features like:
 
  - Fully integrated java client API with synchronous and asynchronous endpoints
  - JDBC compliant access to data
  - In-depth security
+
+we are ready to solve all your data problems, no matter what the scale.
 
 # Authentication
 
@@ -36,8 +44,5 @@ reading, writing, updating schema, etc.
 
 **All these credentials should be kept in a safe place.**
 
-# Getting started
-
-Looking to jump right in? Head over to our [getting started] guide.
 
 [getting started]: /getting-started
