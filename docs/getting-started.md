@@ -178,13 +178,13 @@ When you're ready, take a deeper look into:
 
 We love to hear any feedback you have, [email us]!
 
-[web application] : https://app.fineo.io
-[schema flexibility] : /schema
+[web application]: https://app.fineo.io
+[schema flexibility]: /schema
 [download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1.jar 
 [Find out more about the tools] : /client/tools
-[SQLLine bundle that includes everything you need] : http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
+[SQLLine bundle that includes everything you need]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
 [please reach out]: mailto:help@fineo.io?subject=Welcome email api key help!
-[configure jdbc] : /jdbc/intro
-[command line tools] : /client/tools
-[java client SDK] : /client/java
+[configure jdbc]: /jdbc/intro
+[command line tools]: /client/tools
+[java client SDK]: /client/java
 [email us]: mailto:info@fineo.io?subject=Feedback
