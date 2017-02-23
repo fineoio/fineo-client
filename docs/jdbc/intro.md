@@ -135,12 +135,11 @@ public class Example{
 
   public void example() throws Exception {
     io.fineo.read.Driver.load();
-
-    String url = "https://api.fineo.io/read";
     String apikey = "yourapikey1234";
-    String jdbc = format("jdbc:fineo:url=%s;api_key=%s", url, apikey);
-    System.out.println("Connecting with JDBC URL: " + jdbc);
-    try (Connection conn = getConnection(jdbc)) {
+    Properties props = new Properties();
+    props.put("user", "me@example.com");
+    props.put("password", "password");
+    try (Connection conn = getConnection(format("jdbc:fineo:api_key=%s", url, apikey), props)) {
       conn.getMetaData().getCatalogs();
     }
   }

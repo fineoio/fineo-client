@@ -35,8 +35,7 @@ To create the bundled metric type into a table named 'metric', you run:
 ```
 $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   create --type metric
 ```
 
@@ -47,8 +46,7 @@ create a metric type like:
 ```
 $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   create \
   --type com.company.Event \
   --metric-name my-events
@@ -60,8 +58,7 @@ command line. For example:
 ```
 $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   create \
   --metric-name my-events2 \
   -Ffield1=VARCHAR -Ffield2=INTEGER
@@ -79,8 +76,7 @@ You can also read the schema for a given table with the `read` command. For inst
 ```
 $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   read --metric-name metric
 ```
 
@@ -105,8 +101,7 @@ You can also delete a table (e.g. metric) with the `delete` command like so:
 ```
 $ java -cp tools-<version>.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   delete --metric-name metric
 ```
 
@@ -118,8 +113,7 @@ sending a single event, you can easily specify each field:
 ```
 $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   --type metric \
   --field field.value
 ```
@@ -133,8 +127,7 @@ The tool sets the timestamp is set to the time the event is written, so you don'
 ```
 $ java -cp tools-<version>.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
-  --url <api> \
-  --credentials-file <yaml credentials> \
+  --username <your email> --password <your password> \
   --type metric \
   --field "1.field.a value"
   --field "2.field.another value"
@@ -194,8 +187,7 @@ above:
 ```
 $ java -jar tools-<version>-jdbc.jar \
     --api-key <your api key> \
-    --url <api> \
-    --credentials-file <yaml credentials> \
+    --username <your email> --password <your password> \
     SELECT field from metric
 ```
 

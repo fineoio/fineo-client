@@ -41,8 +41,7 @@ instance you can call. For instance, to use the 'StreamWrite' API, you would do:
 ```
   FineoClientBuilder builder = new FineoClientBuilder()
                                 .withApiKey(apiKey)
-                                .withCredentials(awsCredentials)
-                                .withEndpoint(url);
+                                .withCredentials(awsCredentials);
   StreamWrite stream = builder.build(StreamWrite.class)
 ```
 

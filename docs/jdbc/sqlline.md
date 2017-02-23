@@ -25,15 +25,15 @@ $ ./sqlline
 
 Start by entering the connection credentials:
 ```
-sqlline>  !connect jdbc:fineo:url=<URL you were given>;api_key=<your api key>
+sqlline>  !connect jdbc:fineo:api_key=<your api key>
 ```
 
 If you did not enter a authentication method (see [JDBC guide](/Jdbc)), you can enter your IAM
  credentials as a username (access key) and password (secret key) combination:
 
 ```
- Enter username for jdbc:fineo:url=<url>;api_key=<key>:
- Enter password for jdbc:fineo:url=<url>;api_key=<key>:
+ Enter username for jdbc:fineo;api_key=<key>:
+ Enter password for jdbc:fineo:api_key=<key>:
 ```
 
 That's it. From there you can easily access all of your data through SQL!
