@@ -1,6 +1,7 @@
 package io.fineo.client.model.schema;
 
 
+import io.fineo.client.Api;
 import io.fineo.client.Op;
 import io.fineo.client.Parameter;
 import io.fineo.client.model.Empty;
@@ -14,6 +15,7 @@ import io.fineo.client.model.schema.metric.UpdateMetricRequest;
 
 import java.util.concurrent.CompletableFuture;
 
+@Api("https://api.fineo.io/schema")
 public interface SchemaApi extends AutoCloseable {
 
   interface Management extends SchemaApi {

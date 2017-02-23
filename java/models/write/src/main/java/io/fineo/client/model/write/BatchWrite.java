@@ -1,5 +1,6 @@
 package io.fineo.client.model.write;
 
+import io.fineo.client.Api;
 import io.fineo.client.Op;
 import io.fineo.client.Parameter;
 import io.fineo.client.model.Empty;
@@ -7,6 +8,7 @@ import io.fineo.client.model.Empty;
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
+@Api("https://api.fineo.io/batch")
 public interface BatchWrite extends AutoCloseable {
 
   @Op(method = "PUT", path = "/batch/upload/data/{file}")

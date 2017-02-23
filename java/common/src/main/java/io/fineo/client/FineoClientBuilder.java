@@ -6,6 +6,7 @@ import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.asynchttpclient.Response;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -81,11 +83,31 @@ public class FineoClientBuilder {
     if (apiClass == null) {
       throw new IllegalArgumentException("Missing API class");
     }
-    if (endpoint == null) {
-      throw new IllegalArgumentException("Missing endpoint information");
-    }
+
+    String endpoint = Preconditions.checkNotNull(getEndpoint(apiClass), "Missing api endpoint");
     ApiClientHandler handler = getHandler(endpoint);
     return build(apiClass, handler);
+  }
+
+  <T> String getEndpoint(Class<T> apiClass){
+    // overwritten endpoint takes precedence
+    if (endpoint != null) {
+      return endpoint;
+    }
+
+    // try an annotation instead
+    Api api = apiClass.getAnnotation(Api.class);
+    // read the api endpoint from the class annotation (or one its parent)
+    if (api == null) {
+      Class<?> parent = apiClass.getEnclosingClass();
+      if (parent != null) {
+        api = parent.getAnnotation(Api.class);
+      }
+    }
+    if (api != null) {
+      endpoint = api.value();
+    }
+    return endpoint;
   }
 
   static <T> T build(Class<T> apiClass, ApiClientHandler handler) {
@@ -190,7 +212,7 @@ public class FineoClientBuilder {
     private byte[] contentAsBytes(FineoClientBuilder.Request httpRequest)
       throws JsonProcessingException {
       byte[] data = mapper.writeValueAsBytes(httpRequest.content);
-      if (LOG.isDebugEnabled()){
+      if (LOG.isDebugEnabled()) {
         LOG.debug("Sending {} - {} request with content: {}", httpRequest.method, httpRequest.path,
           new String(data));
       }

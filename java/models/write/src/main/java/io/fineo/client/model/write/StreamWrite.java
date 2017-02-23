@@ -1,10 +1,12 @@
 package io.fineo.client.model.write;
 
+import io.fineo.client.Api;
 import io.fineo.client.Op;
 import io.fineo.client.model.Empty;
 
 import java.util.concurrent.CompletableFuture;
 
+@Api("https://api.fineo.io/stream")
 public interface StreamWrite extends AutoCloseable {
 
   @Op(method = "PUT", path = "/stream/events")

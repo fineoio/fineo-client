@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 
 
@@ -36,4 +37,21 @@ public class TestGeneratedClient {
     thrown.expectMessage(message);
     api.doWork();
   }
+
+  @Test
+  public void testApiEndpoint() throws Exception {
+    FineoClientBuilder builder = new FineoClientBuilder()
+      .withApiKey("somekey");
+    String endpoint = builder.getEndpoint(FakeApi.class);
+    assertEquals(FakeApi.API_ENDPOINT, endpoint);
+    endpoint = "https://some.other.endpoint";
+
+    builder = builder.withEndpoint(endpoint);
+    assertEquals(endpoint, builder.getEndpoint(FakeApi.class));
+
+    assertEquals(endpoint, builder.getEndpoint(FakeApi.SubApi.class));
+    builder = builder.withEndpoint(null);
+    assertEquals(FakeApi.API_ENDPOINT, builder.getEndpoint(FakeApi.SubApi.class));
+  }
+
 }
