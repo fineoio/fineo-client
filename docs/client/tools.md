@@ -188,7 +188,7 @@ above:
 $ java -jar tools-<version>-jdbc.jar \
     --api-key <your api key> \
     --username <your email> --password <your password> \
-    SELECT field from metric
+    SELECT field FROM metric
 ```
 
 You can also specify the SQL query to make with the `--sql` option (helpful for using '*' 
