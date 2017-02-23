@@ -29,10 +29,14 @@ public class SqlOption {
 
   public String getUrl() throws FileNotFoundException {
     StringBuffer sb = new StringBuffer(Driver.CONNECT_PREFIX);
-    sb.append("url=");
-    sb.append(api.url);
+    boolean first = true;
+    if (api.url != null) {
+      sb.append("url=");
+      sb.append(api.url);
+      first = false;
+    }
 
-    append(sb, FineoConnectionProperties.API_KEY, api.key);
+    append(first, sb, FineoConnectionProperties.API_KEY, api.key);
     append(sb, FineoConnectionProperties.AUTHENTICATION, "static");
     AWSCredentialsProvider credentials = api.credentials.get();
     AWSCredentials creds = credentials.getCredentials();
@@ -40,6 +44,17 @@ public class SqlOption {
     append(sb, FineoConnectionProperties.AWS_SECRET, creds.getAWSSecretKey());
 
     return sb.toString();
+  }
+
+  private void append(boolean first, StringBuffer buff, FineoConnectionProperties property, String
+    value) {
+    if (first) {
+      buff.append(property.camelName());
+      buff.append("=");
+      buff.append(value);
+    } else {
+      append(buff, property.camelName(), value);
+    }
   }
 
   private void append(StringBuffer buff, FineoConnectionProperties property, String value) {
