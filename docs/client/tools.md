@@ -129,7 +129,7 @@ $ java -cp tools-<version>-exec.jar;my-company-files.jar io.fineo.client.tools.S
   --api-key <your api key> \
   --username <your email> --password <your password> \
   --type metric \
-  --field "1.field.a value"
+  --field "1.field.a value" \
   --field "2.field.another value"
 ```
 
