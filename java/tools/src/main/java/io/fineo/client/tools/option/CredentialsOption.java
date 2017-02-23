@@ -8,6 +8,7 @@ import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.beust.jcommander.Parameter;
 import com.google.common.base.Preconditions;
+import io.fineo.client.auth.CredentialsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -41,6 +42,14 @@ public class CredentialsOption {
              description = "Load credentials from the standard AWS environment keys")
   public boolean envCredentials;
 
+  @Parameter(names = "--username",
+             description = "Login user name. Must be paired with a password")
+  public String username;
+
+  @Parameter(names = "--password",
+             description = "Login password. Must be paired with a username")
+  public String password;
+
   public AWSCredentialsProvider get() throws FileNotFoundException {
     if (this.credentials == null) {
       credentials = getCredentials();
@@ -49,9 +58,9 @@ public class CredentialsOption {
   }
 
   private AWSCredentialsProvider getCredentials() throws FileNotFoundException {
-    String credentialType = null;
+    // use an untyped list to allow for changing authentication providers
+    List providers = new ArrayList();
     // load the yaml credentials file into static credentials
-    List<AWSCredentialsProvider> providers = new ArrayList<>();
     if (credentialsFile != null) {
       Yaml yaml = new Yaml();
       FileInputStream stream = new FileInputStream(credentialsFile);
@@ -70,6 +79,12 @@ public class CredentialsOption {
     }
     if (envCredentials) {
       providers.add(new EnvironmentVariableCredentialsProvider());
+    }
+
+    // tools are expected to be short-lived, so we can can just use the standard cognito
+    // credentials (no need to worry about refresh)
+    if(username != null && password != null){
+      providers.add(CredentialsHelper.getUserHelper(username, password).getCredentials());
     }
 
     Preconditions.checkArgument(providers.size() > 0, "No valid credentials provided!");

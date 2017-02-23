@@ -1,5 +1,6 @@
 package io.fineo.read;
 
+import io.fineo.read.http.DriverProperties;
 import io.fineo.read.http.FineoAvaticaAwsHttpClient;
 import io.fineo.read.jdbc.ConnectionStringBuilder;
 import io.fineo.read.jdbc.FineoConnectionProperties;
@@ -159,7 +160,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   /**
    * Update the properties to fix inside the avatica framework. Does things like:
    * <ol>
-   * <li>Translate aws auth into avatica auth</li>
+   * <li>Translate aws io.fineo.client.auth.auth into avatica io.fineo.client.auth.auth</li>
    * <li>Update url to include things like the Api Key
    * <ul>
    * <li>The client is created with the URL from the properties (url=), not the overall

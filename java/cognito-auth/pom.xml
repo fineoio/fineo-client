@@ -1,0 +1,116 @@
+  <project xmlns="http://maven.apache.org/POM/4.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+      <artifactId>fineo-client-parent</artifactId>
+      <groupId>io.fineo.client</groupId>
+      <version>1.1.2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cognito-auth</artifactId>
+    <name>Fineo Client - Cognito Authentication</name>
+
+    <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-cognitoidp</artifactId>
+        <version>${aws-java-sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-cognitoidentity</artifactId>
+        <version>${aws-java-sdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-sts</artifactId>
+        <version>${aws-java-sdk.version}</version>
+      </dependency>
+      <!-- Handle jwt tokens library! -->
+      <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>3.1.0</version>
+      </dependency>
+      <!-- force jackson to match our version -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.6.6</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.6.6</version>
+      </dependency>
+    </dependencies>
+
+    <build>
+      <resources>
+        <resource>
+          <directory>src/main/resources</directory>
+          <filtering>true</filtering>
+        </resource>
+      </resources>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <configuration>
+            <createDependencyReducedPom>true</createDependencyReducedPom>
+            <shadedArtifactAttached>true</shadedArtifactAttached>
+            <shadedClassifierName>all</shadedClassifierName>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <artifactSet>
+                  <includes>
+                    <!-- AWS tools -->
+                    <include>com.amazonaws:aws-java-sdk-core</include>
+                    <include>joda-time:joda-time</include>
+                    <include>com.fasterxml.jackson.core:*</include>
+                    <include>com.amazonaws:jmespath-java</include>
+                    <include>com.amazonaws:aws-java-sdk-sts</include>
+                    <include>com.amazonaws:aws-java-sdk-cognitoidp</include>
+                    <include>com.amazonaws:aws-java-sdk-cognitoidentity</include>
+                    <!-- need the http client for cognito requests over standard apache http -->
+                    <include>org.apache.httpcomponents:httpclient</include>
+                    <include>org.apache.httpcomponents:httpcore</include>
+
+                    <!-- JWT Handling -->
+                    <include>com.auth0:java-jwt</include>
+                    <include>commons-codec:commons-codec</include>
+                    <include>org.bouncycastle:bcprov-jdk15on</include>
+                  </includes>
+                </artifactSet>
+                <filters>
+                  <!-- General artifact cleanliness -->
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>META-INF/*.SF</exclude>
+                      <exclude>META-INF/*.DSA</exclude>
+                      <exclude>META-INF/*.RSA</exclude>
+                      <exclude>.gitkeep</exclude>
+                      <!-- -test.xml overrides our logback.xml -->
+                      <exclude>logback-test.xml</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </build>
+  </project>

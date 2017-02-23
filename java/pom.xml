@@ -10,6 +10,7 @@
     <module>jdbc</module>
     <module>tools</module>
     <module>schema</module>
+    <module>cognito-auth</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -191,6 +192,17 @@
       <dependency>
         <groupId>io.fineo.client.schema</groupId>
         <artifactId>schema</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>cognito-auth</artifactId>
+        <version>${project.version}</version>
+        <classifier>all</classifier>
+      </dependency>
+      <dependency>
+        <groupId>io.fineo.client</groupId>
+        <artifactId>cognito-auth</artifactId>
         <version>${project.version}</version>
       </dependency>
 

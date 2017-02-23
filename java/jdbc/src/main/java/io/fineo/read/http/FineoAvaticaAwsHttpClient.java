@@ -1,21 +1,10 @@
 package io.fineo.read.http;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.google.common.annotations.VisibleForTesting;
 import io.fineo.client.ApiAwsClient;
 import io.fineo.client.ClientConfiguration;
+import io.fineo.client.auth.CredentialsHelper;
 import io.fineo.read.AwsApiGatewayBytesTranslator;
-import io.fineo.read.DriverProperties;
-import io.fineo.read.auth.CognitoCachingCredentialsProvider;
-import io.fineo.read.auth.cognito.CognitoUser;
-import io.fineo.read.auth.cognito.CognitoUserPool;
-import io.fineo.read.auth.cognito.CognitoUserSession;
-import io.fineo.read.auth.cognito.handle.AuthenticationContinuation;
-import io.fineo.read.auth.cognito.handle.AuthenticationDetails;
-import io.fineo.read.auth.cognito.handle.AuthenticationHandler;
 import io.fineo.read.jdbc.ConnectionStringBuilder;
 import io.fineo.read.jdbc.FineoConnectionProperties;
 import org.apache.calcite.avatica.remote.AuthenticationType;
@@ -29,11 +18,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static io.fineo.client.ResponseUtil.asClientException;
 import static io.fineo.client.ResponseUtil.error;
@@ -51,7 +37,7 @@ public class FineoAvaticaAwsHttpClient
   private final AwsApiGatewayBytesTranslator translator = new AwsApiGatewayBytesTranslator();
   private final Map<String, String> properties;
   private final ApiAwsClient client;
-  private AWSCredentialsProvider credentials;
+  private CredentialsHelper credentials;
 
   public FineoAvaticaAwsHttpClient(URL url) throws MalformedURLException, URISyntaxException {
     // first, get the properties
@@ -83,7 +69,7 @@ public class FineoAvaticaAwsHttpClient
 
   @Override
   public byte[] send(byte[] request) {
-    client.setCredentials(this.credentials);
+    client.setCredentials(this.credentials.getCredentials());
     request = translator.encode(request);
     Response response;
     try {
@@ -116,72 +102,10 @@ public class FineoAvaticaAwsHttpClient
         // look at the shape of the credentials OR check the config flag
         boolean force = this.properties.getOrDefault("force_auth", "").equals("username_password");
         this.credentials =
-          (force || userShape(username, password)) ?
-          getUserCredentials(username, password) :
-          new AWSStaticCredentialsProvider(new BasicAWSCredentials(username, password));
+          force ?
+          CredentialsHelper.getUserHelper(username, password):
+          CredentialsHelper.getHelper(username, password);
     }
-  }
-
-  private AWSCredentialsProvider getUserCredentials(String username, String password) {
-    CognitoUserPool pool = new CognitoUserPool(
-      DriverProperties.USER_POOL_ID, DriverProperties.CLIENT_ID, DriverProperties.SECRET);
-    CognitoUser user = pool.getUser(username);
-      CountDownLatch done = new CountDownLatch(1);
-      AtomicReference<CognitoUserSession> sessionRef = new AtomicReference<>();
-      AtomicReference<Exception> error = new AtomicReference<>();
-      user.getSession(new AuthenticationHandler() {
-        @Override
-        public void onSuccess(CognitoUserSession userSession, Object newDevice) {
-          sessionRef.set(userSession);
-          done.countDown();
-        }
-
-        @Override
-        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation,
-          String UserId) {
-          AuthenticationDetails authDetails = new AuthenticationDetails(username, password,
-            new HashMap<>());
-          authenticationContinuation.setAuthenticationDetails(authDetails);
-          authenticationContinuation.continueTask();
-        }
-
-        @Override
-        public void getMFACode(Object mfaContinuation) {
-          throw new IllegalStateException("JDBC does not support MFA based login");
-        }
-
-        @Override
-        public void authenticationChallenge(Object continuation) {
-          throw new IllegalStateException("JDBC does not support authentication challenges");
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-          error.set(exception);
-          done.countDown();
-        }
-      });
-    try {
-      done.await();
-      Exception e = error.get();
-      if (e != null) {
-        throw new RuntimeException(e);
-      }
-      CognitoUserSession session = sessionRef.get();
-      CognitoCachingCredentialsProvider credentialsProvider = new
-        CognitoCachingCredentialsProvider(DriverProperties.IDENTITY_POOL_ID, Regions.US_EAST_1);
-      Map<String, String> logins = new HashMap<>();
-      logins.put("cognito-idp.us-east-1.amazonaws.com/" + DriverProperties.USER_POOL_ID, session.getIdToken()
-                                                                                                .getJWTToken());
-      credentialsProvider.setLogins(logins);
-      return credentialsProvider;
-    } catch (InterruptedException e) {
-      throw new RuntimeException("Interrupted waiting for user credentials!", e);
-    }
-  }
-
-  private boolean userShape(String username, String password) {
-    return username.contains("@");
   }
 
   @Override

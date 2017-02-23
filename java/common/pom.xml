@@ -63,8 +63,6 @@
           <createDependencyReducedPom>true</createDependencyReducedPom>
         </configuration>
         <executions>
-          <!-- Core, non-jdbc tools -->
-          <!-- These don't get a manifest b/c there are a bunch of 'natural' options -->
           <execution>
             <phase>package</phase>
             <goals>
