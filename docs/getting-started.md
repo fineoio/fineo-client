@@ -98,34 +98,22 @@ You should have received your API Key in your welcome email. If not, [please rea
  sign up.
  
  Then, you can view the tables:
- 
- ![Screenshot](img/screenshot.png)
+
  
  ```
  0: jdbc:fineo:url=https://api.fineo.io/read> !tables
-+------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
-| TABLE_CAT  | TABLE_SCHEM | TABLE_NAME | TABLE_TYPE |  REMARKS   |  TYPE_CAT  | TYPE_SCHEM | TYPE_NAME  | SELF_REFERENCING_COL_NAME | REF_GENERATION |
-+------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
-| FINEO      | FINEO       | demo       | TABLE      |            |            |            |            |                           |                |
-| FINEO      | INFORMATION_SCHEMA | CATALOGS   | TABLE      |            |            |            |            |                           |                |
-| FINEO      | INFORMATION_SCHEMA | COLUMNS    | TABLE      |            |            |            |            |                           |                |
-| FINEO      | INFORMATION_SCHEMA | SCHEMATA   | TABLE      |            |            |            |            |                           |                |
-| FINEO      | INFORMATION_SCHEMA | TABLES     | TABLE      |            |            |            |            |                           |                |
-| FINEO      | INFORMATION_SCHEMA | VIEWS      | TABLE      |            |            |            |            |                           |                |
-+------------+-------------+------------+------------+------------+------------+------------+------------+---------------------------+----------------+
-```
+ ```
+
+ ![tables](img/getting-started/tables.png)
 
 Or you can read the values that you sent:
 
 ```
 0: jdbc:fineo:url=https://api.fineo.io/read> select * from demo;
-+------------+-------------+---------------------+
-| timestamp  |   text      |       point         |
-+------------+-------------+---------------------+
-| 1487465257000 | user sent for demo        | 1         |
-| 1487465256100 | device sent       | 2          |
-+------------+-------------+---------------------+
 ```
+
+ ![select star](img/getting-started/select_star_from_demo.png)
+
 
 ## Flexible Schema
 
