@@ -1,49 +1,51 @@
 # Getting Started
 
-Welcome to the Fineo platform! With Fineo you can easily and flexibly upload data from connected devices and then view that data through traditional SQL-based tools.
+Welcome to the Fineo platform! With Fineo you can easily upload data from connected devices and then view that data through traditional SQL-based tools.
 
-In this guide, we are going to walk through connecting a simple device, creating a schema, sending data and then reading the data back through a SQL tool.
+This guide is going to walk through connecting a simple device, creating a schema, sending data and then reading the data back. Then it will show to flexibly manage mistakes and how to evolve schema.
 
 ## Creating a device
 
-When you log in to the [web application], you are taken to the 'Devices' tab. To add a new device, you just click the '+' button to create a new device. Each device is given a unique ID.
+The 'Devices' tab is the first screen shown when logging into the [web application]. Add a new device by clicking the '+' button. The platform will generate a unique ID for each device.
 
  ![create device](img/getting-started/create_device.png)
 
-Let's select the device so we can finish setting it up. First, we can set a more helpful name for
- the device and hit "Save". Then, lets add a key to the device. You can have up to two active keys for each device.
+To finish setting up a device, enter in a name for the device and hit Save. Next add a key to the device by pressing '+’under the Keys section. You can have up to two active keys for each device.
 
   ![setup_device](img/getting-started/setup_device.png)
 
- When you create the key, you will be shown the device's access key and secret key. Store the secret key in a safe location - this is the only time that the secret will be accessible! If you lose the secret, you will need to create a new secret.
-
-Now you have all the information needed to send data as that device!
+When you create the key, an access key and secret key will be generated and displayed for the device. Store the secret key in a safe location - this is the only time that the secret will be accessible! If you lose the secret, you will need to create a new key.
 
 ## Setting up a schema
 
-Managing schema is the other major component of any database (beyond accessing the data). While Fineo has a very flexible schema system, you still need to provide some sort of schema when sending data. You can read more about the [schema flexibility].
+While Fineo has a very flexible schema system, you still need to provide some sort of schema before sending data. [Read more about schema flexibility].
 
- ![create schema pointer](img/getting-started/create_schema_pointer.png)
+To create a new schema, select Schema from the left hand navigation and then the ‘+’button in the drop down.
 
-Let's create a schema by selecting the '+' button. This takes you to the schema creation page. Set the schema name, for instance 'schema_demo', and then add two fields:
+![create schema pointer](img/getting-started/create_schema_pointer.png)
+
+This takes you to the schema creation page. Set the desired schema name and fields, for instance, name the schema 'schema_demo' and add two fields:
 
  1. name: text, type: varchar
  2. name: point, type: integer
 
  ![create schema](img/getting-started/create_schema.png)
 
-Then press 'save' to create the schema.
+Then press Save to create the schema.
 
 ## Sending data
 
 ### With the UI
 
-Though the application, we can also send data as the logged in user, rather than as a device. This is useful for debugging and getting started (like right now!).
+You can send data through the web application, rather than from a device. This is useful for debugging and getting started.
 
-Select Data -> Stream to open the upload panel. All data must be non-nested JSON and contain at least the target schema. Beyond that, data can be completely free-form and not even necessarily conform to the schema we just created (we will get to that shortly).
+To open the data upload section, select Data in the left hand navigation and then select Stream from the drop down menu.
 
-For now, lets just send a simple data point:
+![send data](img/getting-started/send_data.png)
 
+All data must be non-nested JSON and contain at least the target schema name under the field name "metrictype" [Learn how to change that field name]. Beyond that, data can be completely free-form JSON - it does not even need conform to the schema’s previously created (we will get to that shortly).
+
+Below is an example for sending a simple data point:
 ```
 {
   "metrictype" : "demo",
@@ -52,14 +54,16 @@ For now, lets just send a simple data point:
 }
 ```
 
+Since this data point does not have a timestamp, one is assigned to it as the time the event is sent.
+
 ### From a device
 
-We generally recommend embedding the Fineo SDK into your application directly to help minimize latency. However, for this example, we will leverage the command line tools in the SDK to send data. [Find out more about the tools].
+The recommended way to send data in production is to embed the Fineo SDK into your device application. However, this example leverages the command line tools to send data like a device, rather than having to build a full application. [Learn more about how to use the SDK].
 
-First, you need to [download the tools]. Then, from the command line, you can send a data point as the 'device' we created with the Stream tool:
+First, [download the tools] jar. Then, from the command line, send a data point as the 'device' created above using the Stream tool:
 
 ```
-$ java -cp tools-1.1.1.jar io.fineo.client.tools.Stream \
+$ java -cp tools-1.1.1-exec.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --static-key <your device access key> \
   --static-secret <your device secret key> \
@@ -68,30 +72,34 @@ $ java -cp tools-1.1.1.jar io.fineo.client.tools.Stream \
   --field point.2
 ```
 
+[Find out more about the tools]
+
 ## Reading Data
 
-At this point, we have successfully sent two data point, one from the UI and one from a 'device'.
+At this point, two data points have been stored - one from the UI and one from a 'device'.
 
-Naturally, you now want to read that data back!
+Naturally, the next step is to read that data back!
 
-We going to use a  standard, command line tool called SqlLine. We created a [SQLLine bundle that includes everything you need]. Once you download it, start it up with:
+Fineo provides a standard JDBC adapter that works with any JDBC-compliant SQL tool. The most simple tool is [SqlLine], a command-line based SQL interface. Fineo has created a SqlLine bundle tool that has everything you need to connected to fineo. [Download the SqlLine bundle here].
+
+When the download has completex, unpack and start it on the command line:
 
 ```
  $ tar -xf sqlline-1.1.10-fineo-1.1.tar.gz
  $ ./sqlline
 ```
 
-Now, we need to connect to Fineo
+Next, connect to Fineo:
 
 ```
 !connect jdbc:fineo:api_key=<your api key>
 ```
 
-You should have received your API Key in your welcome email (if not, [please reach out](mailto:help@fineo.io?subject=Welcome email api key help!)). 
+The Welcome Email should include the API Key to use here (if not, [please reach out](mailto:help@fineo.io?subject=Welcome email api key help!)).
 
-You will then be prompted for your username and password. Enter the email and password that you used to sign up.
+SqlLine then prompts for a username and password - enter the username and password specified when signing up for Fineo.
 
- Then, you can view the tables:
+After successully logging in, a simple check to ensure everything works is to check the tables:
 
  ```
  0: jdbc:fineo:api_key=123> !tables
@@ -99,10 +107,12 @@ You will then be prompted for your username and password. Enter the email and pa
 
  ![tables](img/getting-started/tables.png)
 
-Or you can read the values that you sent:
+It should include the schema created above, as well as the standard JDBC SQL tables.
+
+Then, attempt to read all the data that was previously written:
 
 ```
-0: jdbc:fineo:api_key=123> select * from demo;
+0: jdbc:fineo:api_key=123> SELECT * FROM schema_demo;
 ```
 
  ![select star](img/getting-started/select_star_from_demo.png)
@@ -110,17 +120,17 @@ Or you can read the values that you sent:
 
 ## Flexible Schema
 
-Up to here, this is about what you would expect from any SQL database. What get's interesting 
-about Fineo is that we can leverage some 'NoSQL' like properties to help future-proof 
-applications, as well as decreasing risk of changes, so you can develop quickly.
+Up to here, Fineo works much like any other SQL-based time-series database. Unlike other databases, Finos also enables some 'NoSQL' like functionality to help future-proof applications, as well as decreasing risk of changes.
 
-Let's suppose in moving quickly, you update the data you send from the devices, but forgot to update the schema in the database and also mis-spelled one of the new fields you are sending. Often times, you will have completely broken your application and likely your data warehousing scripts. With Fineo, we are just a button click away from fixing everything!
+The easiest mistakes to make are things like forgetting to migrate the database to support a new field or misspelling a field name. Unfortunately, once deployed to devices in the field, any data sent is lost or the applicaton is broken.
 
-Lets start by sending that new data from the UI:
+Fortunately, Fineo's flexible schema support makes it as easy as clicking a button to recover that data and fix that error, without having to change your deployed application whatsoever.
+
+Start by sending some "bad" data from the UI:
 
 ```
 {
-  "metrictype" : "demo",
+  "metrictype" : "schema_demo",
   "text" : "another user event",
   "point" : 3,
   "point2" : 10,
@@ -128,20 +138,19 @@ Lets start by sending that new data from the UI:
 }
 ```
 
+This includes two fields that was not present in the 'schema_demo' schema and "pont3" is misspelled. Right now, attempting to read the data in SqlLine will just yield the known fields in the schema (e.g. `text`, `point`, and `timestamp`).
 
-If you try to read the data in SQLLine you will just see the fields that you created in the schema.
 
-Let's go and fix that schema so we can see all the new data we are sending. In the 'Schema' tab in the app, select 'demo'. Then we add the two fields that we want:
+To fix this, start by opening the Schema tab in the web application and then selecting 'schema_demo'
 
- * point2
- * point3
+Add the two fields:
 
-We also need to add an alias for ```point3``` from ```pont3``` to resolve that "mistyping" we made when sending the data.
+  1. name: point2, type: integer
+  2. name: point3, type: integer
 
-Great! Now, when we query with SQLLine, we see:
- * the original data points
- * the new data points
- * fixed spelling on "pont3" to "point3"
+An alias also needs to be added for ```point3``` to correct the ```pont3``` field sent above. Hit Save to store these changes.
+
+Now, when querying SqlLine, all the original data points will be present, as well as the new fields and the spelling of `pont3` is transparently fixed to `point3`.
 
 ## Next Steps
 
@@ -156,11 +165,15 @@ When you're ready, take a deeper look into:
 We love to hear any feedback you have, [email us]!
 
 [web application]: https://app.fineo.io
-[schema flexibility]: /schema
+[Read more about schema flexibility]: /schema
+[Learn how to change that field name]: /schema
+[Learn more about how to use the SDK]: /client/java
 [download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1.jar
 [Find out more about the tools]: /client/tools
-[SQLLine bundle that includes everything you need]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
+[SqlLine]: http://sqlline.sourceforge.net/
+[Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
 [configure jdbc]: /jdbc/intro
 [command line tools]: /client/tools
 [java client SDK]: /client/java
 [email us]: mailto:info@fineo.io?subject=Feedback
+
