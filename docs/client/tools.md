@@ -214,5 +214,5 @@ Alternatively, you can also specify the credentials through command line propert
 All tools have `-h` or `--help` options that fully describe all parameters that can used for each
  command.
 
-[here]: http://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1.jar
+[here]: http://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1-exec.jar
 [own jar]: http://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1-jdbc.jar
