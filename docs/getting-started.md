@@ -99,7 +99,7 @@ You should have received your API Key in your welcome email. If not, [please rea
  
  Then, you can view the tables:
  
- ![Screenshot](img/screenshot.jpg)
+ ![Screenshot](img/screenshot.png)
  
  ```
  0: jdbc:fineo:url=https://api.fineo.io/read> !tables
