@@ -34,12 +34,12 @@ endpoint, or a batch request.
     * metrictype
     * timestamp
     * Anything with the prefix:
-      * _f
-      * ```T<n>¦¦```
-        * where ```<n>``` is a number
+        * _f
+        * ```T<n>¦¦```
+            * where ```<n>``` is a number
 
 3. (Currently) No lookup of columns by their original ingest names, only their output names
 
 ## SQL
 1. No multiple * selection.
-  * For example, ```*, field, *```. You can do ``*, f1, f2,...```, but the second * is not supported.
+    * For example, ```*, field, *```. You can do ``*, f1, f2,...```, but the second * is not supported.

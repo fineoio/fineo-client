@@ -20,45 +20,42 @@ Or in the `Properties` object, when connecting with Java.
 The connection string is parsed according to 
 [OLE DB Connection String Syntax](https://msdn.microsoft.com/en-us/library/windows/desktop/ms722656\(v=vs.85\).aspx).
 
-Additionally, you must also specify some way to load the request-signing credentials. Similarly, 
-this can be done as a connection string property or in the `Properties` object in Java.
-
 # Authentication
 
-Properties are either specified on the JDBC URL separated with commas, in the BI user interface 
-or through the Java Properties passed in when creating the connection.
+All requests are authenticated with [AWS-style SigV4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) signatures and credentials.
 
-The properties you need to set are:
+There are several ways that the SDK can obtain the credentials. These can be specified either in 
+the connection URL properties or in the java Properties object. 
 
- 1. API Key
-    - property: ```api_key```
-    - example: ```api_key=1234242352```
- 2. User IAM credentials
-    - Simple authentication: username/password
+The possible authentication methods are:
+ 
+  - Simple authentication: username/password
       - property: ```username```, ```password```
       - Example:
-        * ```jdbc:fineo:url=https://api.fineo.io/read;api_key=1234;username=jane@example.com;password=secret```
+        * ```jdbc:fineo:api_key=1234;username=jane@example.com;password=secret```
         * Note: it is not recommended to pass the password as plain-text in the connection string. 
         Instead, you should store it in the ```Properties``` or enter it in a 'hidden' style field 
-    - AWS Credentials 
-        -property: ```authentication```
-        - Options:
-            * default
-                - Use the [default AWS credential chain]
-            * system
-                - Load from the system properties:
-                    - aws.accessKeyId
-                    - aws.secretKey
-            * env
-                - Load from the environment variables:
-                    - AWS_ACCESS_KEY_ID / AWS_ACCESS_KEY
-                    - AWS_SECRET_KEY / AWS_SECRET_ACCESS_KEY
-            * static
-                - sub-property: aws_key
-                - sub-property: aws_secret
-            * profile
-                - sub property: profile_name=```<name>```
-                - Loads the specified profile from ~/.aws/credentials
+  - AWS Credentials 
+      -property: ```authentication```
+      - Options:
+          * default
+              - Use the [default AWS credential chain]
+          * system
+              - Load from the system properties:
+                  - aws.accessKeyId
+                  - aws.secretKey
+          * env
+              - Load from the environment variables:
+                  - AWS_ACCESS_KEY_ID / AWS_ACCESS_KEY
+                  - AWS_SECRET_KEY / AWS_SECRET_ACCESS_KEY
+          * static
+              - sub-property: aws_key
+              - sub-property: aws_secret
+              - Example:
+                  * ```jdbc:fineo:api_key=1234;authentication=static;aws_key=access;aws_secret=secret```
+          * profile
+              - sub property: profile_name=```<name>```
+              - Loads the specified profile from the `~/.aws/credentials` file
 
 You can also provision multiple authentication types with the ```_OR_``` separator to set a 
 hierarchy of types. For example:
