@@ -80,7 +80,9 @@ At this point, two data points have been stored - one from the UI and one from a
 
 Naturally, the next step is to read that data back!
 
-Fineo provides a standard JDBC adapter that works with any JDBC-compliant SQL tool. The most simple tool is [SqlLine], a command-line based SQL interface. Fineo has created a SqlLine bundle tool that has everything you need to connected to fineo. [Download the SqlLine bundle here].
+Fineo provides a standard JDBC adapter that works with any JDBC-compliant SQL tool. The most simple tool is [SqlLine], a command-line based SQL interface. Fineo has created a SqlLine bundle tool that has everything you need to connected to fineo.
+
+[Download the SqlLine bundle here].
 
 When the download has completex, unpack and start it on the command line:
 
