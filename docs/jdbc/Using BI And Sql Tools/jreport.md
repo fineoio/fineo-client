@@ -43,9 +43,9 @@ file (for Mac OSX/Linux it will be `%REPORTHOME%\bin\setenv.sh`).
 5. Fill in the “Driver”, “URL”, “User” and “Password” with:
 
 * Driver: io.fineo.read.Driver
-* Url: jdbc:fineo:url=<read API url>;api_key=<your api key>
-* User: <your access key>
-* Password: <your secret key>
+* Url: jdbc:fineo:api_key=<your api key>
+* User: <your user name>
+* Password: <your password>
 
 You can also utilize the other standard JDBC authentication methods as described in the [JDBC guide]
 
