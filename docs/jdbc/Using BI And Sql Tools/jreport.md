@@ -29,8 +29,6 @@ For example, on Windows copying the Fineo JDBC driver jar file in C:\JReport\Des
 the `%REPORTHOME%\bin\setenv.bat`
 file (for Mac OSX/Linux it will be `%REPORTHOME%\bin\setenv.sh`). 
 
-[jreport bat update picture]
-
 
 # Step 2: Create a new JReport catalog to manage the Fineo connection
 
@@ -51,21 +49,16 @@ file (for Mac OSX/Linux it will be `%REPORTHOME%\bin\setenv.sh`).
 
 You can also utilize the other standard JDBC authentication methods as described in the [JDBC guide]
 
-[jreport create catalog picture]
-
 6. Click Options>> select the “Qualifier” tab.
    
 7. In the Quote Qualifier section, choose “User Defined” and change the “Quote Character” from “ to ` (back tick)
 
-[backtick picture]
 
 8. Click “OK”, JReport will verify the connection and save all information.
 
 9. Add Tables and Views to the JReports catalog by right-clicking on the connection node and 
 choose “Add Table”. From there, you can browse the schemas and add tables you wish to 
 make available for query building. 
-
-[add tables picture]
 
 10. Click “Done” once you add all desired tables.
 
@@ -79,6 +72,4 @@ make available for query building.
 
 4. Use JReport Designer to query the data and create a report.
 
-[pictures for creating a simple example]
-
-[JDBC guide]: /jdbc/basic_usage
+[JDBC guide]: /jdbc/intro
