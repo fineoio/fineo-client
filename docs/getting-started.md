@@ -99,7 +99,7 @@ Next, connect to Fineo:
 
 The Welcome Email should include the API Key to use here (if not, [please reach out](mailto:help@fineo.io?subject=Welcome email api key help!)).
 
-SqlLine then prompts for a username and password - enter the username and password specified when signing up for Fineo.
+SqlLine then prompts for a username and password - enter your Fineo username and password.
 
 After successully logging in, a simple check to ensure everything works is to check the tables:
 
