@@ -99,7 +99,7 @@ which would output a JSON object like:
 You can also delete a table (e.g. metric) with the `delete` command like so: 
 
 ```
-$ java -cp tools-|version|-exec.jar io.fineo.client.tools.Schema \
+$ java -cp tools-1.1.2-exec.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   delete --metric-name metric
@@ -111,7 +111,7 @@ The same event type that you created above can be reused with the Stream tool. I
 sending a single event, you can easily specify each field:
 
 ```
-$ java -cp tools-|version|-exec.jar;my-company-files.jar io.fineo.client.tools.Stream \
+$ java -cp tools-1.1.2-exec.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   --type metric \
@@ -125,7 +125,7 @@ The tool sets the timestamp is set to the time the event is written, so you don'
   field belongs. Going back to the built in 'metric' type, you can specify two events like this:
 
 ```
-$ java -cp tools-|version|-exec.jar;my-company-files.jar io.fineo.client.tools.Stream \
+$ java -cp tools-1.1.2-exec.jar;my-company-files.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   --type metric \
@@ -155,7 +155,7 @@ Before sending events to the Fineo API, you should check that your timestamp par
  on the server-side_ so you can be sure things are working as expected.
 
 ```
-$  java -cp tools-|version|-exec.jar;my-company-files.jar io.fineo.client.tools.TimestampValidation \
+$  java -cp tools-1.1.2-exec.jar;my-company-files.jar io.fineo.client.tools.TimestampValidation \
     --pattern <pattern> \
     --value <column value>
 ```
@@ -185,7 +185,7 @@ Suppose you just want to read all the rows in the 'metric' table that you create
 above:
 
 ```
-$ java -jar tools-|version|-jdbc.jar \
+$ java -jar tools-1.1.2-jdbc.jar \
     --api-key <your api key> \
     --username <your email> --password <your password> \
     SELECT field FROM metric
@@ -214,5 +214,5 @@ Alternatively, you can also specify the credentials through command line propert
 All tools have `-h` or `--help` options that fully describe all parameters that can used for each
  command.
 
-[here]: http://maven.fineo.io/release/io/fineo/client/tools/|version|/tools-|version|-exec.jar
-[own jar]: http://maven.fineo.io/release/io/fineo/client/tools/|version|/tools-|version|-jdbc.jar
+[here]: http://maven.fineo.io/release/io/fineo/client/tools/1.1.2/tools-1.1.2-exec.jar
+[own jar]: http://maven.fineo.io/release/io/fineo/client/tools/1.1.2/tools-1.1.2-jdbc.jar

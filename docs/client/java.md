@@ -23,7 +23,7 @@ The basic java client is available through Maven here:
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>common</artifactId>
-      <version>|version|</version>
+      <version>1.1.2</version>
     </dependency>
     ...
   </dependencies>
