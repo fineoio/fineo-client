@@ -26,6 +26,7 @@ And then committed back.
 
 ### Finish release
 
-```
-$ mvn -f java/pom.xml --settings <path to release settings file> jgitflow:release-finish
-```
+The internal build handles pushing the jars and updating the latest versions. Push, in this order,
+
+ * master
+ * release-<version>
