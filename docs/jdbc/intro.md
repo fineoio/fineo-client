@@ -1,3 +1,30 @@
+To connect with JDBC, first download the [JDBC driver Jar] or include it via from the Fineo maven
+ repository:
+
+```
+<project>
+...
+  <repositories>
+    <repository>
+      <id>Fineo</id>
+      <url>http://maven.fineo.io/release</url>
+    </repository>
+  </repositories>
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>io.fineo.client</groupId>
+      <artifactId>jdbc</artifactId>
+      <version>1.1.2</version>
+      <classifier>all</classifier>
+    </dependency>
+    ...
+  </dependencies>
+</project>
+```
+
+This acts as a 'thin' client to the Fineo servers, which do the heavy-lifting of the JDBC 
+requests as a 'fat jar' containing all the necessary dependencies.
 
 # Simple Connection
 
@@ -75,36 +102,6 @@ All requests must have **both an API Key and IAM User credentials**.
 
 Currently, we support the same semantics as [Drill SQL](http://drill.apache.org/docs/sql-reference)
 
-# Java
-
-To connect with JDBC, first download the [JDBC driver Jar] or include it via from the Fineo maven
- repository:
-
-```
-<project>
-...
-  <repositories>
-    <repository>
-      <id>Fineo</id>
-      <url>http://maven.fineo.io/release</url>
-    </repository>
-  </repositories>
-  ...
-  <dependencies>
-    <dependency>
-      <groupId>io.fineo.client</groupId>
-      <artifactId>jdbc</artifactId>
-      <version>1.1.2</version>
-      <classifier>all</classifier>
-    </dependency>
-    ...
-  </dependencies>
-</project>
-```
-
-This acts as a 'thin' client to the Fineo servers, which do the heavy-lifting of the JDBC 
-requests as a 'fat jar' containing all the necessary dependencies.
-
 # Simple connection
 
 You might need to load the class in Java before loading the connection.
@@ -140,7 +137,7 @@ public class Example{
 
 # Tuning
 
-You find information on tuning the client connection at our [tuning guide](jdbc/tuning)
+You find information on tuning the client connection at our [tuning guide](/jdbc/tuning)
 
 [JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.2/jdbc-1.1.2-all.jar
 [default AWS credential chain]: http://docs.aws.amazon.com/java-sdk/latest/developer-guide/credentials.html

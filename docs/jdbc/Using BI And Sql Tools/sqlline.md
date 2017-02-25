@@ -8,10 +8,9 @@ The Fineo-specific build of sqlline is available [here] [[1](#1-sqlline)].
 
 ## 2. Prepare
 
-Unpack the tarball and then copy in the desired fineo jdbc jar (see [jdbc](/Jdbc) for the jar) to
+Unpack the tarball and then copy in the desired fineo jdbc jar (see [jdbc](/jdbc/intro) for the jar) to
  `lib/`. If you want logging you can also copy in you desired logging framework (Fineo leverages 
  Slf4j everywhere); we recommend using [logback](http://logback.qos.ch/) [[2](#2-logback)].
- 
  
 ## 3. Start
  
@@ -28,7 +27,7 @@ Start by entering the connection credentials:
 sqlline>  !connect jdbc:fineo:api_key=<your api key>
 ```
 
-If you did not enter a authentication method (see [JDBC guide](/Jdbc)), you can enter your IAM
+If you did not enter a authentication method (see [JDBC guide](/jdbc/intro)), you can enter your IAM
  credentials as a username (access key) and password (secret key) combination:
 
 ```

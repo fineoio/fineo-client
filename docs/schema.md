@@ -155,5 +155,5 @@ set _before_ sending a write (as opposed to all other fields).
 While we are in BETA, no field deletes are supported/
  
   
-[here]: http://api-docs.fineo.io
+[here]: http://api-doc.fineo.io
 [Java DateTimeFormatter: Patterns For Formatting and Parsing]: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html

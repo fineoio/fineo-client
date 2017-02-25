@@ -21,8 +21,7 @@ the event.
 
 The SqlToJson tool provides helps you make SQL queries and then outputs the results into JSON 
 formatted text. If you are looking to investigate your data or dig into it deeply, you are likely 
-better off using [SqlLine](/jdbc/sqlline). However, SqlToJson is useful if you are just getting 
-started.
+better off using [SqlLine](/jdbc/Using BI And Sql Tools/sqlline). However, SqlToJson is useful if you are just getting started.
 
 # Using the tools
 
@@ -196,8 +195,7 @@ matching and avoiding the shell expansion).
 
 # Authentication
 
-All requests must include an API KEY. Additionally, you must specify an AWS access key and 
-secret key (to sign requests). There are multiple ways to specify credentials in the tools.
+All requests must be signed with AWS credentials or a username/password combination. There are multiple ways to specify credentials in the tools.
 
 You can either specify the credentials in a YAML file, like:
 
