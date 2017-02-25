@@ -63,7 +63,7 @@ The recommended way to send data in production is to embed the Fineo SDK into yo
 First, [download the tools] jar. Then, from the command line, send a data point as the 'device' created above using the Stream tool:
 
 ```
-$ java -cp tools-|release|-exec.jar io.fineo.client.tools.Stream \
+$ java -cp tools-|version|-exec.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --static-key <your device access key> \
   --static-secret <your device secret key> \
