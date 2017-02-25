@@ -76,7 +76,6 @@ public interface AuthenticationHandler {
      * , hence a continuation is not available. Probe {@code exception} for details.
      *
      * @param exception is this Exception leading to authentication failure
-     * @return Should authentication flow continue
      */
     public void onFailure(Exception exception);
 }

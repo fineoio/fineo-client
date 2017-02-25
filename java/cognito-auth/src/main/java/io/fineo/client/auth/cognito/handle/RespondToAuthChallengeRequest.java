@@ -23,16 +23,16 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * The new value for the clientId property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>1 - 128<br/>
-     * <b>Pattern: </b>[\w+]+<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>1 - 128<br>
+     * <b>Pattern: </b>[\w+]+<br>
      */
     private String clientId;
 
     /**
      * The new value for the challengeName property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      */
@@ -41,8 +41,8 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * The new value for the session property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>20 - 2048<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>20 - 2048<br>
      */
     private String session;
 
@@ -54,9 +54,9 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Returns the value of the clientId property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>1 - 128<br/>
-     * <b>Pattern: </b>[\w+]+<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>1 - 128<br>
+     * <b>Pattern: </b>[\w+]+<br>
      *
      * @return The value of the clientId property for this object.
      */
@@ -67,9 +67,9 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Sets the value of clientId
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>1 - 128<br/>
-     * <b>Pattern: </b>[\w+]+<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>1 - 128<br>
+     * <b>Pattern: </b>[\w+]+<br>
      *
      * @param clientId The new value for the clientId property for this object.
      */
@@ -83,9 +83,9 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
      * Returns a reference to this object so that method calls can be chained
      * together.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>1 - 128<br/>
-     * <b>Pattern: </b>[\w+]+<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>1 - 128<br>
+     * <b>Pattern: </b>[\w+]+<br>
      *
      * @param clientId The new value for the clientId property for this object.
      * @return A reference to this updated object so that method calls can be
@@ -99,7 +99,7 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Returns the value of the challengeName property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      *
@@ -113,7 +113,7 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Sets the value of challengeName
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      *
@@ -131,7 +131,7 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
      * Returns a reference to this object so that method calls can be chained
      * together.
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      *
@@ -149,7 +149,7 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Sets the value of challengeName
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      *
@@ -167,7 +167,7 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
      * Returns a reference to this object so that method calls can be chained
      * together.
      * <p>
-     * <b>Constraints:</b><br/>
+     * <b>Constraints:</b><br>
      * <b>Allowed Values: </b>SMS_MFA, PASSWORD_VERIFIER, CUSTOM_CHALLENGE,
      * DEVICE_SRP_AUTH, DEVICE_PASSWORD_VERIFIER, ADMIN_NO_SRP_AUTH
      *
@@ -185,8 +185,8 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Returns the value of the session property for this object.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>20 - 2048<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>20 - 2048<br>
      *
      * @return The value of the session property for this object.
      */
@@ -197,8 +197,8 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
     /**
      * Sets the value of session
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>20 - 2048<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>20 - 2048<br>
      *
      * @param session The new value for the session property for this object.
      */
@@ -212,8 +212,8 @@ public class RespondToAuthChallengeRequest extends AmazonWebServiceRequest imple
      * Returns a reference to this object so that method calls can be chained
      * together.
      * <p>
-     * <b>Constraints:</b><br/>
-     * <b>Length: </b>20 - 2048<br/>
+     * <b>Constraints:</b><br>
+     * <b>Length: </b>20 - 2048<br>
      *
      * @param session The new value for the session property for this object.
      * @return A reference to this updated object so that method calls can be
