@@ -1,6 +1,5 @@
 #!/bin/bash
 # Update the doc version in the docs/ directory to the specified version
-
 if [ $# -ne 1 ]; then
   echo "Must supply the new version as the first argument"
   exit 0
