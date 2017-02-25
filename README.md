@@ -10,7 +10,7 @@ Releases are managed with jgitflow-maven-plugin.
 ### Start a release
 
 ```
-$ mvn jgitflow:release-start
+$ mvn -f java/pom.xml jgitflow:release-start
 ```
 
 ### Updating Version
@@ -27,5 +27,5 @@ And then committed back.
 ### Finish release
 
 ```
-$ mvn jgitflow:release-finish
+$ mvn -f java/pom.xml --settings <path to release settings file> jgitflow:release-finish
 ```
