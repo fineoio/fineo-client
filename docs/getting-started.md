@@ -166,6 +166,7 @@ Now, when querying SqlLine, all the original data points will be present, as wel
 You now have all the tools to use the whole platform! You can create and manage devices, manipulate schemas, upload data and then view data in JDBC based tools.
 
 When you're ready, take a deeper look into:
+
  * how to use the [java client SDK] in your code
  * all the power that Fineo's [schema flexibility] provides
  * all the various [command line tools]
@@ -178,6 +179,7 @@ We love to hear any feedback you have, [email us]!
 [Learn how to change that field name]: /schema
 [Learn more about how to use the SDK]: /client/java
 [Find out more about the tools]: /client/tools
+[schema flexibility]: /schema
 [Find out more about using SqlLine with Fineo]: /jdbc/Using BI And Sql Tools/sqlline/
 [SqlLine]: http://sqlline.sourceforge.net/
 [Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
