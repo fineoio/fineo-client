@@ -84,10 +84,17 @@ Fineo provides a standard JDBC adapter that works with any JDBC-compliant SQL to
 
 [Download the SqlLine bundle here].
 
-When the download has completex, unpack and start it on the command line:
+When the download has completed unpack it. [Find out more about using SqlLine with Fineo].
 
 ```
  $ tar -xf sqlline-1.1.10-fineo-1.1.tar.gz
+```
+
+Then download the [latest Fineo JDBC jar] to the ```sqlline-1.1.10-fineo-1.1/lib/``` directory. 
+Now SqlLine can be started:
+
+```
+ $ cd sqlline-1.1.10-fineo-1.1
  $ ./sqlline
 ```
 
@@ -101,7 +108,7 @@ The Welcome Email should include the API Key to use here (if not, [please reach 
 
 SqlLine then prompts for a username and password - enter your Fineo username and password.
 
-After successully logging in, a simple check to ensure everything works is to check the tables:
+After successfully logging in, a simple check to ensure everything works is to check the tables:
 
  ```
  0: jdbc:fineo:api_key=123> !tables
@@ -170,12 +177,14 @@ We love to hear any feedback you have, [email us]!
 [Read more about schema flexibility]: /schema
 [Learn how to change that field name]: /schema
 [Learn more about how to use the SDK]: /client/java
-[download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/1.1.1/tools-1.1.1.jar
 [Find out more about the tools]: /client/tools
+[Find out more about using SqlLine with Fineo]: /jdbc/Using BI And Sql Tools/sqlline/
 [SqlLine]: http://sqlline.sourceforge.net/
 [Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
 [configure jdbc]: /jdbc/intro
 [command line tools]: /client/tools
 [java client SDK]: /client/java
 [email us]: mailto:info@fineo.io?subject=Feedback
+[download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/|version|/tools-|version|-exec.jar
+[latest Fineo JDBC jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/|version|/jdbc-|version|-all.jar
 
