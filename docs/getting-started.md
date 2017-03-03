@@ -101,7 +101,7 @@ Now SqlLine can be started:
 Next, connect to Fineo:
 
 ```
-!connect jdbc:fineo:api_key=<your api key>
+sqlline> !connect jdbc:fineo:api_key=<your api key>
 ```
 
 The Welcome Email should include the API Key to use here (if not, [please reach out](mailto:help@fineo.io?subject=Welcome email api key help!)).
