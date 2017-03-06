@@ -84,17 +84,11 @@ Fineo provides a standard JDBC adapter that works with any JDBC-compliant SQL to
 
 [Download the SqlLine bundle here].
 
-When the download has completed unpack it. [Find out more about using SqlLine with Fineo].
+When the download has completed unpack the tarball and start it[Find out more about using SqlLine with Fineo].
 
 ```
- $ tar -xf sqlline-1.1.10-fineo-1.1.tar.gz
-```
-
-Then download the [latest Fineo JDBC jar] to the ```sqlline-1.1.10-fineo-1.1/lib/``` directory. 
-Now SqlLine can be started:
-
-```
- $ cd sqlline-1.1.10-fineo-1.1
+ $ tar -xf sqlline-1.1.10-fineo-1.2.tar.gz
+ $ cd sqlline-1.1.10-fineo-1.2
  $ ./sqlline
 ```
 
