@@ -180,7 +180,7 @@ We love to hear any feedback you have, [email us]!
 [Learn more about how to use the SDK]: /client/java
 [Find out more about the tools]: /client/tools
 [schema flexibility]: /schema
-[Find out more about using SqlLine with Fineo]: /jdbc/Using BI And Sql Tools/sqlline/
+[Find out more about using SqlLine with Fineo]: /jdbc/Using%20BI%20And%20Sql%20Tools/sqlline/
 [SqlLine]: http://sqlline.sourceforge.net/
 [Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.2/sqlline-1.1.10-fineo-1.2.tar.gz
 [configure jdbc]: /jdbc/intro
