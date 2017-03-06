@@ -182,7 +182,7 @@ We love to hear any feedback you have, [email us]!
 [schema flexibility]: /schema
 [Find out more about using SqlLine with Fineo]: /jdbc/Using BI And Sql Tools/sqlline/
 [SqlLine]: http://sqlline.sourceforge.net/
-[Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.1/sqlline-1.1.10-fineo-1.1.tar.gz
+[Download the SqlLine bundle here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.2/sqlline-1.1.10-fineo-1.2.tar.gz
 [configure jdbc]: /jdbc/intro
 [command line tools]: /client/tools
 [java client SDK]: /client/java
