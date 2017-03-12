@@ -48,7 +48,7 @@ All data must be non-nested JSON and contain at least the target schema name und
 Below is an example for sending a simple data point:
 ```
 {
-  "metrictype" : "demo",
+  "metrictype" : "schema_demo",
   "text" : "user sent for demo",
   "point" : 1
 }
@@ -67,7 +67,7 @@ $ java -cp tools-1.1.2-exec.jar io.fineo.client.tools.Stream \
   --api-key <your api key> \
   --static-key <your device access key> \
   --static-secret <your device secret key> \
-  --metric-name demo
+  --metric-name schema_demo
   --field text."device sent" \
   --field point.2
 ```
