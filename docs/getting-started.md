@@ -125,7 +125,7 @@ Then, attempt to read all the data that was previously written:
 
 Up to here, Fineo works much like any other SQL-based time-series database. Unlike other databases, Finos also enables some 'NoSQL' like functionality to help future-proof applications, as well as decreasing risk of changes.
 
-The easiest mistakes to make are things like forgetting to migrate the database to support a new field or misspelling a field name. Unfortunately, once deployed to devices in the field, any data sent is lost or the applicaton is broken.
+The easiest mistakes to make are things like forgetting to migrate the database to support a new field or misspelling a field name. Unfortunately, with conventional database management systems, this can result in data loss and/or broken features that require time consuming fixes.
 
 Fortunately, Fineo's flexible schema support makes it as easy as clicking a button to recover that data and fix that error, without having to change your deployed application whatsoever.
 
