@@ -1,6 +1,7 @@
 package io.fineo.read.jdbc;
 
 import io.fineo.client.FineoApiClientException;
+import io.fineo.read.Driver;
 import io.fineo.read.http.FineoAvaticaAwsHttpClient;
 import org.apache.calcite.avatica.AvaticaConnection;
 import org.apache.calcite.avatica.ConnectionConfigImpl;
@@ -23,6 +24,7 @@ import static com.amazonaws.SDKGlobalConfiguration.ACCESS_KEY_SYSTEM_PROPERTY;
 import static com.amazonaws.SDKGlobalConfiguration.SECRET_KEY_SYSTEM_PROPERTY;
 import static java.lang.String.format;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 public class TestDriver {
@@ -36,7 +38,7 @@ public class TestDriver {
 
   @After
   public void cleanupDriver() throws SQLException {
-    DriverForTesting driver = (DriverForTesting) DriverManager.getDriver("jdbc:fineo-test:");
+    DriverForTesting driver = (DriverForTesting) DriverManager.getDriver("jdbc:fineo-test");
     driver.getConnections().clear();
   }
 
@@ -103,6 +105,14 @@ public class TestDriver {
     Properties info = parseUrl(url);
     ConnectionConfigImpl config = new ConnectionConfigImpl(info);
     assertEquals("https://the-fineo-url.at.something?api_key=1234", config.url());
+  }
+
+  @Test
+  public void testDriverSuffix() throws Exception {
+    assertEquals(Driver.class, DriverManager.getDriver("jdbc:fineo").getClass());
+    assertNotEquals(Driver.class, DriverManager.getDriver("jdbc:fineo-test").getClass());
+    assertEquals(Driver.class, DriverManager.getDriver("jdbc:fineo:").getClass());
+    assertEquals(Driver.class, DriverManager.getDriver("jdbc:fineo:api_key=1234").getClass());
   }
 
   private Properties parseUrl(String url) throws Exception {
