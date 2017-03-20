@@ -28,7 +28,7 @@ public class SqlOption {
   ApiOption api = new ApiOption();
 
   public String getUrl() throws FileNotFoundException {
-    StringBuffer sb = new StringBuffer(Driver.CONNECT_PREFIX);
+    StringBuffer sb = new StringBuffer(Driver.CONNECT_PREFIX+":");
     boolean first = true;
     if (api.url != null) {
       sb.append("url=");

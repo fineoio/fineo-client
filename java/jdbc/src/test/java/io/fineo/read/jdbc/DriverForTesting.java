@@ -32,7 +32,7 @@ public class DriverForTesting extends Driver {
 
   @Override
   protected String getConnectStringPrefix() {
-    return "jdbc:fineo-test:";
+    return "jdbc:fineo-test";
   }
 
   Map getConnectionMap() {

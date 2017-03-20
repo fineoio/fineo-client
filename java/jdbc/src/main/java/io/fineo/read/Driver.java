@@ -1,5 +1,6 @@
 package io.fineo.read;
 
+import com.google.common.base.Preconditions;
 import io.fineo.read.http.DriverProperties;
 import io.fineo.read.http.FineoAvaticaAwsHttpClient;
 import io.fineo.read.jdbc.ConnectionStringBuilder;
@@ -38,7 +39,7 @@ import static org.apache.calcite.avatica.remote.Driver.Serialization.PROTOBUF;
 public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
   private static final Logger LOG = LoggerFactory.getLogger(Driver.class);
-  public static final String CONNECT_PREFIX = "jdbc:fineo:";
+  public static final String CONNECT_PREFIX = "jdbc:fineo";
 
   static {
     try {
@@ -71,6 +72,18 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
       "unknown version",
       "Fineo",
       "unknown version");
+  }
+
+  @Override
+  public boolean acceptsURL(String url) throws SQLException {
+    // has to start with the fineo prefix
+    String prefix = getConnectStringPrefix();
+    if(!url.startsWith(prefix)){
+      return false;
+    }
+    // but then if as be to done or followed by ":"
+    String remainder = url.substring(prefix.length());
+    return remainder.length() == 0? true: remainder.startsWith(":");
   }
 
   @Override
@@ -124,6 +137,11 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     }
   }
 
+  /**
+   * Take the incoming properties & url and create a new set of properties to use for connecting.
+   * Creates a <b>new Properties instance</b> that should be used instead to ensure we don't
+   * break the source system
+   */
   protected Properties prepareProperties(String url, Properties info)
     throws SQLException, IOException {
     // do the same parsing as in UnregisteredDriver#connect(...). We so this here so we can
@@ -132,9 +150,23 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
     // finish initializing correctly
     final String prefix = getConnectStringPrefix();
     assert url.startsWith(prefix);
-    final String urlSuffix = url.substring(prefix.length());
+    String urlSuffix = url.substring(prefix.length());
+    // strip the leading ':' off the suffix, if necessary. Its not part of any property name.
+    // Comes about when trying to connect easily with some BI tools
+    if(urlSuffix.startsWith(":")){
+      urlSuffix = urlSuffix.substring(1);
+    }
     final Properties info2 = ConnectStringParser.parse(urlSuffix, info);
-    // parse the properties based on the URL key, if possible
+    // these are some odd hoops, but sometimes an outside entity will send the url and set the
+    // url as a property. However, we also use url as an overridable property as the target for
+    // connecting to the Fineo server. Thus, we are attempting to figure out if that happened,
+    // and then, if so, set the url correctly, if one is provided as the first parameter after
+    // the connection, like:
+    //  - jdbc:fineo:https://some.url
+    //  - jdbc:fineo:url=https://some.url
+    if(url.equals(info2.getProperty("url"))) {
+      info2.setProperty("url", urlSuffix);
+    }
     boolean https = urlSuffix.startsWith("https://");
     if (urlSuffix.startsWith("//") || https) {
       String first = urlSuffix.contains(";") ? urlSuffix.split(";")[0] : urlSuffix;
@@ -179,7 +211,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
     // get the default URL, if none has been specified
     String url = BuiltInConnectionProperty.URL.wrap(info).getString();
-    if(url == null){
+    if (url == null || url.length() == 0) {
       url = DriverProperties.READ_URL;
     }
     // properties that are passed through the connection string
@@ -189,6 +221,8 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
     // API KEY is also the company key, and we need that in the connection properties on the
     // server side
+    Preconditions.checkNotNull(key, "Missing api key! Did you remember to set in in the "
+                                    + "properties or connection string?");
     info.put(FineoJdbcProperties.COMPANY_KEY_PROPERTY, key);
     setupClientProperties(info, sb);
 
