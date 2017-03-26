@@ -48,12 +48,6 @@
       <groupId>io.fineo.client</groupId>
       <artifactId>cognito-auth</artifactId>
       <classifier>all</classifier>
-      <exclusions>
-        <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <!-- Test dependencies -->
@@ -143,18 +137,6 @@
                 <relocation>
                   <pattern>com.auth0</pattern>
                   <shadedPattern>fineo.client.com.auth0</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.calcite</pattern>
-                  <shadedPattern>fineo.client.org.apache.calcite</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>com.typesafe.netty</pattern>
-                  <shadedPattern>fineo.client.com.typesafe.netty</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>javassist</pattern>
-                  <shadedPattern>fineo.client.javassist</shadedPattern>
                 </relocation>
               </relocations>
               <filters>
