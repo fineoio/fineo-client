@@ -1,5 +1,3 @@
-# Getting Started
-
 Welcome to the Fineo platform! With Fineo you can easily upload data from connected devices and then view that data through traditional SQL-based tools.
 
 This guide is going to walk through connecting a simple device, creating a schema, sending data and then reading the data back. Then it will show to flexibly manage mistakes and how to evolve schema.
