@@ -95,6 +95,7 @@ hierarchy of types. For example:
  
  ```authentication=system_OR_profile;profile_name=my-profile```
 
+Note, with JDBC you should **not** attempt to create your own instance of the `AWSCredentialsProvider` to pass to the setup. Instead, use one of the above mechanisms to provide the credentials. Generally, this just means an email/password combination, unless some devices are allowed to access the JDBC data.
 
 All requests must have **both an API Key and IAM User credentials**.
 
