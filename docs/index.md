@@ -18,31 +18,10 @@ Fineo is the easiest, smartest way to build your IoT analytics. With features li
 
 we are ready to solve all your data problems, no matter what the scale.
 
-# Authentication
+# Top Links:
 
-## API Key
-
-When you sign up, you will be given an API Key. **Keep this safe** - it ties all requests back to 
-your tables/data. If anyone else gets access to this key, they will be able to see you information.
-
-## Credentials
-
-When you sign up through the application, you specified an email and password. These will be user
- username and password, respectively, and used for signing all requests to the API. This ensures 
- that no one else can masquerade as you. 
- 
-Devices are also given 'access' and 'secret' keys that are compliant with the
-[AWS IAM](https://aws.amazon.com/iam/) style credentials. They will look something like this:
- 
-```
-aws_access_key: AKIBJHP57RXU4RO...
-aws_secret_access_key: 5kZVWNNhf56h4iRC04DyYN3XI5elYO...
-```
-
-These credentials are used to authenticate/authorize a specific device to when making actions - 
-reading, writing, updating schema, etc.
-
-**All these credentials should be kept in a safe place.**
-
+ * [authentication](/authentication)
+ * [jdbc](/jdbc/intro)
+ * [tools](/client/tools)
 
 [getting started]: /getting-started
