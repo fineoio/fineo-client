@@ -21,6 +21,40 @@ seconds. However, it comes at a higher cost and with some more stringent
 Batch is a bit more scalable, but events are processed asynchronously and are available at some 
 point in time later[[1](#1-batch)].
 
+## Stream
+
+Streaming data events must include two things:
+
+ * metric type
+ * timestamp
+ 
+The `metrictype` field ties the event back to a JDBC table. The `timestamp` field ensures the the data can be found.
+  
+However, you are not limited to just these two field names to identify this information in the event.
+
+Using metric field aliases (currently available only through the command line or SDK) you can define alternative field names to use for the `metrictype`. For example, assume there is a metric type (e.g. table) named 'hounds' and you added a metric field alias of 'type', the event:
+ 
+```
+ {
+   "type" : "hounds"
+   "timestamp" : 1490638685520
+ }
+```
+
+Would be all that is needed to make a valid event.
+
+Similarly, timestamp aliases can be defingted for each metric (or globally). So you can define a timestamp alias of 'ts' and, continuing the above example, send a valid event:
+ 
+  
+```
+ {
+   "type" : "hounds"
+   "ts" : 1490638685520
+ }
+```
+
+[Read more about schema management and aliases](/schema)
+
 ## Batch Uploads
 
 Batch data uploads can take two forms:
