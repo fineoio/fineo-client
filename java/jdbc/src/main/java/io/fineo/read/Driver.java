@@ -51,6 +51,7 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
 
   /**
    * A bit cleaner than calling Class.forName(...)
+   * @return <tt>true</tt>
    */
   public static boolean load() {
     return true;
@@ -138,9 +139,13 @@ public class Driver extends org.apache.calcite.avatica.remote.Driver {
   }
 
   /**
-   * Take the incoming properties & url and create a new set of properties to use for connecting.
+   * Take the incoming properties + url and create a new set of properties to use for connecting.
    * Creates a <b>new Properties instance</b> that should be used instead to ensure we don't
    * break the source system
+   * @param url connection url
+   * @param info client supplied properties. Not modified.
+   * @throws SQLException if there is an error parsing name-value pairs in the url
+   * @throws IOException if there is an error parsing the properties
    */
   protected Properties prepareProperties(String url, Properties info)
     throws SQLException, IOException {
