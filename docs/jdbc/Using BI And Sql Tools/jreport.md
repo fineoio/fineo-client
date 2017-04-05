@@ -23,7 +23,7 @@ For general instructions on using the Fineo JDBC driver, see the [JDBC guide].
 
 For example, on Windows copying the Fineo JDBC driver jar file in C:\JReport\Designer\lib folder:
 
-```C:\JReport\Designer\lib\fineo-jdbc-1.1.2-all.jar
+```C:\JReport\Designer\lib\fineo-jdbc-|version|-all.jar
 
 3. Add the file path into the JReport ADDCLASSPATH variable. For Windows, you will need to modify 
 the `%REPORTHOME%\bin\setenv.bat`
