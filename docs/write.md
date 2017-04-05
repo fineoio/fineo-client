@@ -34,7 +34,7 @@ Let's look at example. Suppose there is a metric type (e.g. table) named 'hounds
 
 ```
  {
-   "metrictype" : "hounds"
+   "metrictype" : "hounds",
    "timestamp" : 1490638685520
  }
 ```
@@ -45,7 +45,7 @@ A custom "metric type key" (currently available through the command line or SDK)
 
 ```
  {
-   "type" : "hounds"
+   "type" : "hounds",
    "timestamp" : 1490638685520
  }
 ```
@@ -57,7 +57,7 @@ Similarly, timestamp aliases can be defined for each metric (or globally for all
 
 ```
  {
-   "type" : "hounds"
+   "type" : "hounds",
    "ts" : 1490638685520
  }
 ```
