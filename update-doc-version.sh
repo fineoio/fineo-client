@@ -11,7 +11,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 set -x
 cd $DIR/docs
 # replace the version
-find ./ -type f -exec sed -i -e "s/|version|/${version}/g" {} \;
+find . -type f -exec sed -i -e "s/|version|/${version}/g" {} \;
+find $DIR/conf.py -type f -exec sed -i -e "s/|version|/${version}/g" {} \;
+cd -
 # clean and extra docs
 git clean -f
 
