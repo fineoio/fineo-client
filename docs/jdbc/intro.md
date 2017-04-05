@@ -15,7 +15,7 @@ To connect with JDBC, first download the [JDBC driver Jar] or include it via fro
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>jdbc</artifactId>
-      <version>1.1.2</version>
+      <version>1.1.3</version>
       <classifier>all</classifier>
     </dependency>
     ...
@@ -140,5 +140,5 @@ public class Example{
 
 You find information on tuning the client connection at our [tuning guide](/jdbc/tuning)
 
-[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.2/jdbc-1.1.2-all.jar
+[JDBC Driver Jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.3/jdbc-1.1.3-all.jar
 [default AWS credential chain]: http://docs.aws.amazon.com/java-sdk/latest/developer-guide/credentials.html
