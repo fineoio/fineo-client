@@ -31,12 +31,11 @@ The internal build handles pushing the jars and updating the latest versions. Pu
  * master
  * release-<version>
 
-After the release completes, update the master branch onto stable and then update the version:
+After the release completes, update the master branch onto stable and force the master changes on top of stable (e.g. the pom versions should be [new version]-SNAPSHOT)
 
 ```
-$ nextVersion=$version+1-SNAPSHOT
+$ git checkout master
 $ git pull origin
-$ git rebase stable
-$ mvn -f java/pom.ml versions:set -DnewVersion=$nextVersion
-$ git commit -A -m "updating poms for $nextVersion development"
+$ git rebase stable -s recursive -X theirs
+$ git push origin -f
 ```
