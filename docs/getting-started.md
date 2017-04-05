@@ -179,6 +179,6 @@ We love to hear any feedback you have, [email us]!
 [command line tools]: /client/tools
 [java client SDK]: /client/java
 [email us]: mailto:info@fineo.io?subject=Feedback
-[download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/|version|/tools-|version|-exec.jar
-[latest Fineo JDBC jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/|version|/jdbc-|version|-all.jar
+[download the tools]: https://maven.fineo.io/release/io/fineo/client/tools/1.1.3/tools-1.1.3-exec.jar
+[latest Fineo JDBC jar]: http://maven.fineo.io/release/io/fineo/client/jdbc/1.1.3/jdbc-1.1.3-all.jar
 
