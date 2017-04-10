@@ -97,4 +97,8 @@ public enum FineoConnectionProperties implements ConnectionProperty {
   public boolean required() {
     return required;
   }
+
+  public void set(Properties props, Object value){
+    props.put(this.camelName(), value);
+  }
 }
