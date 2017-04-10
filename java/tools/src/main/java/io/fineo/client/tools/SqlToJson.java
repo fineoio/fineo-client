@@ -35,8 +35,8 @@ public class SqlToJson {
 
     Driver.load();
     List<Map<String, Object>> results;
-    try (Connection conn = DriverManager.getConnection(sql.getUrl())) {
-      ResultSet set = conn.createStatement().executeQuery(sql.getQuery());
+    try (Connection conn = DriverManager.getConnection(sql.getUrl());
+         ResultSet set = conn.createStatement().executeQuery(sql.getQuery())) {
       MapListHandler handler = new MapListHandler();
       results = handler.handle(set);
       ObjectMapper mapper = new ObjectMapper();
