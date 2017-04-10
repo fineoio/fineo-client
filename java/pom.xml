@@ -11,6 +11,7 @@
     <module>tools</module>
     <module>schema</module>
     <module>cognito-auth</module>
+    <module>example</module>
   </modules>
   <packaging>pom</packaging>
 

@@ -2,6 +2,8 @@ Welcome to the Fineo platform! With Fineo you can easily upload data from connec
 
 This guide is going to walk through connecting a simple device, creating a schema, sending data and then reading the data back. Then it will show to flexibly manage mistakes and how to evolve schema.
 
+For those interested in just jumping into writing code, a simple example driver is [available](https://github.com/fineoio/fineo-client/blob/master/java/example/src/main/java/io/fineo/client/tools/ExampleDriver.java).
+
 ## Creating a device
 
 The 'Devices' tab is the first screen shown when logging into the [web application]. Add a new device by clicking the '+' button. The platform will generate a unique ID for each device.
