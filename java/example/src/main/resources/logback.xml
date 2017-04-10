@@ -6,17 +6,11 @@
   </appender>
 
 
-  <logger name="io.fineo" level="DEBUG" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-  </logger>
-
-  <logger name="fineo.client" level="DEBUG" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-  </logger>
+  <logger name="io.fineo" level="DEBUG"/>
+  <logger name="fineo.client" level="DEBUG"/>
   <!-- this logs like crazy at DEBUG -->
-  <logger name="fineo.client.org.asynchttpclient" level="INFO" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-  </logger>
+  <logger name="fineo.client.org.asynchttpclient" level="INFO"/>
+  <logger name="io.fineo.client.auth" level="INFO"/>
 
   <root level="WARN">
     <appender-ref ref="CONSOLE"/>

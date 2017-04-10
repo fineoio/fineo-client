@@ -3,7 +3,12 @@ package io.fineo.client.example;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- *
+ * A simple example event to send. All events need:
+ * <ul>
+ *   <li>metrictype</li>
+ *   <li>timestamp</li>
+ * </ul>
+ * Or a way to identify those fields through a metric key name or field alias.
  */
 public class Event {
   private final String metrictype = ExampleDriver.METRIC_NAME;
@@ -14,6 +19,7 @@ public class Event {
   public Event(String f1, int f2) {
     this.f1 = f1;
     this.f2 = f2;
+    // every event needs a timestamp
     this.timestamp = System.currentTimeMillis();
   }
 

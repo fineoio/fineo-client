@@ -12,22 +12,42 @@
   <name>Fineo Client - Example</name>
   <description>A simple example project for interacting with the Fineo API</description>
 
+  <repositories>
+    <repository>
+      <id>maven.fineo</id>
+      <url>http://maven.fineo.io/release</url>
+    </repository>
+  </repositories>
+
+  <properties>
+    <fineo.version>1.1.4-SNAPSHOT</fineo.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>common</artifactId>
+      <version>${fineo.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.fineo.client</groupId>
+      <artifactId>cognito-auth</artifactId>
+      <version>${fineo.version}</version>
     </dependency>
     <dependency>
       <groupId>io.fineo.client</groupId>
       <artifactId>jdbc</artifactId>
+      <version>${fineo.version}</version>
     </dependency>
     <dependency>
       <groupId>io.fineo.client.models</groupId>
       <artifactId>schema</artifactId>
+      <version>${fineo.version}</version>
     </dependency>
     <dependency>
       <groupId>io.fineo.client.models</groupId>
       <artifactId>write</artifactId>
+      <version>${fineo.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-dbutils</groupId>

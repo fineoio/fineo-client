@@ -4,6 +4,7 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fineo.client.FineoClientBuilder;
+import io.fineo.client.auth.CredentialsHelper;
 import io.fineo.client.model.schema.SchemaApi;
 import io.fineo.client.model.schema.field.CreateFieldRequest;
 import io.fineo.client.model.schema.metric.CreateMetricRequest;
@@ -28,8 +29,12 @@ import static java.lang.Thread.sleep;
 /**
  * A simple example for creating a simple schema, uploading data and then reading that data back.
  * <p>
- * API KEY is the first argument. Access credentials are loaded using the default AWS chain
- * {@link DefaultAWSCredentialsProviderChain}.
+ * Arguments (in order):
+ * <ol>
+ * <li>API Key</li>
+ * <li>Email (JDBC username)</li>
+ * <li>Password (JDBC password)</li>
+ * </ol>
  * <p>
  * After running this driver you should be able to see the 'example metric' schema in the
  * <a href="http://app.fineo.io>UI</a> and be able to read two rows from the 'example metric' table.
@@ -44,7 +49,8 @@ public class ExampleDriver {
     String apikey = args[0];
     FineoClientBuilder builder = new FineoClientBuilder()
       .withApiKey(apikey)
-      .withCredentials(new DefaultAWSCredentialsProviderChain());
+      // you can also provide static credentials if you want to send as a 'device'
+      .withCredentials(CredentialsHelper.getUserHelper(args[1], args[2]));
     setupSchema(builder);
     write(builder);
     read(apikey, args[1], args[2]);
