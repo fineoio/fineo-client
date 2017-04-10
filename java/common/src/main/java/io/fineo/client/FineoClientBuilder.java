@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -104,10 +103,8 @@ public class FineoClientBuilder {
         api = parent.getAnnotation(Api.class);
       }
     }
-    if (api != null) {
-      endpoint = api.value();
-    }
-    return endpoint;
+    Preconditions.checkState(api != null, "No API endpoint annotation found!");
+    return api.value();
   }
 
   static <T> T build(Class<T> apiClass, ApiClientHandler handler) {
