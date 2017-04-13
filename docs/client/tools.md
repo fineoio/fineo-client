@@ -32,7 +32,7 @@ You can get the tools [here].
 To create the bundled metric type into a table named 'metric', you run: 
 
 ```
-$ java -cp tools-<version>-exec.jar io.fineo.client.tools.Schema \
+$ java -cp tools-|version|-exec.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   create --type metric
@@ -43,7 +43,7 @@ Otherwise, we just use the type you specify. Note that if you have your own type
 create a metric type like:
 
 ```
-$ java -cp tools-<version>-exec.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-|version|-exec.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   create \
@@ -55,7 +55,7 @@ Alternatively, you can also create schema entirely based on the typing your spec
 command line. For example:
 
 ```
-$ java -cp tools-<version>-exec.jar;my-company-files.jar io.fineo.client.tools.Schema \
+$ java -cp tools-|version|-exec.jar;my-company-files.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   create \
@@ -73,7 +73,7 @@ You can also read the schema for a given table with the `read` command. For inst
  schema of the metric table that we create above, you would run:
   
 ```
-$ java -cp tools-<version>-exec.jar io.fineo.client.tools.Schema \
+$ java -cp tools-|version|-exec.jar io.fineo.client.tools.Schema \
   --api-key <your api key> \
   --username <your email> --password <your password> \
   read --metric-name metric

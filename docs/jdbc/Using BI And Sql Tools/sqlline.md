@@ -74,7 +74,7 @@ We include a couple of fixes, like loading the properties file correctly and usi
 #### 2. Logback
 For logback, the jars you need are: [logback-core] and [logback-classic]. Download these jars and add them to the `lib/` directory. 
 
-[here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-1.2/sqlline-1.1.10-fineo-1.2.tar.gz
+[here]: http://maven.fineo.io/release/sqlline/sqlline/1.1.10-fineo-|version|/sqlline-1.1.10-fineo-|version|.tar.gz
 [logback-core]: http://central.maven.org/maven2/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar
 [logback-classic]: http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar
 [contact us]: mailto:help@fineo.io?subject=SqlLine
